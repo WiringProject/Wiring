@@ -1,0 +1,58 @@
+#######################################
+# Syntax Coloring Map For MenuBackend
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+MenuBackend                    KEYWORD1
+MenuItem                       KEYWORD1
+MenuChangeEvent                KEYWORD1
+MenuUseEvent                   KEYWORD1
+MenuItemChangeEvent            KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+registerBackend                KEYWORD2
+moveRelativeLevels             KEYWORD2
+moveToLevel                    KEYWORD2
+fireItemChangedEvent           KEYWORD2
+getValue                       KEYWORD2
+setValue                       KEYWORD2
+increment                      KEYWORD2
+decrement                      KEYWORD2
+setLevel                       KEYWORD2
+getLevel                       KEYWORD2
+hasShortkey                    KEYWORD2
+getShortkey                    KEYWORD2
+getRoot                        KEYWORD2
+getCurrent                     KEYWORD2
+getName                        KEYWORD2
+getBack                        KEYWORD2
+getBefore                      KEYWORD2
+getRight                       KEYWORD2
+getAfter                       KEYWORD2
+getLeft                        KEYWORD2
+use                            KEYWORD2
+moveBack                       KEYWORD2
+moveUp                         KEYWORD2
+moveDown                       KEYWORD2
+moveLeft                       KEYWORD2
+moveRight                      KEYWORD2
+add                            KEYWORD2
+addBefore                      KEYWORD2
+addRight                       KEYWORD2
+addAfter                       KEYWORD2
+addLeft                        KEYWORD2
+from                           KEYWORD2
+to                             KEYWORD2
+item                           KEYWORD2
+isEqual                        KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+

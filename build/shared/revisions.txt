@@ -1,0 +1,369 @@
+caution: the beverage you're about to enjoy is extremely hot. this
+file is a list of changes between each release. this is not a general
+reference of how to use processing, because the information for older
+releases will be super crusty. 
+
+ABOUT Wiring 1.0 Final
+
+Yay!  It's here!  It's been a long time coming, but it's finally here.
+
+Just a few changes since RC4:
+Fixed Wiring S Play Shield hardware definition
+Fixed reset delay on Serial Monitor
+Updated avrdude to 5.11 (includes new 'wiring' programmer type)
+Updated boards.txt and programmers.txt (all) to take advantage of new 'wiring' type in avrdude
+Updated reference and examples
+Fixed problem with mega32/64/128 in AVR 8 bit core WHardwareTimer
+Added clickable URLs to the editor
+
+
+ABOUT Wiring 1.0 BETA RC4
+Fix Issue 1: Serial port is not updated on status bar when new port selected
+Fix Issue 2: Java exception when "unindenting"
+Fix Issue 3: Comment scrubbing - is it necessary?
+Fix Issue 5: editor.antialias=true won't work
+Fix calling avrdude extra slashes included in path
+Fix StandardFirmata sketch missing the Servo.h header include
+
+
+ABOUT Wiring 1.0 BETA RC3
+
+Dear all, we are very happy to share with you the Wiring 1.0 Beta release.
+In the last few years we have seen the Wiring language and model being ported successfully to other platforms, so this is a special occasion. 
+
+This release is a milestone for open hardware. It is the sum of work and contributions from many, and the synthesis of ideas gathered and experimented in the last seven years. At the same time, it is also a start, as once again Wiring has opened up prototyping with electronics to wider audiences by defining an extensible architecture for future hardware, software and courseware; where novice, intermediate and experts will materialize their ideas, design and support for their new open hardware devices as well as develop applications unlocking new ways of thinking and making in an even simpler way.
+
+A summary for new features:
+
+First, you don't need a Wiring board to use Wiring, you can use your Wiring boards (even the first ones ever made) and any other board. In the Tools menu you'll find a selection of manufacturers, for those who like to start from scratch will find definitions in the Tools->Board menu for popular bare ATMEL DIP parts like atmega168, atmega168p, atmega328p and atmega644p. Wiring also supports directly the Arduino hardware, Rogue Robotics, BDMicro and others.
+
+The new Wiring Cores architecture will allow to create cores for other hardware manufacturers. The first core available is the AVR8 which supports most of Atmel atmega parts. The roadmap for next releases include cores for AVRTiny, Microchip and ARM.
+
+A library system for ÒCore librariesÓ implemented on a specific core, cross-platform libraries which are libraries not depending on any hardware and of course the user contributed libraries.
+
+New API members for advanced PWM settings like frequency and resolution, polyphonic tones on pins, advanced power and timer management etc., for a full list please check the menu Help->Reference in the application.
+
+Reference in english and spanish included in the application and selectable in the Preferences menu. The language reference is set by default to english and can be accessed on the Help->Reference Menu. The preferences also allows for auto-start the Serial monitor after uploading, playing a sound after compiling/build/uploading and in case of errors. The interface also features progress bar for processes like compiling and uploading. The current selected hardware and serial port are shown in the Editor Line status at the bottom. We have added features to the original Processing editor like the Window menu for easy sketch window switching as well as open recent sketches option.
+
+Libraries for Processing and Openframeworks based on the Firmata protocol and tutorials for interfacing Wiring with third party popular software.
+
+Proper installer for macosx and Windows (Linux will be available in the following days).
+
+New examples including Basic, Topics, Core libraries, Cross-platform libraries and more, available with the application download and the Web site. The schematics button on the interface allows to open the circuit diagram directly from the sketch if the sketch includes schematics.
+
+For developers/experts we have many surprises: support their own hardware directly from Wiring. Doing a little research in the hardware folder included in the application you'll find it only takes to create a few definitions in two files for any new part, basically these definitions tell Wiring the pin layout and cpu resources management.
+
+New cores based on aver devices for now at:
+Documents (or My Documents)/Wiring/hardware/cores/mynewcore
+
+New boards based on any atmega cpu (i.e. AVR8 core) at:
+Documents (or My Documents)/Wiring/hardware/myhardwarecompany/mynewboardmodel
+
+User contributed libraries at:
+Documents (or My Documents)/Wiring/libraries
+
+Regarding the new Wiring hardware we have different flavors (Wiring S, M, L and XS), the first one coming out is the Wiring S, which is the first board from the new hardware generation. The Wiring S features the atmega644p microcontroller. With 32 I/O pins, 8 analog inputs, 2 hardware serial ports, 6 PWM (analog outputs), SPI, TWI, 3 external interrupts pins, power regulation with output for both 5V and 3.3V. 
+
+Besides the highest manufacturing standards it also features standard .100 pin spacing which allows for immediate prototyping of shields and expansion boards without having to print a custom pcb. The board is available now from our distributors worldwide for less than USD$28.
+
+Along with the new hardware there a shield adapter to use third party Arduino shields out of the box with the Wiring boards leaving the Wiring extra pins available for other applications.
+
+Please let us know how it goes for you with this release and thank you for your support and help. As you might know this require a lot of work and we will be updating the site with documentation about the wiring development framework in the following weeks.
+
+
+ABOUT REV 0026
+
+- Fix problem with gcc distribution, many class constructors weren't working
+
+- Minor fixes for include files
+
+- Reference update
+
+
+ABOUT REV 0025
+
+- Maintenance release
+
+- Fix PWM pins 29, 30 1nd 31 not working 
+
+- Fix tone() noTone() methods
+
+- Reference update
+
+
+ABOUT REV 0024
+
+- antlr preprocessor removed
+
+- Floats print bug fixed
+
+- New examples for portMode, portRead and portWrite added
+
+- Servo library update by Michael Margolis
+
+- Fast digitalWrite added as an inline function to test it (Paul Stoffregen, Michael Margolis)
+
+- Added support for new Wiring hardware atmega1281/2561 microcontrollers, timers, interrupts etc.
+
+- New AVR Toolchain Wiring distribution for Windows / OSX / Linux
+
+- bootloader support for atmega1281/2561 microcontrollers
+
+- Add character classification and conversion functions to the API and reference
+
+- Include for Wire library was renamed from TwoWire.h to Wire.h, check and update old sketches
+  for the new include name, or delete it and use the menu Sketch -> Import Library -> Wire, this
+  will add the proper include to the sketch.
+
+- Other Math functions added to the reference
+
+- Added library Timer2
+
+- Fix Save As when sketch has schematics
+
+- Add tone() and noTone() commands from Brett Hagman
+
+- Fix background for schematics
+
+
+ABOUT REV 0023
+
+- New reference and examples system. Note that the Wiring web site examples html files
+  are locally included within the Wiring software and accessible through the Help Menu.
+  Because of the new examples system, the library Examples are added twice (through File ->
+  Examples -> Libraries and the previous way File -> Examples -> Library-xxxxx). This will
+  be fixed for next release.
+
+- The Stop toolbar button was removed from the Environment, instead the Schematics button
+  was added. If the sketch includes circuit schematics a window with the diagram will
+  be displayed. The Schematics window includes two buttons [ Reset ] and [ Close ], the Reset
+  button resets the diagram position to default, the Close button closes the Schematics
+  Window. It is possible to resize the Window and pan its content with the mouse.
+
+- Fix bug in the editor when typing some reserved words (new), fixed Tab bug as well.
+
+- Fix bug in the serial missing data under certain conditions
+
+- Add support for sketchbook/libraries folder, libraries will be listed in the Sketch -> 
+  Import Library - > menu under contributed
+
+- Added support for local sketch code, it is possible to include in tabs .cpp .h and .c
+  files, note those files are not preprocessed, so no error line highlight will be provided
+  on .cpp, .c or .h sketch files. 
+  This feature is nice for developing libraries in your sketch folder and then move them
+  to your sketchbook/libraries folder.  
+
+- When new sketches are created the setup and loop methods will be on the editor.
+
+- Keypad and Password libraries by Mark Stanley and Alexander Brevig added to contributed libraries. 
+
+
+
+ABOUT REV 0022
+
+- Write String class
+
+- add new and delete operators for char[], int[] and long[] arrays
+
+- Write and add Vector class
+
+- Update reference
+
+- Update Firmata
+
+- Replace Servo library with Michael Margolis new Servo library
+
+- add splitString helper functions
+
+- write new examples for String and Vector
+
+
+
+ABOUT REV 0021
+
+- Sync with processing editor
+
+- Fix Serial thanks to Pierre
+
+- Update avr toolchain
+
+- Fix Documentation errors in html files
+
+
+
+ABOUT REV 0020
+
+- Sync processing editor
+
+- Fix example error messages
+
+- Fix error marking line
+
+- Fix reference and examples bugs
+
+- Fix Encoder library bug, thanks to Nameet Kumar
+
+
+
+ABOUT REV 0019
+
+- Fix Serial1 buffer memory bug
+
+- Add bootloader with lower waiting time for auto reset wiring board 0004
+
+- Add auto-reset support feature for boards revision 0004 and up
+
+- Fix reference and examples bugs
+
+
+
+ABOUT REV 0018
+
+- Fix Serial buffer bug
+
+- Fix analogRead bug when using multiple analog inputs
+
+- Fix Firmata libary examples
+
+
+
+ABOUT REV 0017
+
+- Add flush() method to the Serial library
+
+- Factor out print to Print class from LiquidCrystal and Serial library
+
+- Add support for printing floats with the print command, right now with 2 decimal numbers by default
+
+- Add bit, byte and word support functions bit() bitRead() bitWrite() lowByte() highByte() and makeWord()
+
+- Add reference for the new commands
+
+- Fix pulseIn() command
+
+- Add Firmata library
+
+
+
+ABOUT REV 0016
+
+- Add two-way serial monitor
+
+- Fix bug with shiftOut command
+
+- Add Binary.h to WProgram.h
+
+- Add examples and diagrams to distribution reference
+
+- Fix null pointer serial error throwing when there is no serial or disconnected
+
+
+
+ABOUT REV 0015
+
+- Remove sampling from analogRead command (note from Adrian Freed)
+
+- add map function
+
+- add timeout for pulseIn
+
+- fix avrdude for macosx 10.4
+
+
+
+ABOUT REV 0014
+
+- Fix the nasty PWM bug preventing the analogWrite(line, 0) to stop pulse
+analogWrite now uses values in the range 0-1023 (10 bit resolution for PWM)
+
+- Fix Servo library bug when using 8 servos at a time
+
+- Add SoftwareSerial and Stepper libraries to the core
+
+- Add new examples
+
+- Add support to the ATMEL stk500v2 protocol for bootloader through avrdude
+
+- Add support and documentation for WiringMini and USBAdapter
+
+- Fix bug in preferences preventing the browser starts from the Help menu in Linux
+
+
+
+ABOUT REV 0013
+
+- pulse generation commands added to the core
+
+- libraries are now linked on demand, the #include support for external libraries was added. Serial will continue working as it used to be.
+
+- New examples added
+
+- Fixes in the reference both web and local
+
+- Extensive tests on vista and OS X systems
+
+- Fix the stdlib.h bug
+
+- Some minor editor bugs fixed
+
+
+ABOUT REV 0010
+
+- String library added
+
+
+
+ABOUT REV 0005
+
+- Serial port library changed syntax, support for second serial port added
+
+- New Servo library
+
+- Better error messages / reports
+
+- Wiring Open Source
+
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+
+ABOUT REV 0004
+
+- New preprocessor supporting wiring syntax
+
+- New GUI update as P5
+
+- New Compiler/Uploader
+
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+
+ABOUT REV 0003
+
+- New support for gcc 3.4.3 and updated tools
+
+- New downloader, more stable downloader
+
+- Better error messages for Compiler and Downloader
+
+- Updated reference to launch the right pages on the Wiring site
+
+- Some Editor bugs fixed
+
+
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+
+
+ABOUT REV 0002
+
+- New serial monitor icon added to the interface
+
+- New libraries added for Encoders, pulse reading also implemented for this release.
+
+- Changes in Servo Library API, angle is now servoWrite, and position is servoRead, check the help/examples for documentation.
+
+- includes new icons designed by florian
+
+
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+
+

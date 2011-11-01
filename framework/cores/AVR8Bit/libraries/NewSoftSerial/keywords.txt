@@ -1,0 +1,30 @@
+#######################################
+# Syntax Coloring Map for NewSoftSerial
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+NewSoftSerial                  KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+setTX                         KEYWORD2
+setRX                         KEYWORD2
+begin                         KEYWORD2
+end                           KEYWORD2
+read                          KEYWORD2
+available                     KEYWORD2
+active                        KEYWORD2
+overflow                      KEYWORD2
+library_version               KEYWORD2
+enable_timer0                 KEYWORD2
+flush                         KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+

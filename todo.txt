@@ -1,0 +1,783 @@
+0100
+
+0027
+x Add New hardware Serial and FIFO libraries thanks to Brett Hagman
+x Add buffer checking to String and Vector
+x Add error checking for Vector
+x Add NewSoftSerial library from Mikal Hart
+x Add Messenger library from Thomas O Fredericks
+x Schematics now as .png files
+x Add SPI library
+x Add power management commands powerEnable() powerDisable()
+x Add ShiftIn(), ShiftOut() revised
+x Editor sync with Processing to the latest features
+x Wire library static buffers fix
+x Serial monitor autostart after upload in Preferences dialog box
+x Remove force to save before uploading
+x Fix for Tone from Brett Hagman
+x Reference and examples update
+x Fix auto reset on Windows 7
+
+0026
+x Fix problem with gcc distribution, many class constructors weren't working
+x Minor fixes for include files
+x Reference update
+
+0025
+x Fix PWM pins 29, 30 1nd 31 not working
+x Fix tone() noTone() methods
+x Reference update
+
+0024
+x antlr preprocessor removed
+x Floats print bug fixed
+x New examples for portMode, portRead and portWrite added
+x Servo library update by Michael Margolis
+x Fast digitalWrite added as an inline function to test it (Paul Stoffregen, Michael Margolis)
+x Added support for new Wiring hardware atmega1281/2561 microcontrollers, timers, interrupts etc.
+x New AVR Toolchain Wiring distribution for Windows / OSX / Linux
+x boot loader support for atmega1281/2561 microcontrollers
+x add character classification and conversion functions to the API and reference
+x Include for Wire library was renamed from TwoWire.h to Wire.h, check and update old sketches
+  for the new include name, or delete it and use the menu Sketch -> Import Library -> Wire, this
+  will add the proper include to the sketch.
+x Other Math functions added to the reference
+x Added library Timer2
+x Fix Save As when sketch has schematics
+x Add tone() and noTone() commands
+
+0023
+x Support for sketchbook libraries folder
+x New reference and examples system. Note that the Wiring web site examples html files
+  are locally included within the Wiring software and accessible through the Help Menu.
+  Because of the new examples system, the library Examples are added twice (through File ->
+  Examples -> Libraries and the previous way File -> Examples -> Library-xxxxx). This will
+  be fixed for next release.
+x The Stop toolbar button was removed from the Environment, instead the Schematics button
+  was added. If the schetch includes circuit schematics a window with the diagram will
+  be displayed. The Schematics window includes two buttons [ Reset ] and [ Close ], the Reset
+  button resets the diagram position to default, the Close button closes the Schematics
+  Window. It is possible to resize the Window and pan its content with the mouse.
+x Fix bug in the editor when typing some reserved words (new), fixed Tab bug as well.
+x Fix bug in the serial missing data under certain conditions
+x Add support for sketchbook/libraries folder, libraries will be listed in the Sketch ->
+  Import Library - > menu under contributed
+x Added support for local sketch code, it is possible to include in tabs .cpp .h and .c
+  files, note those files are not preprocessed, so no error line highlight will be provided
+  on .cpp, .c or .h sketch files.
+  This feature is nice for developing libraries in your sketch folder and then move them
+  to your sketchbook/libraries folder.
+x When new sketches are created the setup and loop methods will be on the editor.
+x Keypad and Password libraries by Mark Stanley and Alexander Brevig added to libraries.
+
+0022
+x Write String class
+x add new and delete operators for char[], int[] and long[] arrays
+x Write and add Vector class
+x Update reference
+x Update Firmata
+x Replace Servo library with Michael Margolis new Servo library
+x add splitString helper functions
+x write new examples for String and Vector
+
+0021
+x Sync with processing editor
+x Fix Serial thanks to Pierre
+x Update avr toolchain
+x Fix Documentation errors in html files
+
+0020
+x Sync with processing editor
+x Fix example error reporting
+x Fix Encoder library bug, thanks to Nameet Kumar
+x Fix Documentation errors in html files
+
+0019
+x Fix Serial1 buffer memory bug
+x Add bootloader with lower waiting time for auto reset wiring board 0004
+x Add auto-reset feature for boards revision 0004 and up
+
+0018
+x Fix Serial buffer critical section bug
+x Fix Multiple analogRead bug
+x Fix Firmata examples 
+
+0017
+x Add flush() method to the Serial library
+x Factor out print to Print class from LiquidCrystal and Serial library
+x Add support for printing floats with the print command, right now with 2 decimal numbers by default
+x Add bit, byte and word support functions bit() bitRead() bitWrite() lowByte() highByte() and makeWord()
+x Add reference for the new commands
+x Fix pulseIn() command
+x Add Firmata library
+x Update linux jre
+
+0016
+x Add two-way serial monitor
+x Fix bug with shiftOut command
+x Add Binary.h to WProgram.h
+x Add examples and diagrams to distribution reference
+x Fix null pointer serial error throwing when there is no serial or disconnected
+
+0015
+x Remove sampling from analogRead command (note from Adrian Freed)
+x add map function
+x add timeout for pulseIn
+x fix avrdude for macosx 10.4 
+
+0014 
+x Fix nasty PWM bug preventing from the PWM to be stopped by analogWrite(line, o)
+x Fix bug using 8 servos at a time
+x Change PWM resolution to 10 bits, now possible values are from 0-1023
+x add Tom's SoftwareSerial and Stepper libraries
+x add support for stk500v2 protocol through avrdude
+x add documentation for WiringMini and USBAdapter
+x Fix bug in preferences preventing the browser starts from the Help menu
+
+0013 Add support for  the #include directive 
+x from now on, libraries are not linked automatically except Serial
+x editor fixes
+x pulseOut added
+x added documentation for bitwise operators
+x fix errors in reference
+x fix stdlib.h bug
+x examples update for #include directive
+x fix mac distribution svn files removal
+
+0012 Fix PWM issue
+x fix bug with the String equals(String) missing method
+x add EEPROM API
+x Update avr toolchain
+x Add Troubleshooting/ I/O board to the distribution
+x Fixes for the editor
+
+0011 Fix external interruptions support
+
+0010 String library added
+x Support String as a datatype
+
+0009 core
+x fixed QSlide bug, added initWiring function for library writers 
+
+0008 pde
+x fixed serial bug seting the speed
+x fixes on the editor
+x added reference for new interrupts commands
+
+0007 pde
+x fixed bug with the math library linking
+x fixed forced save before uploading to i/o board
+x fixed documentation
+x fixed millis and freidns to be unsigned long
+
+0006 pde
+
+0005 pde
+
+0004 pde
+
+0003 pde
+x check the existence of an option to display the sketch forder when updating in the proferences file
+x check bug for the undo
+
+0002 pde
+X added florian's new icons
+
+
+//
+
+MESS TO SORT
+
+_ make sure that the preproc stuff gets built once
+_   especially straight out of cvs
+_ also out of cvs
+_   check for necessary tools to be installed
+_   zip, unzip, jikes, etc
+
+macosx
+_ resize box intrudes on the scroller for the console area
+_ horizontal scroller is always present
+
+_ creating sketchbook / lab situations
+_   test to see if it's possible to write to "My Documents"
+_   if not, should bring up a prompt asking where to put sketchbook
+_   also put something in lib/preferences.txt for default location
+_     this way a course admin can change the default location
+
+_ allow to use doubles on casting -- particularly for Math.cos() et al
+
+_ ctrl-tab to switch between tabs
+
+_ make notes about preproc
+_   subclasses need to use "public void keyPressed" not "void keyPressed"
+
+_ round() is not colored
+
+_ add serial.last() to api
+_   also bring back serial event via reflection
+
+_ "save as" shouldn't show save as dialog for sketches 
+_   unless that's the current mode that's being used
+
+_ "new midlet" option.. keeping things open for midlet projects
+
+_ track loadImage() with filenames that are inconsistent
+_   i.e. mixed case filename in sketch is different in windows
+_   but when uploaded to a unix server causes a serious problem
+_   use canonicalPath to flag possible problems
+_   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1096508877;start=5
+
+_ mouse wheel broken in the text editor? (windows jdk 1.5?) 
+
+_ make font builder vertically resizable
+_   200 pt font hoses things / hides buttons
+
+_ save caret position when switching tabs
+
+_ add mnemonics for menus (alt-f to open 'file')
+
+_ if additional tab is "public" class.. then make external?
+
+
+......................................................................
+
+
+casey notes
+_ sketches no longer require a "data" folder
+_ "draw" is not highlighted as a keyword.. other keywords?
+_   draw(), PGraphics(), NO_DEPTH_TEST, PMovie(), PMovie.repeat()
+_   PClient(), PClient.available(), PClient.read(), 
+_   PServer(), PServer.dispose(), PServer.write(), attach(), length
+_ example that uses loop/noLoop, or redraw?
+_ talk to creas about making html files for bugs, readme, revisions.
+_   or how they should relate to the 'faq'.. readme -> faq? 
+_ make a sketch that shows loading from the web
+_ make another sketch that shows loading from a file
+
+_ nanoxml problems with manifest
+
+_ make exit() and/or size(0, 0) work for scripts
+
+libraries
+_ if videoEvent exists, don't auto-read?
+_   though for serial this would only grab the last byte
+_   video bug on osx? an error message when quitting video sketches:
+    java.io.IOException: Bad file descriptor 
+_     at java.io.FileInputStream.readBytes(Native Method) etc... ). 
+_ how to queue lib events until the end of loop
+_   call them inside post()!
+_ bring back some form of beginSerial/beginVideo
+_   openSerial(), serial().. 
+_   should it prompt or use the first available if none specified?
+_ serial - if null serial port name, prompt for one
+_   if "" for name, use the default / first in the list
+_ run library destroy after hitting 'stop'
+_   quicktime audio doesn't stop after hitting 'stop'
+_   weirdness external stop not calling stop(), just finished = true
+
+_ properly handle non-ascii chars in p5 folder name
+_   or at least warn the user to install somehwere else
+_ track down the cause of the processing.exe not starting bugs
+_   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1062794781
+_   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1067764732
+_   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1094148057
+
+_ different name for 'lib' folder because of libraries folder
+
+_ implement new version of history
+_   make history folder, and a zip (not gz) file for each entry
+_   history causing trouble - super slow with a huge sketch
+_     could instead be gzipped and appended to history.dat
+_     along with another file that is actually a table of offsets
+_     no need to make the thing a gzip stream
+_     checkbox on menu for 'record history' ?
+_     history converter option?
+_   only first 20 entries visible?
+_   zlib file becoming corrupt (not flushed after close?)
+_     http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1080346981;start=0
+_     http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1088333655;start=0
+_   shortcut to walk through history, ala photoshop (ctrl-alt-z)
+
+_ keypressed hanging on applets with a code folder
+_   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1081450102
+_ problems running external vm/vm is hanging
+_   seems to be happening because of virus scanning software (norton)
+_   may need to launch the applet (using 'start') 
+_     and talk over a socket instead
+_   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1067867520;start=0
+_   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1067643186
+_   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1078714442;start=0
+_     something in that one about mouse position halting or not
+
+hanging bug
+to try: 1) don't use a bufferedreader.. just read it and then use a
+buffered reader around the byte array 2) don't do anything with the
+input, and just read it off without signalling message()
+* it may be something to do with the editor consoles. try shutting off
+output to the console and see if it'll still crash.
+* most likely related to io streams to the external java process. when
+run via a disconnected process, using "cmd /c start java", the thing
+will never hang. in that instance, the process terminates almost
+immediately, and no i/o needs to happen (since it's a cmd prompt that
+never shows up). 
+* it could also be a graphics sync bug that just gets more testy
+because the environment, a second java process, is running at the same
+time. mis.newPixels() may hork since it's over in the applet's thread,
+and it might be calling repaint() or Toolkit.sync() to update the
+image on-screen. 
+* shows up on key presses.. not sure if this is because of the actual
+key press, or if it's because they're often accompanied by a println()
+* blank spaces in filenames/parent folder often cause trouble.. not
+sure if related. same for PATH and CLASSPATH.
+* some virus scanning software, particularly older NAV versions cause
+the trouble. 
+
+
+static apps/scripts
+_ static applets need to be able to resize themselves on 'play'
+_ figure out what to do with static apps exported as application
+_   needs to just hang there
+_ scripts (w/ no graphics) will need to call exit() explicitly
+
+
+libraries
+_ compiling - main file is a .java not a .pde
+_   also where no root .pde file with the same name.. (i.e. video)
+_ on "new library" fill in the default code for the lib
+_ record imports from java files as well
+_ ignore imports from java.* or maybe just things pde's classpath
+_ after export of library, rebuild "import library" menu
+
+
+really nasty bugs (fix in 0070 if possible)
+_ threading issues on casey's laptop
+_ odd error in System.err stream coming from running external
+_   dies after a while or goes weird
+_   make sure exceptions with .class work
+_ openStream returning 'null' really horked up the letters applet
+_   no System.out was coming through
+_   System.err was getting cut off before finishing
+
+
+_ support for editor plugins
+_   make dynamically loaded plugins and "tools" menu
+_     break out beautify as its own plugin
+_   make beautify plugin "Auto Format"
+_     //for (int i = 0; i < 10; i++) {
+_     } catch (IOException e) { }
+_     http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1086555381
+_     need to ignore comments.. but not those inside quotes.. oog
+_     http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1067309918;start=0
+_     ignores colons for case statements
+_     need to tie this to the parser instead
+_   do a better job of maintaining cursor during beautify 
+_   only beautify a particular section of code
+_     http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_Software;action=display;num=1087227217
+o   make "get quicktime libs" function
+o     can java get the root directory for system/win32 etc?
+
+
+_ write a threading example
+_   or handle this some more intelligent way, super.stop() is needed.
+_   http://processing.org/discourse/yabb/YaBB.cgi?board=Syntax;action=display;num=1083574943
+_   http://processing.org/discourse/yabb/YaBB.cgi?board=Syntax;action=display;num=1067383998
+
+
+export stuff
+_ make multiple jar files thing work as an option
+_   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_Software;action=display;num=1067360903;start=0
+_   applet default is one file, application default is multiple
+_   user in advanced mode can switch to the other
+_   buttons on side of sketch do default (last) behavior
+_ include a note that 'applet' folder will get emptied/rewritten
+_   or rename the old applet folder to something else? (nah, too messy)
+
+
+_ redo preferences panel to use proper swing layout etc
+_ exception in setup() on external app doesn't kill run button 
+_   also doesn't kill external vm
+_ make preferences a modal dialog
+_ package processing.app for PdeBase, PdeEditor..
+
+
+_ video - try to replicate bug that causes hang with camera
+_   happens when winvdig, camera or quicktime are not properly installed
+
+
+0071 or later
+_ write export-to-application
+_   lock feature for present mode (part of export to application?)
+_   application can still do serial (qt, other stuff?) 
+_   applet runs in browser, though applet on cbagel is everything..
+_   include main class info for executable jar file with jdk > 1.2
+_   not difficult to do, just some tweaking once applet export works
+_   wrapper that invokes the applet using a copy of the jre
+_   main() method needs to set layout manager if jexegen is to be used
+_     (msft vm defaults to null layout manager)
+_   also make sure pack() is happening
+_   add manifest.mf to exported applets so that applications will work
+_     http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_Software;action=display;num=1045983103;start=0
+_   BApplet.main(new String[] { "flashcards3" });
+_     this will need to detect whether the user has their own main()
+_     or even BApplet.main(new String[] { getClass().getName() });
+_     META-INF/MANIFEST.MF contains just "Main-Class: ClassName"
+_     main sticking point will be serial/qtjava in exports
+_ write export-to-library
+_   need to be able to produce the serial, video, etc libs
+_   see if sonia project can compile
+_ implement horizontal version of PdeEditorButtons
+_   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_Software;action=display;num=1076707944
+o   is PdeEditorHeader one pixel too tall?
+_ menu option for Renderer > to "Core" or "OpenGL"
+_   on export, uses this setting to determine if jogl is added to project
+_ add a "make archive" option
+_   doesn't rename sketch, just names zip file sketch + time stamp
+_ need showError/Message/Warning/Prompt design from casey
+_   maybe something that shows stack trace?
+_   with an 'email this' button? (include source code too?)
+_   also need a "prompt" dialog for asking filenames, etc
+_   implement and remove PdeEditorStatus stuff
+
+
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
+PDE - Processing Development Environment
+
+
+PDE / Details
+
+   b _ running present mode with a bug in the program hoses things
+   b _   make sure the program compiles before starting present mode
+   1 _ processing.exe: problem if expert version is run, and no java installed
+   1 _   call the person a genius and tell them to install java
+   1 _ make some fancy extendo things because the tabs get too big
+
+   1 _ tie .pde files as documents of the application
+   1 _   figure out proper registry key for windows
+   1 _     can be handled when the app first run (jni?)
+   1 _   write handler for main() to take document names
+   1 _   need document icons
+   1 _   add MRJOpenApplicationHandler and MRJOpenDocumentHandler
+   1 _       especially the open document fella
+   1 _       under osx, app won't get doc unless app already launched
+   1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_Software;action=display;num=1094149466
+
+   1 _ implement page setup and print
+   1 _   pretty printing of code in project
+   1 _   option to just print all code in project
+   1 _   option to export all the code as colored html
+
+   1 _ p5 becomes a memory hog (benelek and glen murphy)
+   1 _   even without sketches open, perhaps not gc'ing properly
+   1 _   objects probably not getting finalized
+   1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1050134854;start=0
+
+   1 _ need to check if volume is read-only, notify and quit if it is
+   1 _   people are trying to run off the disk image
+   1 _   need to pay attention to when running from read-only drive
+   1 _     reported by brandenberg
+   1 _    "p5 will launch from the disk image, but will 
+   1 _     not draw the sketch name bar doesn't appear"
+
+   1 _ size() has memory limitations (pitaru)
+   1 _   catch OutOfMemoryError inside size() and let the user know
+   1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1038847001
+   1 _ verify editor buttons working properly
+   1 _   they're not.. mostly unresponsive, and often get stuck
+   1 _   is play button properly unhighlighting? 
+   1 _     does it unhighlight after compile or runtime errors?
+   1 _     also when using draw() instead of loop()
+   1 _       applet needs to notify runner that it has terminated
+   1 _   if export fails (compile error) need deselect
+   1 _ exceptions in draw() apps aren't caught
+   1 _   the program resize(200, 200); just does nothing (doesn't complain)
+   1 _ if 'void' left out before loop or setup, cryptic message about
+   1 _   'constructor loop must be named Temporary_23498_2343'
+   1 _   add a better handler for this specific thing?
+   1 _ menu weirdness (benelek)
+   1 _   when u've got a menu open, move a cursor over the text area
+   1 _   and back over the menu, the text-area cursor type remains. 
+   1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1043667859
+   1 _ scroll bar has some painting weirdness with jedit textarea
+   1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1042351684
+   1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1083787569
+   1 _ rename/saveas doesn't properly have its focus set
+   1 _   under windows, immediately typing after rename doesn't select
+   1 _   the whole thing is selected, but not directly editable
+   1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_Software;action=display;num=1075149929
+   1 _ Ctrl-Z will undo, but not scroll to where the undo happens. 
+   1 _   so user thinks nothing is happening and overundo. 
+   1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1064220242;start=0
+   1 _ figure out how to cancel 'save changes' on macosx and windows
+   1 _   macosx handleQuit seems to force termination (at least on 1.3)
+   1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1064732330;start=0
+   1 _ don't cache stuff from loadStrings and others
+   1 _   mac java vm won't give up old version of file
+   1 _   or use setUseCaches(false)
+   1 _ too many frames drawn before window visible - especially on mac
+   1 _ dim edit menus as appropriate during selection/no selection/etc
+   1 _ switch to newer revision of jedit?
+   1 _   is enormous horizontal scroller issue fixed properly
+   1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1083787569
+   1 _ make export put a timestamp in the html code (hidden or visible)
+   1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_Software;action=display;num=1075659029
+
+   1 _ find/replace
+   1 _   add support for hitting 'ESC'
+   1 _   option to ignore or match case
+   1 _   when hitting 'find', select the text in the field
+   1 _     give that field focus explicitly, rather than just for typing
+   1 _     right now, typing works, but no caret, no blue highlight
+   1 _     and on second find run, should instead select all the find string
+   1 _       so that typing will replace it directly
+   1 _   only enable "find next" in menu after a find has happened
+
+   1 _ drag & drop implementation to add files to sketch
+
+
+PDE / Compiler
+
+   1 _ warn about writing non-1.1 code. 
+   1 X   will jikes do it if the -source is set to 1.1? nope.. 
+   1 X     notes inside PdeCompiler
+   1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_Software;action=display;num=1079867179;start=0
+
+
+BUGS / Preprocessor
+
+   1 _ casting problems in the parser
+   1 _   float u = float(x)/width; works.
+   1 _   float u = (float(x)/width); doesn't work: "unexpected token: float".
+   1 _   float u = (x/float(width)); works! 
+   1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1084011098;start=0
+   1 _ if last line of code is a comment with no CR after it,
+   1 _   an OutOfMemoryError wants to happen, 
+   1 _   but right now there's a hack to add a CR in PdePreprocessor
+   1 _ return (int(5.5)) causes an error
+   1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1083624993;start=0
+   1 _ random, single slash in the code doesn't throw an error
+   1 _   (just gets removed by the preprocessor)
+   1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1099371066;start=0
+
+
+PDE / Font Builder
+
+   1 _ close/hide window on 'ESC'
+   1 _ loading is very slow on the first time (getting all font names)
+   1 _   show a progress/status bar while it's happening?
+   1 _ font builder chopping off parts of letters
+   1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1076358432;start=0
+
+
+PDE / Features
+
+   b _ some notion of plugins for pde
+   b _   color picker or other things written by folks
+   b _   add all .jar files in lib/plugins on startup
+   b _ make some kind of internal color picker
+   b _   could be a separate window that's always around if needed
+   1 _ external editor -> add a command to launch
+   1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_Software;action=display;num=1043734580;start=0
+     _ refresh sketchbook menu upon returning to the app from elsewhere?
+     _   this would need to track whether coming just from an ext runtime
+
+
+PDE / Console
+
+   1 _ error messages run off the edge and go invisible
+   1 _   actually this is just for the editor status box
+   1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1074894329
+   1 _ multi-line errors a mess in jikes
+   1 _   maybe a dropdown list thing, with the first just shown?
+
+
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
+DISTRIBUTION
+
+How the environment gets packed up, downloaded, and installed.
+
+
+DISTRIBUTION / General 
+b _ need to change all the copyrights over to mit "except where noted"
+b _ dist.sh needs to auto-remove .DS_Store boogers
+b _ write script to remove .DS_Store and CVS folders from dist
+b _   # remove DS_Store files
+b _   sudo find . -name ".DS_Store" -depth -exec rm {} \;
+b _ need more comprehensive list of 'known bugs'
+b _ need more comprehensive list of 'known suggestions'
+b _ javadoc "advanced" reference by beta
+b _   and then finalizing it towards 1.0
+b _   document hint() commands for advanced reference
+b _ beta release will include source code
+b _ write notes about running p5 on another platforms 
+b _   this was some feedback from running on bsd:
+b _     /usr/local/jdk1.3.1/bin/java -cp lib:lib/build:lib/pde.jar:lib/kjc.jar:lib/oro.jar:java/lib/ext/comm.jar PdeBase 
+b _   need to use the 1.3 vm, and get a fake platform name
+b _   otherwise, goes looking for lib/pde_.properties or something
+1 _ if size() not found in export/compile, ask the user
+1 _   size(myWidth, myHeight) -> set static var in BGraphics
+1 _     for the last size that was used, use as default for fill-in field
+1 o modify antlr stuff to conditionally recompile in make.sh
+1 _   compile antlr inside the initial setup of the work dir
+1 X     done for macosx
+1 _     fix this for windows and linux
+1 _ about box 
+1 _   bring up information about gpl, lgpl, and ibmpl
+1 _   jedit syntax is under mit license
+1 _     http://www.opensource.org/licenses/mit-license.php
+
+
+BUGS / Windows
+1 _ NullPointerException when alt is pressed
+1 _   might be something to do with the applet frame being an awt not swing
+1 _   event first goes to the applet listener, needs to consume the event
+1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1061802316;start=0
+1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1077058974
+1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1081751451;start=0
+1 _ p5's exe prolly has trouble when PATH has quotes (or spaces?)
+1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1068388889
+1 _   CLASSPATH figured out what to do with quotes, but not PATH
+
+
+DISTRIBUTION / Windows
+1 _ winamp/audio getting starved or crackly while applets running
+1 _   thread priority too high? or something weird
+1 _ need splash screen, startup takes a long time
+
+
+DISTRIBUTION / Linux
+1 _ doesn't seem interested in quitting properly (?)
+b _ splash screen
+1 _ ctrl-t is not stopping a sketch
+1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_software_bugs;action=display;num=1074810469
+
+
+DISTRIBUTION / Mac OS X
+b _ add mkdmg script to macosx build process
+b _   could significantly speed things up
+b _ set nice background for disk image on macosx
+1 _ test more to see if runtime exceptions are coming through
+1 _ track down error in PdeCompiler for message parsing
+1 _   was missing the error about a package being gone
+1 _   can comment out /System/Library/ as a test
+1 _ Contents/Resources/Java can take jnilib files
+1 _ set file type/creator for .pde files of examples
+1 _ would be nice to have macosx packaged up as a single .app file
+1 _ is there a way to set the color of the Frame growbox?
+1 _   currently it's white instead of dark gray like the ui
+1 _   setBackground(Color) didn't seem to help inside PdeBase.<init>
+1 _ use disk:// notation as panther alternative
+1 _   so that it doesn't download the disk, just mounts it
+1 _   although.. this only works on panther.. how many are using it?
+1 _ mac standard key combinations for moving around in the editor
+1 _   http://processing.org/discourse/yabb/YaBB.cgi?board=Proce55ing_Software;action=display;num=1093116515
+
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
+PRIORITIES
+
+
+casey
+_ graphics engine up to spec
+_ video/net/sound up to spec
+X multiple files open 
+X compile libraries within p5
+
+ed
+_ quality of compiler errors + multiple errors
+X additional class files.. .java or .pde
+X find/replace
+
+juha
+_ documenting how the environment works / is set up
+
+amit
+X find/replace
+X println speed improvements
+_ 'debug' that shows a variable (rather than many many println)
+X tabs for multiple files
+
+zach
+2 _ setting breakpoints / stepping through
+2 _   useful as understanding for how program works
+2 _ tracing like director
+
+schoenerwissen
+2 _ tracing variables
+2 _ bspace object
+b X 7 day search on discourse board
+
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
+FRY
+
+My grab of examples/libraries that I'd like to make. Most of these are
+things I've already written in some form or another, but need to take
+the time to package up and release.
+
+_ example showing quicksort code
+_   and how to implement/use as an inner class
+_ arcball
+_ joystick
+_ particles (from multip?)
+_ phyics & collisions
+_   look at the 'havoc' physics library
+_ java3d classes for vec3f and matrix
+_ quicktime exporter or image sequence export
+_   fairly quick--just use experimental code from dbn
+_ more advanced splitting of files into rows/cols uses another class
+_   other class also has concept for random access of lines
+_   by storing the line positions, can access without loading all
+_   into memory because some files will be too large
+_   read table/csv formatted data into a matrix
+_     pseudo-database format version of this that stores indexes to file
+_       rather than loading the whole thing at once
+_ history.. add my diffs sketch (as a plug-in)
+_   could just include a compiled version of the diff app, ala jikes
+_ something about using regexps in p5
+_   wrap up oro for simple matching
+_   (as alternative to the sun classes.. link to those in the docs)
+_ method for file handling, recursive walk-through a directory
+_   file i/o: file listing util that leaves out . and ..
+
+more random thoughts
+_ stroke picker
+_   just lineweight, so don't bother.. use constants palette instead
+_ font picker
+_   same thing, just quickly generates fonts on the fly and applies them
+_ need to look at matlab's visualization tools
+_ arcs, better 'color' object
+_ take everything in perl cookbook, and make easy to do with p5
+_ database access and reading large files are always hangups
+_ support capabilities of matlab's visualization tools
+_ charting/labeling primitives.. excel never quite does it
+_ botting engine
+_ difficulty of initial grab/analysis of data, that may take some time
+_   then needs to be stored and run on multiple times
+_ methods for picking colors.. how to color code, limit to 5? gradients..
+_ simple way to do tufte-style small multiples on an app
+_ function for reporting percent finished (or swing dialog)
+_ also for reporting the amount of time remaining
+_ loading/selecting a file (or folder), or from command line
+_ load large file as lattice (option of whether to keep in memory)
+_   how many rows/columns for headings
+_ walking through an entire directory, with a handler
+_   that throws out the . and .. items
+_   that knows about aliases (jdk13)
+_ overall contrast/color control (genomevalence for hulk)
+_ mac -> vlw (or sbit?) font converter
+_   need to also read the fond for metrics
+_ general bitmap font editor, see what chars are in font, etc

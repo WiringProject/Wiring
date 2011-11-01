@@ -1,0 +1,43 @@
+#######################################
+# Syntax Coloring Map For NMEA Library
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+NMEA                           KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+decode                         KEYWORD2
+gprmc_utc                      KEYWORD2
+gprmc_status                   KEYWORD2
+gprmc_latitude                 KEYWORD2
+gprmc_longitude                KEYWORD2
+gprmc_speed                    KEYWORD2
+gprmc_course                   KEYWORD2
+gprmc_distance_to              KEYWORD2
+gprmc_course_to                KEYWORD2
+sentence                       KEYWORD2
+terms                          KEYWORD2
+term                           KEYWORD2
+term_decimal                   KEYWORD2
+libversion                     KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+ALL                            LITERAL1
+GPRMC                          LITERAL1
+MPS                            LITERAL1
+KMPH                           LITERAL1
+MPH                            LITERAL1
+KTS                            LITERAL1
+MTR                            LITERAL1
+KM                             LITERAL1
+MI                             LITERAL1
+NM                             LITERAL1

@@ -1,0 +1,22 @@
+#######################################
+# Syntax Coloring Map For SmoothInterpolate
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+SmoothInterpolate              KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+calculate                      KEYWORD2
+size                           KEYWORD2
+smooth                         KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+

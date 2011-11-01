@@ -1,0 +1,14 @@
+824,825c824,825
+<         buffer.append("void setup()\n{\n\n}\n\n");
+<         buffer.append("void loop()\n{\n\n}");
+---
+>         buffer.append("void setup() \n{\n\n}\n\n");
+>         buffer.append("void loop() \n{\n\n}");
+863,864c863,864
+<         buffer.append("void setup()\n{\n\n}\n\n");
+<         buffer.append("void loop()\n{\n\n}");
+---
+>         buffer.append("void setup() \n{\n\n}\n\n");
+>         buffer.append("void loop() \n{\n\n}");
+1501d1500
+<     

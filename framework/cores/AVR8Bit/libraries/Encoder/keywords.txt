@@ -1,0 +1,24 @@
+#######################################
+# Syntax Coloring Map For Encoder
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+Encoder                        KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+attached                       KEYWORD2
+attach                         KEYWORD2
+detach                         KEYWORD2
+write                          KEYWORD2
+read                           KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+

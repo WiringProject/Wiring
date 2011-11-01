@@ -1,0 +1,32 @@
+#######################################
+# Syntax Coloring Map For Serial
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin                          KEYWORD2
+read                           KEYWORD2
+print                          KEYWORD2
+println                        KEYWORD2
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+DEC                            LITERAL1
+HEX                            LITERAL1
+OCT                            LITERAL1
+BIN                            LITERAL1
+BYTE                           LITERAL1
+

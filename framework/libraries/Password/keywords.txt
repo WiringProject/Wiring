@@ -1,0 +1,24 @@
+#######################################
+# Syntax Coloring Map For Password
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+Password                       KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+set                            KEYWORD2
+is                             KEYWORD2
+append                         KEYWORD2
+reset                          KEYWORD2
+evaluate                       KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+

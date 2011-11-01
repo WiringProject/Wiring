@@ -1,0 +1,34 @@
+#######################################
+# Syntax Coloring Map For Keypad
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+Keypad                         KEYWORD1
+KeypadEvent                    KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin                          KEYWORD2
+getKey                         KEYWORD2
+getState                       KEYWORD2
+setHoldTime                    KEYWORD2
+addEventListener               KEYWORD2
+
+# this is a macro that converts 2d arrays to pointers
+makeKeymap                     KEYWORD2
+
+# this is a way to standardize the client code,
+# help enhance the use of the name keypadEvent
+keypadEvent                    KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+NO_KEY                         LITERAL1
+KEY_RELEASED                   LITERAL1

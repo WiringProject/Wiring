@@ -1,0 +1,24 @@
+#######################################
+# Syntax Coloring Map For Constrained
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+Constrain                      KEYWORD1
+Constrained                    KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+value                          KEYWORD2
+maximum                        KEYWORD2
+minimum                        KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+

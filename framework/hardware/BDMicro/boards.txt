@@ -1,0 +1,35 @@
+##############################################################
+
+MavricIIB14MHz.name=BDMicro Mavric IIB @ 14.7456 MHz
+MavricIIB14MHz.upload.protocol=wiring
+MavricIIB14MHz.upload.maximum_size=126976
+MavricIIB14MHz.upload.speed=115200
+MavricIIB14MHz.bootloader.low_fuses=0xBF
+MavricIIB14MHz.bootloader.high_fuses=0xDC
+MavricIIB14MHz.bootloader.extended_fuses=0xFF
+MavricIIB14MHz.bootloader.path=
+MavricIIB14MHz.bootloader.file=WiringBoot_Mavric-IIB_14745600Hz.hex
+MavricIIB14MHz.bootloader.unlock_bits=0x3F
+MavricIIB14MHz.bootloader.lock_bits=0x2F
+MavricIIB14MHz.build.mcu=atmega128
+MavricIIB14MHz.build.f_cpu=14745600L
+MavricIIB14MHz.build.core=AVR8Bit
+MavricIIB14MHz.build.hardware=MavricIIB
+
+##############################################################
+
+MavricIIB16MHz.name=BDMicro Mavric IIB @ 16 MHz
+MavricIIB16MHz.upload.protocol=wiring
+MavricIIB16MHz.upload.maximum_size=126976
+MavricIIB16MHz.upload.speed=115200
+MavricIIB16MHz.bootloader.low_fuses=0xBF
+MavricIIB16MHz.bootloader.high_fuses=0xDC
+MavricIIB16MHz.bootloader.extended_fuses=0xFF
+MavricIIB16MHz.bootloader.path=
+MavricIIB16MHz.bootloader.file=WiringBoot_Mavric-IIB_16MHz.hex
+MavricIIB16MHz.bootloader.unlock_bits=0x3F
+MavricIIB16MHz.bootloader.lock_bits=0x2F
+MavricIIB16MHz.build.mcu=atmega128
+MavricIIB16MHz.build.f_cpu=16000000L
+MavricIIB16MHz.build.core=AVR8Bit
+MavricIIB16MHz.build.hardware=MavricIIB

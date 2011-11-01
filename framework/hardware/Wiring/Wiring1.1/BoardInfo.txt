@@ -1,0 +1,65 @@
+Pin Information for Wiring V1.1 (ATmega1281/ATmega2561)
+
+
+Pin Port F1        F2        F3        F4        Mask Notes
+  0   0  SCL                 EI0                 0x01 PORTD0,External Interrupt 0
+  1   0  SDA                 EI1                 0x02 PORTD1,External Interrupt 1
+  2   0  RX1                 EI2                 0x04 PORTD2,External Interrupt 2
+  3   0  TX1                 EI3                 0x08 PORTD3,External Interrupt 3
+  4   0                      ICP1                0x10 PORTD4
+  5   0                      XCK1                0x20 PORTD5,SPI1 SCK (Master only)
+  6   0                                T0        0x40 PORTD6,Timer 0 input
+  7   0                                T1        0x80 PORTD7,Timer 1 input
+  8   1                                A8        0x01 PORTC0,External Memory A8
+  9   1                                A9        0x02 PORTC1,External Memory A9
+ 10   1                                A10       0x04 PORTC2,External Memory A10
+ 11   1                                A11       0x08 PORTC3,External Memory A11
+ 12   1                                A12       0x10 PORTC4,External Memory A12
+ 13   1                                A13       0x20 PORTC5,External Memory A13
+ 14   1                                A14       0x40 PORTC6,External Memory A14
+ 15   1                                A15       0x80 PORTC7,External Memory A15
+ 16   2                                AD0       0x01 PORTA0,External Memory AD0
+ 17   2                                AD1       0x02 PORTA1,External Memory AD1
+ 18   2                                AD2       0x04 PORTA2,External Memory AD2
+ 19   2                                AD3       0x08 PORTA3,External Memory AD3
+ 20   2                                AD4       0x10 PORTA4,External Memory AD4
+ 21   2                                AD5       0x20 PORTA5,External Memory AD5
+ 22   2                                AD6       0x40 PORTA6,External Memory AD6
+ 23   2                                AD7       0x80 PORTA7,External Memory AD7
+ 24   3            PCINT0    ~SS                 0x01 PORTB0,SPI Slave Select Input
+ 25   3            PCINT1    SCK                 0x02 PORTB1,SPI Master Clock
+ 26   3            PCINT2    MOSI                0x04 PORTB2,SPI Master Input/Slave Output
+ 27   3            PCINT3    MISO                0x08 PORTB3,SPI Master Output/Slave Input
+ 28   3  PWM       PCINT4                        0x10 PORTB4,OC2A
+ 29   3  PWM       PCINT5                        0x20 PORTB5,OC1A
+ 30   3  PWM       PCINT6                        0x40 PORTB6,OC1B
+ 31   3  PWM       PCINT7                        0x80 PORTB7,OC0A/OC1C
+ 32   4  RX0       PCINT8              PDI       0x01 PORTE0,ISP data input
+ 33   4  TX0                           PDO       0x02 PORTE1,ISP data output
+ 34   4                      XCK0      AIN0      0x04 PORTE2,SPI0 SCK (Master only),Analog Comparator Positive Input
+ 35   4  PWM                           AIN1      0x08 PORTE3,OC3A,Analog Comparator Negative Input
+ 36   4  PWM                 EI4                 0x10 PORTE4,OC3B,External Interrupt 4
+ 37   4  PWM                 EI5                 0x20 PORTE5,OC3C,External Interrupt 5
+ 38   4                      EI6       T3        0x40 PORTE6,External Interrupt 6,Timer 3 input
+ 39   4            ICP3      EI7       CLKO      0x80 PORTE7,Divided System Clock Output
+ 40   5                                ADC0      0x01 PORTF0,Analog Input 0
+ 41   5                                ADC1      0x02 PORTF1,Analog Input 1
+ 42   5                                ADC2      0x04 PORTF2,Analog Input 2
+ 43   5                                ADC3      0x08 PORTF3,Analog Input 3
+ 44   5                                ADC4      0x10 PORTF4,Analog Input 4,JTAG
+ 45   5                                ADC5      0x20 PORTF5,Analog Input 5,JTAG
+ 46   5                                ADC6      0x40 PORTF6,Analog Input 6,JTAG
+ 47   5                                ADC7      0x80 PORTF7,Analog Input 7,JTAG
+ 48   6  WLED                          ~WR       0x01 PORTG0,On-board LED,External Memory WR
+ 49   6                                ~RD       0x02 PORTG1,External Memory RD
+ 50   6                                ALE       0x04 PORTG2,External Memory ALE
+ 51   6                      TOSC2               0x08 PORTG3,External Timer Oscillator
+ 52   6                      TOSC1               0x10 PORTG4,External Timer Oscillator
+ 53   6  PWM                                     0x20 PORTG5,OC0B
+
+
+More notes:
+PCINTx pins are "Pin Change Interrupt" pins.  See Atmel AVR datasheets for more
+information.
+
+$Id: BoardInfo.txt 1232 2011-09-01 05:55:38Z bhagman $

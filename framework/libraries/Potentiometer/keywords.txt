@@ -1,0 +1,22 @@
+#######################################
+# Syntax Coloring Map For Potentiometer
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+Potentiometer                  KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+getValue                       KEYWORD2
+getSector                      KEYWORD2
+setSectors                     KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+

@@ -1,0 +1,26 @@
+#######################################
+# Syntax Coloring Map For TimedAction
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+TimedAction                    KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+reset                          KEYWORD2
+enable                         KEYWORD2
+disable                        KEYWORD2
+check                          KEYWORD2
+setInterval                    KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+NO_PREDELAY                    LITERAL1
+

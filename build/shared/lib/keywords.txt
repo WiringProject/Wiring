@@ -1,0 +1,587 @@
+# LITERAL2 specifies constants
+
+DEC	LITERAL2
+BIN	LITERAL2
+OCT	LITERAL2
+HEX	LITERAL2
+BIN	LITERAL2
+DEG_TO_RAD	LITERAL2
+FALLING	LITERAL2
+HALF_PI	LITERAL2
+INPUT	LITERAL2
+LSBFIRST	LITERAL2
+MAX_FLOAT	LITERAL2
+MAX_INT	LITERAL2	
+MSBFIRST	LITERAL2
+NULL	LITERAL2
+OUTPUT	LITERAL2
+PI	LITERAL2
+RAD_TO_DEG	LITERAL2
+RADIANS	LITERAL2
+RISING	LITERAL2
+EXTERNAL_INTERRUPT_0	LITERAL2
+EXTERNAL_INTERRUPT_1	LITERAL2
+EXTERNAL_INTERRUPT_2	LITERAL2
+EXTERNAL_INTERRUPT_3	LITERAL2
+EXTERNAL_INTERRUPT_4	LITERAL2
+EXTERNAL_INTERRUPT_5	LITERAL2
+EXTERNAL_INTERRUPT_6	LITERAL2
+EXTERNAL_INTERRUPT_7	LITERAL2
+THIRD_PI	LITERAL2
+TWO_PI	LITERAL2
+DEFAULT	LITERAL2
+INTERNAL1V1	LITERAL2
+INTERNAL2V56	LITERAL2
+INTERNAL	LITERAL2
+EXTERNAL	LITERAL2
+CLOCK_STOP	LITERAL2
+CLOCK_NO_PRESCALE	LITERAL2
+CLOCK_PRESCALE_8	LITERAL2
+CLOCK_PRESCALE_32	LITERAL2
+CLOCK_PRESCALE_64	LITERAL2
+CLOCK_PRESCALE_128	LITERAL2
+CLOCK_PRESCALE_256	LITERAL2
+CLOCK_PRESCALE_1024	LITERAL2
+CLOCK_EXTERNAL_FALLING	LITERAL2
+CLOCK_EXTERNAL_RISING	LITERAL2
+POWER_ADC	LITERAL2
+POWER_SPI	LITERAL2
+POWER_WIRE	LITERAL2
+POWER_TIMER0	LITERAL2
+POWER_TIMER1	LITERAL2
+POWER_TIMER2	LITERAL2
+POWER_TIMER3	LITERAL2
+POWER_TIMER4	LITERAL2
+POWER_TIMER5	LITERAL2
+POWER_SERIAL0	LITERAL2
+POWER_SERIAL1	LITERAL2
+POWER_SERIAL2	LITERAL2
+POWER_SERIAL3	LITERAL2
+POWER_ALL	LITERAL2
+SLEEP_IDLE	LITERAL2
+SLEEP_ADC	LITERAL2
+SLEEP_POWER_DOWN	LITERAL2
+SLEEP_POWER_SAVE	LITERAL2
+SLEEP_STANDBY	LITERAL2
+SLEEP_EXTENDED_STANDBY	LITERAL2
+RX0	LITERAL2
+TX0	LITERAL2
+RX1	LITERAL2
+TX1	LITERAL2
+RX2	LITERAL2
+TX2	LITERAL2
+RX3	LITERAL2
+TX3	LITERAL2
+EIO	LITERAL2
+EI1	LITERAL2
+EI2	LITERAL2
+EI3	LITERAL2
+EI4	LITERAL2
+EI5	LITERAL2
+EI6	LITERAL2
+EI7	LITERAL2
+SCL	LITERAL2
+SDA	LITERAL2
+SS	LITERAL2
+MOSI	LITERAL2
+MISO	LITERAL2
+SCK	LITERAL2
+A0	LITERAL2
+A1	LITERAL2
+A2	LITERAL2
+A3	LITERAL2
+A4	LITERAL2
+A5	LITERAL2
+A6	LITERAL2
+A7	LITERAL2
+A8	LITERAL2
+A9	LITERAL2
+A10	LITERAL2
+A11	LITERAL2
+A12	LITERAL2
+A13	LITERAL2
+A14	LITERAL2
+A15	LITERAL2
+TOTAL_PINS	LITERAL2
+TOTAL_ANALOG_PINS	LITERAL2
+FIRST_ANALOG_PIN	LITERAL2
+WIRING_PORTS	LITERAL2
+# Notes for Tone
+NOTE_B0	LITERAL2
+NOTE_C1	LITERAL2
+NOTE_CS1	LITERAL2
+NOTE_D1	LITERAL2
+NOTE_DS1	LITERAL2
+NOTE_E1	LITERAL2
+NOTE_F1	LITERAL2
+NOTE_FS1	LITERAL2
+NOTE_G1	LITERAL2
+NOTE_GS1	LITERAL2
+NOTE_A1	LITERAL2
+NOTE_AS1	LITERAL2
+NOTE_B1	LITERAL2
+NOTE_C2	LITERAL2
+NOTE_CS2	LITERAL2
+NOTE_D2	LITERAL2
+NOTE_DS2	LITERAL2
+NOTE_E2	LITERAL2
+NOTE_F2	LITERAL2
+NOTE_FS2	LITERAL2
+NOTE_G2	LITERAL2
+NOTE_GS2	LITERAL2
+NOTE_A2	LITERAL2
+NOTE_AS2	LITERAL2
+NOTE_B2	LITERAL2
+NOTE_C3	LITERAL2
+NOTE_CS3	LITERAL2
+NOTE_D3	LITERAL2
+NOTE_DS3	LITERAL2
+NOTE_E3	LITERAL2
+NOTE_F3	LITERAL2
+NOTE_FS3	LITERAL2
+NOTE_G3	LITERAL2
+NOTE_GS3	LITERAL2
+NOTE_A3	LITERAL2
+NOTE_AS3	LITERAL2
+NOTE_B3	LITERAL2
+NOTE_C4	LITERAL2
+NOTE_CS4	LITERAL2
+NOTE_D4	LITERAL2
+NOTE_DS4	LITERAL2
+NOTE_E4	LITERAL2
+NOTE_F4	LITERAL2
+NOTE_FS4	LITERAL2
+NOTE_G4	LITERAL2
+NOTE_GS4	LITERAL2
+NOTE_A4	LITERAL2
+NOTE_AS4	LITERAL2
+NOTE_B4	LITERAL2
+NOTE_C5	LITERAL2
+NOTE_CS5	LITERAL2
+NOTE_D5	LITERAL2
+NOTE_DS5	LITERAL2
+NOTE_E5	LITERAL2
+NOTE_F5	LITERAL2
+NOTE_FS5	LITERAL2
+NOTE_G5	LITERAL2
+NOTE_GS5	LITERAL2
+NOTE_A5	LITERAL2
+NOTE_AS5	LITERAL2
+NOTE_B5	LITERAL2
+NOTE_C6	LITERAL2
+NOTE_CS6	LITERAL2
+NOTE_D6	LITERAL2
+NOTE_DS6	LITERAL2
+NOTE_E6	LITERAL2
+NOTE_F6	LITERAL2
+NOTE_FS6	LITERAL2
+NOTE_G6	LITERAL2
+NOTE_GS6	LITERAL2
+NOTE_A6	LITERAL2
+NOTE_AS6	LITERAL2
+NOTE_B6	LITERAL2
+NOTE_C7	LITERAL2
+NOTE_CS7	LITERAL2
+NOTE_D7	LITERAL2
+NOTE_DS7	LITERAL2
+NOTE_E7	LITERAL2
+NOTE_F7	LITERAL2
+NOTE_FS7	LITERAL2
+NOTE_G7	LITERAL2
+NOTE_GS7	LITERAL2
+NOTE_A7	LITERAL2
+NOTE_AS7	LITERAL2
+NOTE_B7	LITERAL2
+NOTE_C8	LITERAL2
+NOTE_CS8	LITERAL2
+NOTE_D8	LITERAL2
+NOTE_DS8	LITERAL2
+
+# KEYWORD1 specifies datatypes and keywords
+
+String	KEYWORD1
+Vector	KEYWORD1	
+assert	KEYWORD1
+boolean	KEYWORD1
+break	KEYWORD1
+byte	KEYWORD1
+case	KEYWORD1
+catch	KEYWORD1
+char	KEYWORD1	
+class	KEYWORD1	
+const	KEYWORD1
+continue	KEYWORD1	
+default	KEYWORD1	
+define	KEYWORD1
+do	KEYWORD1	
+double	KEYWORD1
+else	KEYWORD1
+enum	KEYWORD1	
+extends	KEYWORD1
+false	KEYWORD1
+final	KEYWORD1	
+finally	KEYWORD1
+for	KEYWORD1
+float 	KEYWORD1
+if	KEYWORD1
+include	KEYWORD1
+inline	KEYWORD1
+int	KEYWORD1	
+long	KEYWORD1	
+new	KEYWORD1
+null	KEYWORD1	
+private	KEYWORD1	
+protected	KEYWORD1	
+public	KEYWORD1	
+return	KEYWORD1	
+short	KEYWORD1
+sizeof	KEYWORD1	
+static	KEYWORD1
+switch	KEYWORD1
+template	KEYWORD1	
+this	KEYWORD1	
+throw	KEYWORD1	
+throws	KEYWORD1	
+true	KEYWORD1	
+unsigned	KEYWORD1
+void	KEYWORD1	
+volatile	KEYWORD1
+while	KEYWORD1
+and	KEYWORD3
+and_eq	KEYWORD3
+bitand	KEYWORD3
+bitor	KEYWORD3
+bool	KEYWORD3
+catch	KEYWORD1
+class	KEYWORD3
+compl	KEYWORD3
+const_cast	KEYWORD3
+delete	KEYWORD1
+dynamic_cast	KEYWORD3
+explicit	KEYWORD1
+export	KEYWORD2
+friend	KEYWORD1
+mutable	KEYWORD3
+namespace	KEYWORD2
+new	KEYWORD1
+not	KEYWORD3
+not_eq	KEYWORD3
+operator	KEYWORD3
+or	KEYWORD3
+or_eq	KEYWORD3
+private	KEYWORD1
+protected	KEYWORD1
+public	KEYWORD1
+reinterpret_cast	KEYWORD3
+static_cast	KEYWORD3
+template	KEYWORD3
+this	LITERAL2
+throw	KEYWORD1
+try	KEYWORD1
+typeid	KEYWORD3
+typename	KEYWORD3
+using	KEYWORD2
+virtual	KEYWORD1
+void	KEYWORD1
+wchar_t	KEYWORD3
+xor	KEYWORD3
+xor_eq	KEYWORD3
+word	KEYWORD1
+Serial	KEYWORD1
+Serial1	KEYWORD1
+Serial2	KEYWORD1
+Serial3	KEYWORD1
+
+# Timer keywords
+
+Timer0	KEYWORD1
+Timer1	KEYWORD1
+Timer2	KEYWORD1
+Timer3	KEYWORD1
+Timer4	KEYWORD1
+Timer5	KEYWORD1
+stop	KEYWORD2
+setClockSource	KEYWORD2
+setInterrupt	KEYWORD2
+enableInterrupt	KEYWORD2
+disableInterrupt	KEYWORD2
+setMode	KEYWORD2
+setOutputMode	KEYWORD2
+setOCR	KEYWORD2
+delayMilliseconds	KEYWORD2
+INTERRUPT_OVERFLOW	LITERAL2
+INTERRUPT_COMPARE_MATCH_A	LITERAL2
+INTERRUPT_COMPARE_MATCH_B	LITERAL2
+INTERRUPT_COMPARE_MATCH_C	LITERAL2
+INTERRUPT_CAPTURE_EVENT	LITERAL2
+CHANNEL_A	LITERAL2
+CHANNEL_B	LITERAL2
+CHANNEL_C	LITERAL2
+
+# THE TEXT ABOVE IS HAND-WRITTEN AND FOUND IN THE FILE "keywords_base.txt"
+# THE TEXT BELOW IS AUTO-GENERATED
+
+
+TWO_PI	LITERAL2	TWO_PI
+break	KEYWORD1	break
+HALF_PI	LITERAL2	HALF_PI
+available	KEYWORD2	Serial_available_
+splitString	KEYWORD2	splitString_
+flush	KEYWORD2	Serial_flush_
+sin	KEYWORD2	sin_
+byte	KEYWORD1	byte
+delayMicroseconds	KEYWORD2	delayMicroseconds_
+millis	KEYWORD2	millis_
+max	KEYWORD2	max_
+cos	KEYWORD2	cos_
+|		bitwiseOR
+%		modulo
+isSpace	KEYWORD2	isSpace_
+ldexp	KEYWORD2	ldexp_
+pow	KEYWORD2	pow_
+disablePower	KEYWORD2	disablePower_
+isPrintable	KEYWORD2	isPrintable_
+unsignedlong	KEYWORD1	unsignedlong
+UCharTable		UCharTable
+<		greaterthan
+abs	KEYWORD2	abs_
++=		addassign
+count	KEYWORD2	FloatTable_count_
+print	KEYWORD2	Serial_print_
+portMode	KEYWORD2	portMode_
+toUpperCase	KEYWORD2	String_toUpperCase_
+lowByte	KEYWORD2	lowByte_
+toUpperCase	KEYWORD2	toUpperCase_
+analogReference	KEYWORD2	analogReference_
+while	KEYWORD1	while_
+micros	KEYWORD2	micros_
+substring	KEYWORD2	String_substring_
+tone	KEYWORD2	tone_
+enablePower	KEYWORD2	enablePower_
+signbit	KEYWORD2	signbit_
+#define	KEYWORD1	define
+setElementAt	KEYWORD2	Vector_setElementAt_
+new	KEYWORD1	new
+<<		bitwisebitshiftright
+indexOf	KEYWORD2	String_indexOf_
+fabs	KEYWORD2	fabs_
+delete	KEYWORD1	delete
+count	KEYWORD2	UIntTable_count_
+log	KEYWORD2	log_
+isAscii	KEYWORD2	isAscii_
+copyInto	KEYWORD2	Vector_copyInto_
+!=		inequality
+replace	KEYWORD2	String_replace_
+interrupts	KEYWORD2	interrupts_
+RISING	LITERAL2	RISING
+removeElement	KEYWORD2	Vector_removeElement_
+capacity	KEYWORD2	Vector_capacity_
+HIGH	LITERAL2	HIGH
+&=		bitwiseANDandassign
+MSBFIRST	LITERAL2	MSBFIRST
+#include	KEYWORD1	include
+FALLING	LITERAL2	FALLING
+fmax	KEYWORD2	fmax_
+count	KEYWORD2	DoubleTable_count_
+digitalWrite	KEYWORD2	digitalWrite_
+sleep	KEYWORD2	sleep_
+-		minus
+remove	KEYWORD2	Vector_remove_
+noAnalogWrite	KEYWORD2	noAnalogWrite_
+isGraph	KEYWORD2	isGraph_
+else	KEYWORD1	else
+default	KEYWORD1	default
+ByteTable		ByteTable
+toCharArray	KEYWORD2	String_toCharArray_
+ceil	KEYWORD2	ceil_
+float	KEYWORD2	float_
+compareTo	KEYWORD2	String_compareTo_
+-=		subtractassign
+INPUT	LITERAL2	INPUT
+&		bitwiseAND
+elementAt	KEYWORD2	Vector_elementAt_
+LOW	LITERAL2	LOW
+getBytes	KEYWORD2	String_getBytes_
+UIntTable		UIntTable
+/*		multilinecomment
+indexOf	KEYWORD2	Vector_indexOf_
+true	KEYWORD1	true
+const	KEYWORD1	const
+interruptMode	KEYWORD2	interruptMode_
+++		increment
+atan	KEYWORD2	atan_
+contains	KEYWORD2	Vector_contains_
+println	KEYWORD2	Serial_println_
+long	KEYWORD2	long_
+get	KEYWORD2	Vector_get_
+add	KEYWORD2	Vector_add_
+analogWrite	KEYWORD2	analogWrite_
+charAt	KEYWORD2	String_charAt_
+length	KEYWORD2	ConstantString_length_
+map	KEYWORD2	map_
+isEmpty	KEYWORD2	Vector_isEmpty_
+isAlphaNumeric	KEYWORD2	isAlphaNumeric_
+isUpperCase	KEYWORD2	isUpperCase_
+CharTable		CharTable
+unsignedchar	KEYWORD1	unsignedchar
+loop	KEYWORD2	loop_
+sleepMode	KEYWORD2	sleepMode_
+end	KEYWORD2	Serial_end_
+delay	KEYWORD2	delay_
+/		divide
+isHexadecimalDigit	KEYWORD2	isHexadecimalDigit_
+float	KEYWORD1	float
+isAlpha	KEYWORD2	isAlpha_
+<=		lessthanorequalto
+setPWMResolution	KEYWORD2	setPWMResolution_
+false	KEYWORD1	false
+boolean	KEYWORD1	boolean
+volatile	KEYWORD1	volatile
+||		logicalOR
+WLED	LITERAL2	WLED
+count	KEYWORD2	Vector_count_
+toAscii	KEYWORD2	toAscii_
+byte	KEYWORD2	byte_
+portRead	KEYWORD2	portRead_
+atan2	KEYWORD2	atan2_
+!		logicalNOT
+fma	KEYWORD2	fma_
+Constant	KEYWORD1	Constant
+--		decrement
+case	KEYWORD1	case
+<		lessthan
+begin	KEYWORD2	Serial_begin_
+count	KEYWORD2	UCharTable_count_
+count	KEYWORD2	LongTable_count_
+pullup	KEYWORD2	pullup_
+acos	KEYWORD2	acos_
+tanh	KEYWORD2	tanh_
+firstElement	KEYWORD2	Vector_firstElement_
+ensureCapacity	KEYWORD2	Vector_ensureCapacity_
+getTonePolyphony	KEYWORD2	getTonePolyphony_
+size	KEYWORD2	Vector_size_
+toInt	KEYWORD2	String_toInt_
+constrain	KEYWORD2	constrain_
+Serial		Serial
+DoubleTable		DoubleTable
+random	KEYWORD2	random_
+highByte	KEYWORD2	highByte_
+asin	KEYWORD2	asin_
+removeElementAt	KEYWORD2	Vector_removeElementAt_
+sq	KEYWORD2	sq_
+IntTable		IntTable
+setSize	KEYWORD2	Vector_setSize_
+shiftOut	KEYWORD2	shiftOut_
+ULongTable		ULongTable
+attachInterrupt	KEYWORD2	attachInterrupt_
+isControl	KEYWORD2	isControl_
+isDigit	KEYWORD2	isDigit_
+setup	KEYWORD2	setup_
+trunc	KEYWORD2	trunc_
+,		comma
+shiftIn	KEYWORD2	shiftIn_
+Vector		Vector
+double	KEYWORD1	double
+bitWrite	KEYWORD2	bitWrite_
+if	KEYWORD1	if_
+lastIndexOf	KEYWORD2	String_lastIndexOf_
+read	KEYWORD2	Serial_read_
+;		semicolon
+pulseIn	KEYWORD2	pulseIn_
+hypot	KEYWORD2	hypot_
+isWhitespace	KEYWORD2	isWhitespace_
+trimToSize	KEYWORD2	Vector_trimToSize_
+null	KEYWORD1	null
+-		negation
+noSleep	KEYWORD2	noSleep_
+long	KEYWORD1	long
+int	KEYWORD1	int
+sizeof	KEYWORD2	sizeof_
+noPullup	KEYWORD2	noPullup_
+equals	KEYWORD2	String_equals_
+{}		curlybraces
+setTonePolyphony	KEYWORD2	setTonePolyphony_
+//		comment
+=		assign
+isPunct	KEYWORD2	isPunct_
+isLowerCase	KEYWORD2	isLowerCase_
+lastIndexOf	KEYWORD2	Vector_lastIndexOf_
+count	KEYWORD2	IntTable_count_
+==		equality
+switch	KEYWORD2	switch_
+count	KEYWORD2	ByteTable_count_
+sinh	KEYWORD2	sinh_
+log10	KEYWORD2	log10_
+detachInterrupt	KEYWORD2	detachInterrupt_
+()		parentheses
+*		multiply
+removeAllElements	KEYWORD2	Vector_removeAllElements_
+FloatTable		FloatTable
+length	KEYWORD2	String_length_
+PI	LITERAL2	PI
+CHANGE	LITERAL2	CHANGE
+floor	KEYWORD2	floor_
+*		dereference
+LongTable		LongTable
+<<		bitwisebitshiftleft
+tan	KEYWORD2	tan_
+exp	KEYWORD2	exp_
+setPWMPrescale	KEYWORD2	setPWMPrescale_
+concat	KEYWORD2	String_concat_
+|=		bitwiseORandassign
+noInterrupts	KEYWORD2	noInterrupts_
+<=		greaterthanorequalto
+equalsIgnoreCase	KEYWORD2	String_equalsIgnoreCase_
+bitRead	KEYWORD2	bitRead_
+radians	KEYWORD2	radians_
+String		String
+makeWord	KEYWORD2	makeWord_
+return	KEYWORD1	return
+array		array
+clear	KEYWORD2	Vector_clear_
+setCharAt	KEYWORD2	String_setCharAt_
+[]		arrayaccess
+toLowerCase	KEYWORD2	String_toLowerCase_
+OUTPUT	LITERAL2	OUTPUT
+toLowerCase	KEYWORD2	toLowerCase_
+char	KEYWORD2	char_
+ConstantString		ConstantString
+fmod	KEYWORD2	fmod_
+randomSeed	KEYWORD2	randomSeed_
+min	KEYWORD2	min_
+&&		logicalAND
++		addition
+endsWith	KEYWORD2	String_endsWith_
+LSBFIRST	LITERAL2	LSBFIRST
+cosh	KEYWORD2	cosh_
+trim	KEYWORD2	String_trim_
+&tilde;		bitwiseonescomplement
+sqrt	KEYWORD2	sqrt_
+degrees	KEYWORD2	degrees_
+static	KEYWORD1	static
+analogRead	KEYWORD2	analogRead_
+digitalRead	KEYWORD2	digitalRead_
+unsignedint	KEYWORD1	unsignedint
+count	KEYWORD2	ULongTable_count_
+int	KEYWORD2	int_
+.		dot
+char	KEYWORD1	char
+count	KEYWORD2	CharTable_count_
+fmin	KEYWORD2	fmin_
+square	KEYWORD2	square_
+word	KEYWORD1	word
+pinMode	KEYWORD2	pinMode_
+^		bitwiseXOR
+void	KEYWORD1	void
+noTone	KEYWORD2	noTone_
+addElement	KEYWORD2	Vector_addElement_
+portWrite	KEYWORD2	portWrite_
+&		reference
+for	KEYWORD1	for_
+peek	KEYWORD2	Serial_peek_
+write	KEYWORD2	Serial_write_
+insertElementAt	KEYWORD2	Vector_insertElementAt_
+lastElement	KEYWORD2	Vector_lastElement_
+bit	KEYWORD2	bit_
+round	KEYWORD2	round_
+startsWith	KEYWORD2	String_startsWith_
