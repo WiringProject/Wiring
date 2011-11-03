@@ -1,0 +1,107 @@
+<project name="platform">
+  <description>Wiring IDE build sub-project for Linux</description>
+
+  <!-- =============
+       Configuration
+       ============= -->
+
+  <!-- platform.basedir: Directory containing this file -->
+  <dirname property="platform.basedir" file="${ant.file.platform}"/>
+
+  <!-- dist.wiring.dir: The Wiring directory, for .tgz'ing. -->
+  <property name="dist.wiring" value="wiring-${release.version}"/>
+  <property name="dist.wiring.dir" location="${dist.dir}/${dist.wiring}"/>
+  <property name="dist.wiring.lib" location="${dist.wiring.dir}/lib"/>
+
+  <!-- dist.archive: Archive for wiring distribution. -->
+  <property name="dist.archive"
+            location="${dist.dir}/wiring-${release.version}.tgz"/>
+
+  <!-- platform.bootclasspath: Location of bootstrap class files.
+       Linux builds defer to the user-installed JDK, so use its rt.jar. -->
+  <property environment="env"/>
+  <property name="platform.bootclasspath"
+            value="${env.JAVA_HOME}/jre/lib/rt.jar"/>
+
+  <!-- Dependencies -->
+  <property name="dep.toolchain.avr.remote"
+            value="http://wiring.googlecode.com/files/tools-avr-linux-i586.tar.gz"/>
+  <property name="dep.jre.remote"
+            value="http://wiring.googlecode.com/files/jre-tools-6u26-linux-i586.tgz"/>
+  <property name="dep.jre.local"
+            location="${deps.archive}/jre.tgz"/>
+
+  <!-- =======
+       Targets
+       ======= -->
+
+  <!-- dist -->
+
+  <target name="-dist" depends="-init,platform.-init,resolve.deps,build">
+    <!-- Copy everything into dist.wiring.dir -->
+    <copy todir="${dist.wiring.dir}"><fileset dir="${deps.extract}"/></copy>
+    <copy todir="${dist.wiring.dir}"><fileset dir="${framework.dir}"/></copy>
+    <copy todir="${dist.wiring.dir}"><fileset dir="${build.rsrc.shared}"/></copy>
+    <copy todir="${dist.wiring.lib}"><path refid="lib.class.path"/></copy>
+    <copy todir="${dist.wiring.lib}" file="${build.jar}"/>
+
+    <!-- Hacks to get things to (mostly) work -->
+    <copy todir="${dist.wiring.dir}/java/lib/i386">
+      <filelist dir="${dist.wiring.dir}/lib/serial/" files="librxtxSerial.so"/>
+    </copy>
+    <copy todir="${dist.wiring.dir}" file="${platform.basedir}/dist/wiring"/>
+    <chmod perm="ugo+x">
+      <fileset dir="${dist.wiring.dir}/tools"
+               includes="**/bin/*,**/libexec/gcc/avr/4.3.5/c*"/>
+    </chmod>
+    <chmod perm="ugo+x">
+      <fileset dir="${dist.wiring.dir}/java" includes="**/bin/*"/>
+    </chmod>
+    <chmod perm="ugo+x" file="${dist.wiring.dir}/wiring"/>
+
+    <!-- Make the dist tarball -->
+    <echo message="Creating dist tarball..."/>
+    <exec executable="tar" dir="${dist.dir}">
+      <arg value="czf"/>
+      <arg value="${dist.archive}"/>
+      <arg value="${dist.wiring}"/>
+    </exec>
+    <echo message="Done. Dist archive is in ${dist.archive}"/>
+  </target>
+
+  <!-- Dependency resolution -->
+
+  <target name="-resolve.deps"
+          depends="platform.-resolve.dep.jre,platform.-resolve.dep.avr">
+  </target>
+
+  <target name="-resolve.dep.jre"
+          depends="platform.-check.dep.jre"
+          unless="exists.dep.jre">
+    <get src="${dep.jre.remote}" dest="${dep.jre.local}"/>
+    <untar src="${dep.jre.local}" dest="${deps.extract}" compression="gzip"/>
+  </target>
+
+  <target name="-check.dep.jre" depends="-init">
+    <available property="exists.dep.jre" file="${dep.jre.local}"/>
+  </target>
+
+  <!-- Override AVR toolchain using a real tar, so symlinks work. -->
+  <target name="-resolve.dep.avr"
+          depends="-init,-check.dep.avr"
+          unless="exists.dep.avr">
+    <get src="${dep.toolchain.avr.remote}" dest="${dep.toolchain.avr.local}"/>
+    <exec executable="tar" dir="${deps.extract}">
+      <arg value="xzf"/>
+      <arg value="${dep.toolchain.avr.local}"/>
+    </exec>
+  </target>
+
+  <!-- Initializiation -->
+
+  <target name="-init">
+    <mkdir dir="${dist.wiring.dir}"/>
+    <mkdir dir="${dist.wiring.lib}"/>
+  </target>
+
+</project>

@@ -1,0 +1,216 @@
+<!--
+    Top-level TODO:
+
+     - get rid of unnecessary copying and work (e.g., apple.jar is copied
+       to out/dist/ under Linux).  This can likely be handled by only fetching
+       the JARs needed for the current platform.
+-->
+
+<project name="wiring" default="dist" basedir=".">
+  <description>Wiring IDE build file.</description>
+
+  <!-- ====================
+       Common Configuration
+       ==================== -->
+
+  <!-- Current wiring version (FIXME: this is just a stub) -->
+  <property name="release.version" value="v1.0.0-dev"/>
+
+  <!-- out.dir: the parent directory for all build-generated files. -->
+  <property name="out.dir" location="${basedir}/out"/>
+
+  <!-- dist.dir: a staging area for the Wiring IDE distribution. -->
+  <property name="dist.dir" location="${out.dir}/dist"/>
+
+  <!-- deps.dir: dependencies fetched from the network. -->
+  <property name="deps.dir" location="${out.dir}/deps"/>
+  <property name="deps.archive" location="${deps.dir}/archive"/>
+  <property name="deps.extract" location="${deps.dir}/extract"/>
+
+  <!-- build.dir: IDE build artifacts (like .class files and pde.jar). -->
+  <property name="build.dir" location="${out.dir}/ide"/>
+  <property name="build.classes" location="${build.dir}/classes"/>
+  <property name="build.jar" location="${build.dir}/pde.jar"/>
+
+  <!-- javadoc.dir: Contains javadoc output -->
+  <property name="javadoc.dir" location="${out.dir}/javadoc"/>
+
+  <!-- * -->
+
+  <!-- framework.dir: the Wiring Framework. -->
+  <property name="framework.dir" location="${basedir}/framework"/>
+
+  <!-- build.rsrc: Build resources. -->
+  <property name="build.rsrc.dir" location="${basedir}/build"/>
+  <property name="build.rsrc.shared" location="${build.rsrc.dir}/shared"/>
+  <property name="build.rsrc.ide-deps" location="${build.rsrc.shared}/lib"/>
+
+  <!-- ide.dir: the IDE sources. -->
+  <property name="ide.dir" location="${basedir}/IDE"/>
+  <property name="ide.src" location="${ide.dir}"/>
+
+  <!-- * -->
+
+  <!-- lib.class.path: the IDE's classpath dependencies. -->
+  <!-- TODO: turn these into external dependencies. -->
+  <path id="lib.class.path">
+    <pathelement location="${build.rsrc.ide-deps}/antlr.jar"/>
+    <pathelement location="${build.rsrc.ide-deps}/apple.jar"/>
+    <pathelement location="${build.rsrc.ide-deps}/jna.jar"/>
+    <pathelement location="${build.rsrc.ide-deps}/serial/serial.jar"/>
+    <pathelement location="${build.rsrc.ide-deps}/serial/RXTXcomm.jar"/>
+    <pathelement location="${build.rsrc.ide-deps}/processing.jar"/>
+
+    <!-- TODO: do we really still depend on ECJ? -->
+    <pathelement location="${build.rsrc.ide-deps}/ecj.jar"/>
+  </path>
+
+  <!-- ide.main.class is the class which provides the IDE's main() method. -->
+  <property name="ide.main.class" value="processing.app.Base"/>
+
+  <!-- * -->
+
+  <!-- External dependency configuration.
+
+       TODO use a real dependency management tool (e.g. Apache Ivy).
+       TODO sort out what to do about already-generated ANTLR java sources.
+
+       Notes:
+       * dep.foo.remote is the URL dependency foo's archive from.
+       * dep.foo.local is the local path to save foo's archive in.
+       * Remote URLs not given here are specified in the
+         platform-specific build.xml. -->
+
+  <property name="dep.toolchain.avr.local"
+            location="${deps.archive}/tools-avr.tgz"/>
+
+  <property name="dep.reference.remote"
+            value="http://wiring.googlecode.com/files/reference.zip"/>
+  <property name="dep.reference.local"
+            location="${deps.archive}/reference.zip"/>
+
+  <!-- ==================================
+       Platform Configuration and Targets
+       ================================== -->
+
+  <!-- Detect platform, setting the "plat.name" property to "macosx",
+       "linux", or "windows". -->
+  <condition property="plat.name" value="macosx">
+    <os family="mac"/>
+  </condition>
+  <condition property="plat.name" value="linux">
+    <!-- NB: this is true on all non-OS X Unices, not just Linux. -->
+    <and>
+      <os family="unix"/>
+      <not><os family="mac"/></not> <!-- Ant considers OS X a Unix -->
+    </and>
+  </condition>
+  <condition property="plat.name" value="windows">
+    <os family="windows"/>
+  </condition>
+
+  <!-- build.rsrc.plat: Platform-specific build resources -->
+  <property name="build.rsrc.plat" location="${build.rsrc.dir}/${plat.name}"/>
+
+  <import file="${build.rsrc.plat}/plat-build.xml"/>
+
+  <!-- ==============
+       Common Targets
+       ============== -->
+
+  <!-- dist -->
+
+  <target name="dist" depends="platform.-dist"
+          description="Build the Wiring distribution"/>
+
+  <!-- build -->
+
+  <target name="build" depends="-init,resolve.deps"
+          description="Build Wiring IDE sources">
+    <javac srcdir="${ide.src}"
+           destdir="${build.classes}"
+           includeAntRuntime="false"
+           source="1.5" target="1.5"
+           bootclasspath="${platform.bootclasspath}" extdirs=""
+           classpathref="lib.class.path"/>
+    <jar destfile="${build.jar}" basedir="${build.classes}" update="true">
+      <manifest>
+        <attribute name="Main-Class" value="processing.app.Base"/>
+      </manifest>
+    </jar>
+  </target>
+
+  <!-- JavaDoc -->
+
+  <target name="javadoc" depends="-init"
+          description="Generate JavaDoc HTML output">
+    <javadoc sourcepath="${ide.src}" destdir="${javadoc.dir}"
+             packagenames="processing.app.*" classpathref="lib.class.path"
+             Bootclasspath="${platform.bootclasspath}"/>
+  </target>
+
+  <!-- Dependency resolution -->
+  <!-- FIXME: Symlinks and permissions are not handled properly. We
+       currently resort to platform-specific workaround hacks. -->
+
+  <target name="resolve.deps"
+          depends="-resolve.dep.avr,-resolve.dep.reference,platform.-resolve.deps"
+          description="Handle dependency resolution and retrieval">
+  </target>
+
+  <!-- The following if="dep.avr.default.ok" is an ugly hack to allow
+       individual platforms to override AVR toolchain retrieval. Sigh. -->
+  <target name="-resolve.dep.avr"
+          depends="-check.dep.avr"
+          if="dep.avr.default.ok"
+          unless="exists.dep.avr">
+    <get src="${dep.toolchain.avr.remote}" dest="${dep.toolchain.avr.local}"/>
+    <untar src="${dep.toolchain.avr.local}"
+           dest="${deps.extract}" compression="gzip"/>
+  </target>
+
+  <target name="-check.dep.avr" depends="-init">
+    <available property="exists.dep.avr" file="${dep.toolchain.avr.local}"/>
+  </target>
+
+  <target name="-resolve.dep.reference"
+          depends="-check.dep.reference"
+          unless="exists.dep.reference">
+    <get src="${dep.reference.remote}" dest="${dep.reference.local}"/>
+    <unzip src="${dep.reference.local}" dest="${deps.extract}"/>
+  </target>
+
+  <target name="-check.dep.reference" depends="-init">
+    <available property="exists.dep.reference" file="${dep.reference.local}"/>
+  </target>
+
+  <!-- Cleanup -->
+
+  <target name="clean"
+          description="Remove built IDE files">
+    <delete dir="${build.dir}" quiet="true"/>
+    <delete dir="${dist.dir}" quiet="true"/>
+  </target>
+
+  <target name="clean.all"
+          description="Remove build files and downloaded dependencies">
+    <delete dir="${out.dir}" quiet="true"/>
+  </target>
+
+  <!-- Initialization -->
+
+  <target name="-init">
+    <mkdir dir="${out.dir}"/>
+
+    <mkdir dir="${dist.dir}"/>
+
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.classes}"/>
+
+    <mkdir dir="${deps.dir}"/>
+    <mkdir dir="${deps.archive}"/>
+    <mkdir dir="${deps.extract}"/>
+
+    <mkdir dir="${javadoc.dir}"/>
+  </target>
+</project>

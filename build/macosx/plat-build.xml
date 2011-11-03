@@ -1,0 +1,83 @@
+<project name="platform">
+  <description>Wiring IDE build sub-project for OS X</description>
+
+  <!-- =============
+       Configuration
+       ============= -->
+
+  <!-- app.name: Name of the .app we build -->
+  <property name="app.name" value="Wiring.app"/>
+
+  <!-- dist.app: The .app we build for distribution. -->
+  <property name="dist.app" location="${dist.dir}/${app.name}"/>
+  <property name="dist.app.resources"
+            location="${dist.app}/Contents/Resources/Java"/>
+
+  <!-- dist.rsrc.plat: Platform dist resources. -->
+  <property name="dist.rsrc.plat" location="${build.rsrc.plat}/dist"/>
+  <!-- TODO make this file an external dependency. -->
+  <property name="dist.rsrc.dmg.template"
+            location="${build.rsrc.plat}/template.dmg.gz"/>
+
+  <!-- platform.bootclasspath: Location of bootstrap class files.
+       OS X builds defer to the Apple JDK, so use its rt.jar. -->
+  <property environment="env"/>
+  <property name="platform.bootclasspath"
+            value="${env.JAVA_HOME}/jre/lib/rt.jar"/>
+
+  <!-- dist.rsrc.app: The "naked" .app we start with. -->
+  <property name="dist.rsrc.app" location="${dist.rsrc.plat}/${app.name}"/>
+
+  <!-- Dependencies -->
+  <property name="dep.toolchain.avr.remote"
+            value="http://wiring.googlecode.com/files/tools-avr-macosx-10.6.tar.gz"/>
+  <property name="dep.avr.default.ok" value="true"/>
+
+  <!-- =======
+       Targets
+       ======= -->
+
+  <!-- dist -->
+
+  <target name="-dist" depends="platform.-dist.prep.app">
+  </target>
+
+  <target name="-dist.prep.app" depends="-init,resolve.deps,build">
+    <exec executable="cp">
+      <arg value="-pRX"/>
+      <arg value="${dist.rsrc.app}"/>
+      <arg value="${dist.app}"/>
+    </exec>
+
+    <copy todir="${dist.app.resources}">
+      <fileset dir="${build.rsrc.shared}"/>
+      <fileset dir="${deps.extract}"/>
+      <fileset dir="${framework.dir}"/>
+    </copy>
+    <copy todir="${dist.app.resources}" file="${build.jar}"/>
+
+    <!-- Platform hacks -->
+    <echo message="${release.version}${line.separator}"
+          file="${dist.app.resources}/lib/version.txt"/>
+    <chmod perm="ugo+x">
+      <fileset dir="${dist.app.resources}/tools"
+               includes="**/bin/*,**/libexec/gcc/avr/4.3.5/c*"/>
+    </chmod>
+    <!-- It seems that OS X adds Contents/Resources/Java to
+         java.library.path (which is the search path for .jnilib
+         files). Rather than mess with java.library.path elsewhere,
+         we'll just hack it like this for now. -->
+    <!-- TODO set java.library.path appropriately elsewhere. -->
+    <copy file="${dist.app.resources}/lib/serial/librxtxSerial.jnilib"
+          todir="${dist.app.resources}"/>
+
+    <echo message="Done. ${app.name} is in ${dist.app}."/>
+  </target>
+
+  <!-- Dependency resolution -->
+
+  <target name="-resolve.deps">
+    <!-- No extra dependencies on OS X at this time. -->
+  </target>
+
+</project>

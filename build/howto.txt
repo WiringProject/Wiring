@@ -1,5 +1,10 @@
 HOW TO BUILD WIRING ON YOUR FAVORITE PLATFORM
 
+These instructions apply to the Wiring distribution available on
+GitHub. If you're trying to build an older version of Wiring (obtained
+from e.g. Subversion), you'll need to use the instructions from that
+older version instead.
+
 
 ////////////////////////////////////////////////////////////////////
 
@@ -8,84 +13,60 @@ HOW TO BUILD WIRING ON YOUR FAVORITE PLATFORM
 
 1. INSTALL DEVELOPMENT TOOLS
 
-1a. On Windows, install Cygwin. It's downloadable from 
-    www.cygwin.com or specifically: www.cygwin.com/setup.exe
+At a minimum, you will need the following things to build Wiring:
 
-** of the packages, begin with the defaults, and add:
++ A Java Development Kit (JDK). Any Oracle JDK compatible with Java
+  1.5+ should work. (We make use of some com.sun.* APIs that may
+  render other JDKs inoperable).
 
-+ subversion - used for version control
++ Apache Ant. Last we checked, OS X includes this by default with its
+  JDK install. Linux users will likely find Ant in their
+  distribution's package manager. Windows users can download and
+  install Ant from its Apache page:
 
-+ make, gcc-mingw, and g++ - used to build wiring.exe
-  (this will also pull in gcc-core)
+      http://ant.apache.org/
 
-+ perl - use this version from cygwin, activestate or other windows 
-         perl distributions have trouble
+Depending on your platform, you will also need some other stuff:
 
-+ unzip, zip - for dealing with archives
+1a. Windows:
 
-+ included in the defaults, but make sure: coreutils, gzip, tar
+    - Launch4j: You need this to build wiring.exe. After you download and
+      install it, make sure that launch4jc.exe is on your PATH.
 
-+ not required but useful: 
-  openssh - command line ssh client
-  nano - handy/simple text editor (gnu pico ripoff)
+      http://launch4j.sourceforge.net/
 
-** and be sure to leave the option selected for 'unix line endings' 
+1b. Mac OS X
 
-the cygwin installer is sometimes a little flakey, so it may take more 
-than one try to get everything in there. in fact, it's often best to
-run the installer once, and let it install all its defaults, then run 
-it again, and select the items above. it's also useful to run the 
-installer every few months to keep things fresh.
+    - Apple's developer tools (XCode).
 
+1c. On Linux:
 
-1b. On Mac OS X, install Apple's Developer Tools (Xcode).
+    - tar: We test with GNU tar. This is almost certainly already
+      installed on your system.
 
-    You'll also need subversion: http://subversion.tigris.org/
-    Install it from Fink, Darwinports, or download as a package:
-    http://metissian.com/projects/macosx/subversion/
+2. GRAB THE CODE FROM GITHUB
 
+That means you'll also need Git. If you're reading this, you've
+probably already got that ;). If you don't, the following GitHub guide
+should help you install Git:
 
-1c. On Linux, you're pretty much on your own.. You need a pretty 
-    standard development setup along with Subversion.
+      http://help.github.com/set-up-git-redirect
 
+Once that's installed, get the code with:
 
-2. GRAB THE CODE FROM WIRING.UNIANDES.EDU.CO
-
-As of March 1, 2007, we're no longer using CVS and have moved on to
-Subversion. 
-
-To get the code, type this from a prompt:
-svn co svn://aeon.uniandes.edu.co/trunk/wiring
-
-That part may take a while, especially for people outside the US or
-who have a slow internet connection. (The JRE binaries are stored in 
-SVN so that we can properly test on the exact platform/runtime setup
-that we'll be releasing.)
-
-
+     $ git clone git://github.com/WiringProject/Wiring.git
 
 3. BUILD IT
 
-# now to build for the first time:
-cd /path/to/wiring/build/windows
+From the top-level Wiring directory, run
 
-# or if you're on linux
-cd /path/to/wiring/build/linux
+    $ ant
 
-# let's say you're into black turtlenecks and jeans
-cd /path/to/wiring/build/macosx
+To build the Wiring IDE.
 
-# and then..
-./make.sh
-
-# if everything went well, you'll have no errors. (feel free to make
-# suggestions for things to include here for common problems)
-
-# then to run it
-./run.sh
-
-# each time you make a change, use make to build the thing 
-# and run to get it up and running. 
+The first time you run this, Ant will automatically download and
+extract bunch of other things you need, so it may take a while. After
+the first time, though, builds will go much faster.
 
 
 ////////////////////////////////////////////////////////////////////
@@ -93,54 +74,48 @@ cd /path/to/wiring/build/macosx
 //// Updating to the Latest Version
 
 
-4a. Each time you want to update to latest version:
+4a. Each time you want to update to latest version, run
 
-cd /path/to/wiring
-svn update
+    $ git pull
 
+    From within the Wiring directory (you may also use a Git GUI to do
+    this, but that depends on your platform).
 
 4b. If you're getting strange errors when you try to build, especially
-    if new folders have been added to the Wiring repository, remove
-    your 'work' folder and rebuild. Generally, this is a good idea to 
-    do whenever a new release has been made, since that will involve
-    files that may have been changed (or folders that have been moved).
+    if significant changes have been made to the Wiring repository,
+    you can clean up with:
 
-# get to the wiring folder
-cd /path/to/wiring
+    $ ant clean
 
-# remove the work directory
-cd build/yourplatform
-rm -rf work
+    If you want to nuke _everything_ (compiled IDE, downloaded
+    dependencies, etc.), then use:
 
-# and try again
-./make.sh
+    $ ant clean.all
 
-Unfortunately there isn't a way to know if new folders have
-since been added. but if you're getting "class not found" errors
-while building, then that's a good indicator that something is
-missing from a subfolder.
+    Be aware, though, that using clean.all means your next build will
+    require an internet connection, as Wiring's dependencies will have
+    to be re-downloaded.
 
 
 ////////////////////////////////////////////////////////////////////
 
 //// The Frequently Asked Question
 
-- What about Eclipse? What about Ant? Command line sucks.
+- What about Eclipse? Command line sucks.
 
-The command line stuff isn't as scary as it might initially
-seem. Hopefully it's just a matter of following the instructions above
-(and being patient). If not, let us know (via the discourse board)
-where you have trouble so we can fix things.
+  The command line stuff isn't as scary as it might initially
+  seem. Hopefully it's just a matter of following the instructions
+  above (and being patient).
 
-We're slowly moving development over to Eclipse, which will probably
-include Ant because of cross-platform dependencies. As of release 0140,
-major changes are being implemented to simplify the build process, 
-which should mean that we're pretty close. The environment and all
-the libraries build properly with Eclipse, however we won't be 
-documenting it until the dust has settled.
+  However, there are plenty of GUIs out there for Git etc., and
+  Eclipse has good Ant integration. Wiring should build using Ant
+  within Eclipse, and we're moving development over to it. However,
+  we're not documenting it until the dust has settled, so for now,
+  you're on your own.
 
 
 ////////////////////////////////////////////////////////////////////
 
 
-Hernando Barragan - Updated 22 July 2009
+Original author: Hernando Barragan
+Current build system maintainer: Marti Bolivar <mbolivar@leaflabs.com>

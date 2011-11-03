@@ -1,0 +1,115 @@
+<project name="platform">
+  <description>Wiring IDE build sub-project for Windows</description>
+
+  <!-- =============
+       Configuration
+       ============= -->
+
+  <!-- dist.wiring.dir: The Wiring directory for .zip'ing. -->
+  <property name="dist.wiring" value="wiring-${release.version}"/>
+  <property name="dist.wiring.dir" location="${dist.dir}/${dist.wiring}"/>
+  <property name="dist.wiring.lib" location="${dist.wiring.dir}/lib"/>
+
+  <!-- build.rsrc.launch4j: launch4j resources. -->
+  <property name="dist.rsrc.launch4j" location="${build.rsrc.plat}/launcher"/>
+
+  <!-- platform.bootclasspath: Location of bootstrap class files.
+       Windows builds bundle a JRE, so hand-hack a path to its rt.jar. -->
+  <property environment="env"/>
+  <property name="platform.bootclasspath"
+            value="${deps.extract}/java/lib/rt.jar"/>
+
+  <!-- Dependencies -->
+
+  <property name="dep.toolchain.avr.remote"
+            value="http://wiring.googlecode.com/files/tools-avr-windows-i586-ant.tgz"/>
+  <property name="dep.avr.default.ok" value="true"/>
+
+  <property name="dep.jre.remote"
+            value="http://wiring.googlecode.com/files/jre-tools-6u26-windows-i586.zip"/>
+  <property name="dep.jre.local"
+            location="${deps.archive}/jre.tgz"/>
+
+  <property name="dep.cygwindlls.remote"
+            value="http://wiring.googlecode.com/files/cygwin-dlls.zip"/>
+  <property name="dep.cygwindlls.local"
+            location="${deps.archive}/cygwin-dlls.zip"/>
+
+  <!-- =======
+       Targets
+       ======= -->
+
+  <!-- dist -->
+
+  <target name="-dist" depends="platform.-dist.prep">
+    <!-- Copy everything into dist.wiring.dir. -->
+    <copy todir="${dist.wiring.dir}"><fileset dir="${build.rsrc.shared}"/></copy>
+    <copy todir="${dist.wiring.dir}"><fileset dir="${deps.extract}"/></copy>
+    <copy todir="${dist.wiring.dir}"><fileset dir="${framework.dir}"/></copy>
+    <copy todir="${dist.wiring.lib}"><path refid="lib.class.path"/></copy>
+    <copy todir="${dist.wiring.lib}" file="${build.jar}"/>
+
+    <!-- Create version.txt. -->
+    <echo message="${release.version}${line.separator}"
+          file="${dist.wiring.lib}/version.txt"/>
+
+    <echo message="--------------------------------------------------"/>
+    <echo message="Done. Release is in ${dist.wiring.dir}"/>
+    <echo message="--------------------------------------------------"/>
+  </target>
+
+  <target name="-dist.prep"
+          depends="-init,platform.-init,resolve.deps,build">
+    <!-- Dirty hacks; TODO: clean this up. -->
+
+    <!-- Get wiring.exe under ${dist.wiring.dir}. The launch4j config
+         wants to put this in ${dist.rsrc.launch4j}/wiring.exe, and I
+         haven't figure out how to dissuade it from doing so, so just
+         move it to the right place for now. [mbolivar] -->
+    <exec executable="launch4jc.exe">
+      <arg value="${dist.rsrc.launch4j}/config.xml"/>
+    </exec>
+    <move file="${dist.rsrc.launch4j}/wiring.exe" todir="${dist.wiring.dir}"/>
+
+    <!-- Make sure rxtxSerial.dll gets picked up by JNI -->
+    <copy file="${build.rsrc.ide-deps}/serial/rxtxSerial.dll"
+          todir="${dist.wiring.dir}"/>
+  </target>
+
+  <!-- Dependency resolution -->
+
+  <target name="-resolve.deps"
+          depends="platform.-resolve.dep.jre,platform.-resolve.dep.cygwindlls">
+  </target>
+
+  <target name="-resolve.dep.jre"
+          depends="-check.dep.jre"
+          unless="exists.dep.jre">
+    <get src="${dep.jre.remote}" dest="${dep.jre.local}"/>
+    <unzip src="${dep.jre.local}" dest="${deps.extract}"/>
+  </target>
+
+  <target name="-check.dep.jre" depends="-init">
+    <available property="exists.dep.jre" file="${dep.jre.local}"/>
+  </target>
+
+  <target name="-resolve.dep.cygwindlls"
+          depends="-check.dep.cygwindlls"
+          unless="exists.dep.cygwindlls">
+    <get src="${dep.cygwindlls.remote}" dest="${dep.cygwindlls.local}"/>
+    <unzip src="${dep.cygwindlls.local}" dest="${deps.extract}"/>
+  </target>
+
+  <target name="-check.dep.cygwindlls" depends="-init">
+    <available property="exists.dep.cygwindlls"
+               file="${dep.cygwindlls.local}"/>
+  </target>
+
+  <!-- Initializiation -->
+
+  <target name="-init">
+    <mkdir dir="${dist.wiring.dir}"/>
+    <mkdir dir="${dist.wiring.lib}"/>
+  </target>
+
+</project>
