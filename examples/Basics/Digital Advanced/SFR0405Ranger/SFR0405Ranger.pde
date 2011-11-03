@@ -14,6 +14,7 @@ void setup()
 {
   pinMode(echoPin, INPUT);
   pinMode(triggerPin, OUTPUT);
+  Serial.begin(9600);
 }
 
 void loop()
