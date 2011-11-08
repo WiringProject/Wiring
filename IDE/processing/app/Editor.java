@@ -111,7 +111,6 @@ public class Editor extends JFrame implements RunnerListener {
 
   // runtime information and window placement
   private Point sketchWindowLocation;
-  private Runner runtime;
 
 //  private JMenuItem exportAppItem;
   private JMenuItem saveMenuItem;
