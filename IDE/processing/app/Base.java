@@ -85,16 +85,8 @@ public class Base {
 
   static HashSet<File> libraries;
 
-  //ArrayList<LibraryFolder> builtinLibraries;
-  //ArrayList<LibraryFolder> contribLibraries;
-                
   // maps imported packages to their library folder
   static HashMap<String, File> importToLibraryTable;
-
-  // classpath for all known libraries for p5
-  // (both those in the p5/libs folder and those with lib subfolders
-  // found in the sketchbook)
-  //static public String librariesClassPath;
   
   static public HashMap<String, Target> targetsTable;
   
@@ -197,7 +189,6 @@ public class Base {
 
   public Base(String[] args) {
     // Get paths for the libraries and examples in the Processing folder
-    //String workingDirectory = System.getProperty("user.dir");
     examplesFolder = getContentFile("examples");
     librariesFolder = getContentFile("libraries");
     toolsFolder = getContentFile("tools");
@@ -303,20 +294,9 @@ public class Base {
       if ((screen.width != screenW) || (screen.height != screenH)) {
         windowPositionValid = false;
       }
-      /*
-      int windowX = Preferences.getInteger("last.window.x");
-      int windowY = Preferences.getInteger("last.window.y");
-      if ((windowX < 0) || (windowY < 0) ||
-          (windowX > screenW) || (windowY > screenH)) {
-        windowPositionValid = false;
-      }
-      */
     } else {
       windowPositionValid = false;
     }
-
-    // Iterate through all sketches that were open last time p5 was running.
-    // If !windowPositionValid, then ignore the coordinates found for each.
 
     // Save the sketch path and window placement for each open sketch
     int count = Preferences.getInteger("last.sketch.count");
@@ -384,25 +364,6 @@ public class Base {
   }
 
 
-  /*
-  public void storeSketch(Editor editor) {
-    int index = -1;
-    for (int i = 0; i < editorCount; i++) {
-      if (editors[i] == editor) {
-        index = i;
-        break;
-      }
-    }
-    if (index == -1) {
-      System.err.println("Problem storing sketch " + editor.sketch.name);
-    } else {
-      String path = editor.sketch.getMainFilePath();
-      Preferences.set("last.sketch" + index + ".path", path);
-    }
-  }
-  */
-
-
   // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 
@@ -449,8 +410,6 @@ public class Base {
    */
   static public JMenuItem newJMenuItemAlt(String title, int what) {
     JMenuItem menuItem = new JMenuItem(title);
-    //int modifiers = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-    //menuItem.setAccelerator(KeyStroke.getKeyStroke(what, modifiers));
     menuItem.setAccelerator(KeyStroke.getKeyStroke(what, SHORTCUT_ALT_KEY_MASK));
     return menuItem;
   }
@@ -538,12 +497,6 @@ public class Base {
     }
     fileMenu.add(sketchbookMenu);
 
-    /*if (examplesMenu == null) {
-      examplesMenu = new JMenu("Examples");
-      rebuildExamplesMenu(examplesMenu);
-    }
-    fileMenu.add(examplesMenu);*/
-
     item = newJMenuItem("Close", 'W');
     if (editor != null) {
     item.addActionListener(new ActionListener() {
@@ -593,19 +546,6 @@ public class Base {
       item.setEnabled(false);
     }
     fileMenu.add(item);
-/*
-    item = newJMenuItemShift("Export Application", 'E');
-    if (editor != null) {
-      item.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          editor.handleExportApplication();
-        }
-      });
-    } else {
-      item.setEnabled(false);
-    }
-    fileMenu.add(item);
-*/
     fileMenu.addSeparator();
 
     item = newJMenuItemShift("Page Setup", 'P');
@@ -692,8 +632,6 @@ public class Base {
       // using the same dimensions, but offset slightly.
       synchronized (editors) {
         final int OVER = 50;
-        // In release 0160, don't
-        //location = activeEditor.getPlacement();
         Editor lastOpened = editors.get(editors.size() - 1);
         int[] location = lastOpened.getPlacement();
         // Just in case the bounds for that window are bad
@@ -754,9 +692,6 @@ public class Base {
       int month = cal.get(Calendar.MONTH);  // 0..11
       suffix = months[month] + PApplet.nf(day, 2);
     } else {
-      //SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd");
-      //SimpleDateFormat formatter = new SimpleDateFormat("MMMdd");
-      //String purty = formatter.format(new Date()).toLowerCase();
       SimpleDateFormat formatter = new SimpleDateFormat(format);
       suffix = formatter.format(new Date());
     }
@@ -806,7 +741,6 @@ public class Base {
         StringBuffer buffer = new StringBuffer();
         buffer.append("void setup()\n{\n\n}\n\n");
         buffer.append("void loop()\n{\n\n}");
-//        buffer.append('\n');
         buffer.append(editor.getText());
         editor.setText(buffer.toString());
         editor.setSelection(0, 0);  // scroll to start
@@ -845,18 +779,15 @@ public class Base {
         StringBuffer buffer = new StringBuffer();
         buffer.append("void setup()\n{\n\n}\n\n");
         buffer.append("void loop()\n{\n\n}");
-//        buffer.append('\n');
         buffer.append(activeEditor.getText());
         activeEditor.setText(buffer.toString());
         activeEditor.setSelection(0, 0);  // scroll to start
         activeEditor.getSketch().setModified(false);
 
       }
-//      return true;
 
     } catch (IOException e) {
       activeEditor.statusError(e);
-//      return false;
     }
   }
 
@@ -888,15 +819,11 @@ public class Base {
     FileDialog fd = new FileDialog(activeEditor,
                                    "Open a Wiring sketch...",
                                    FileDialog.LOAD);
-    // This was annoying people, so disabled it in 0125.
-    //fd.setDirectory(Preferences.get("sketchbook.path"));
-    //fd.setDirectory(getSketchbookPath());
 
     // Only show .pde files as eligible bachelors
     fd.setFilenameFilter(new FilenameFilter() {
         public boolean accept(File dir, String name) {
           // TODO this doesn't seem to ever be used. AWESOME.
-          //System.out.println("check filter on " + dir + " " + name);
           return name.toLowerCase().endsWith(".pde");
         }
       });
@@ -918,8 +845,6 @@ public class Base {
     for (Editor editor : editors) {
       if (editor.getSketch().getMainFilePath().equals(window)) {
         editor.toFront();
-        //        System.err.println("  handleOpen: already opened");
-        //return editor;
       }
     }
   }
@@ -937,34 +862,16 @@ public class Base {
 
 
   protected Editor handleOpen(String path, int[] location) {
-//    System.err.println("entering handleOpen " + path);
-
     File file = new File(path);
     if (!file.exists()) return null;
 
-//    System.err.println("  editors: " + editors);
     // Cycle through open windows to make sure that it's not already open.
     for (Editor editor : editors) {
       if (editor.getSketch().getMainFilePath().equals(path)) {
         editor.toFront();
-//        System.err.println("  handleOpen: already opened");
         return editor;
       }
     }
-
-    // If the active editor window is an untitled, and un-modified document,
-    // just replace it with the file that's being opened.
-//    if (activeEditor != null) {
-//      Sketch activeSketch = activeEditor.sketch;
-//      if (activeSketch.isUntitled() && !activeSketch.isModified()) {
-//        // if it's an untitled, unmodified document, it can be replaced.
-//        // except in cases where a second blank window is being opened.
-//        if (!path.startsWith(untitledFolder.getAbsolutePath())) {
-//          activeEditor.handleOpenUnchecked(path, 0, 0, 0, 0);
-//          return activeEditor;
-//        }
-//      }
-//    }
 
     Editor editor = new Editor(this, path, location);
 
@@ -982,11 +889,9 @@ public class Base {
       boolean needShuffle = true;
       for (int i=0; i<maximum; i++) {
         String savedPath = Preferences.get("recent.sketch" + i + ".path");
-        //System.out.println("RECENT FILE: "+path);
         if(savedPath != null) {
           if(savedPath.length()>0) {            
             if (savedPath.equals(path)) {
-              //needShuffle = false;
               for (int j=i; j<(maximum-1); j++) {
                 String updatePath = Preferences.get("recent.sketch"+(j+1)+ ".path");
                 if(updatePath != null) {
@@ -1015,17 +920,6 @@ public class Base {
           }
         }
       }
-      /*
-       //remove duplicates
-       for (int i=0; i<10; i++) {
-       for (int j=i; j<10; j++) {
-       if (Preferences.get("recent.file"+i)==Preferences.get("recent.file"+j)){
-       for (int k=9; k>j; k--) {
-       Preferences.set("recent.file"+k, Preferences.get("recent.file"+(k-1)));
-       }
-       }
-       }
-       }*/
       Preferences.set("recent.sketch0.path",path);
       Preferences.setInteger("recent.sketch.maximum", Math.min(maximum, 10));
       Preferences.save();
@@ -1042,8 +936,6 @@ public class Base {
    * @return true if succeeded in closing, false if canceled.
    */
   public boolean handleClose(Editor editor) {
-    // Check if modified
-//    boolean immediate = editors.size() == 1;
     if (!editor.checkModified()) {
       return false;
     }
@@ -1052,12 +944,7 @@ public class Base {
     editor.internalCloseRunner();
 
     if (editors.size() == 1) {
-      // For 0158, when closing the last window /and/ it was already an
-      // untitled sketch, just give up and let the user quit.
-//      if (Preferences.getBoolean("sketchbook.closing_last_window_quits") ||
-//          (editor.untitled && !editor.getSketch().isModified())) {
       if (Base.isMacOS()) {
-        //if (defaultFileMenu == null) {
           Object[] options = { "OK", "Cancel" };
           String prompt =
             "<html> " +
@@ -1080,7 +967,6 @@ public class Base {
               result == JOptionPane.CLOSED_OPTION) {
             return false;
           }
-        //}
       }
 
       // This will store the sketch count as zero
@@ -1091,33 +977,12 @@ public class Base {
       // Save out the current prefs state
       Preferences.save();
 
-//      if (defaultFileMenu == null) {
-        // Since this wasn't an actual Quit event, call System.exit()
         System.exit(0);
-
-//      } else {
-//        editor.setVisible(false);
-//        editor.dispose();
-//        defaultFileMenu.insert(Base.sketchbookMenu, 2);
-        //defaultFileMenu.insert(Base.examplesMenu, 3);
-//        activeEditor = null;
-//      }
-
     } else {
       // More than one editor window open,
       // proceed with closing the current window.
       editor.setVisible(false);
       editor.dispose();
-//      for (int i = 0; i < editorCount; i++) {
-//        if (editor == editors[i]) {
-//          for (int j = i; j < editorCount-1; j++) {
-//            editors[j] = editors[j+1];
-//          }
-//          editorCount--;
-//          // Set to null so that garbage collection occurs
-//          editors[editorCount] = null;
-//        }
-//      }
       editors.remove(editor);
     }
     return true;
@@ -1207,7 +1072,6 @@ public class Base {
     };
     for (int i = 0; i < maximum; i++) {
       String path = Preferences.get("recent.sketch" + i + ".path");
-      //System.out.println("RECENT FILE: "+path);
       if(path != null) {
         if(path.length()>0) {
           File entry = new File(path);
@@ -1227,17 +1091,12 @@ public class Base {
    * to prevent the interface from locking up until the menus are done.
    */
   protected void rebuildSketchbookMenus() {
-    //System.out.println("async enter");
-    //new Exception().printStackTrace();
     EventQueue.invokeLater(new Runnable() {
       public void run() {
-        //System.out.println("starting rebuild");
         rebuildSketchbookMenu(sketchbookMenu);
         rebuildToolbarMenu(Editor.toolbarMenu);
-        //System.out.println("done with rebuild");
       }
     });
-    //System.out.println("async exit");
   }
 
 
@@ -1245,7 +1104,6 @@ public class Base {
     JMenuItem item;
     menu.removeAll();
 
-    //System.out.println("rebuilding toolbar menu");
     // Add the single "Open" item
     item = newJMenuItem("Open...", 'O');
     item.addActionListener(new ActionListener() {
@@ -1264,7 +1122,6 @@ public class Base {
       e.printStackTrace();
     }
 
-  //System.out.println("rebuilding examples menu");
   // Add each of the subfolders of examples directly to the menu
     try {
       boolean found = addSketches(menu, examplesFolder, true);
@@ -1283,9 +1140,6 @@ public class Base {
 
 
   protected void rebuildSketchbookMenu(JMenu menu) {
-    //System.out.println("rebuilding sketchbook menu");
-    //new Exception().printStackTrace();
-
     try {
       menu.removeAll();
       addSketches(menu, getSketchbookFolder(), false);
@@ -1295,8 +1149,7 @@ public class Base {
   }
 
 
-  public void rebuildImportMenu() {  //JMenu importMenu) {
-    //System.out.println("rebuilding import menu");
+  public void rebuildImportMenu() {
     importMenu.removeAll();
 
     // reset the set of libraries
@@ -1312,13 +1165,10 @@ public class Base {
     if (coreAvailable()) 
       try {
         File coreLibraries = getCoreLibrariesFolder();
-        //System.out.println(sketchbookLibraries);
         JMenu corelibs = new JMenu("Core");
         if (coreLibraries != null) {
           boolean found = addLibraries(corelibs, coreLibraries);
-          //System.out.println("found is "+found);
           if (found) {
-            //JMenuItem corelibs = new JMenuItem("Core");
             corelibs.setEnabled(true);
             importMenu.insert(corelibs, separatorIndex);
             if(previousLibrariesFound)
@@ -1336,7 +1186,6 @@ public class Base {
       JMenu commonLibs = new JMenu("Cross-platform");
       boolean found = addLibraries(commonLibs, librariesFolder);
       if (found) {
-        //JMenuItem commonLibs = new JMenuItem("Agnostic");
         commonLibs.setEnabled(true);
         importMenu.insert(commonLibs, separatorIndex);
         if (previousLibrariesFound)
@@ -1351,12 +1200,9 @@ public class Base {
     separatorIndex = importMenu.getItemCount();
     try {
       File sketchbookLibraries = getSketchbookLibrariesFolder();
-      //System.out.println(sketchbookLibraries);
       JMenu contrib = new JMenu("Contributed");
       boolean found = addLibraries(contrib, sketchbookLibraries);
-      //System.out.println("found is "+found);
       if (found) {
-        //JMenuItem contrib = new JMenuItem("Contributed");
         contrib.setEnabled(true);
         importMenu.insert(contrib, separatorIndex);
         if(previousLibrariesFound)
@@ -1370,19 +1216,11 @@ public class Base {
 
  
   public void rebuildExamplesMenu() {
-    //System.out.println("rebuilding examples menu");
     try {
       int separatorIndex = examplesMenu.getItemCount();
       
       examplesMenu.removeAll();
       boolean found = addSketches(examplesMenu, examplesFolder, false);
-      //if (found) {
-          //JMenuItem commonExamples = new JMenuItem("Common");
-          //commonExamples.setEnabled(false);
-          //examplesMenu.insert(commonExamples, separatorIndex);
-          //examplesMenu.insertSeparator(separatorIndex);
-          //examplesMenu.addSeparator();
-      //}
       separatorIndex = examplesMenu.getItemCount();
       int librariesSeparatorIndex = separatorIndex;
       boolean librariesExamplesFound = false;
@@ -1390,10 +1228,8 @@ public class Base {
       if (coreAvailable()) {
         separatorIndex = examplesMenu.getItemCount();
         JMenu coreExamples = new JMenu("Core");
-        //coreExamples.setEnabled(false);
         found = addSketches(coreExamples, getCoreLibrariesFolder(), false);
         if (found) {
-          //JMenu coreExamples = new JMenu("From Core");
           coreExamples.setEnabled(true);
           examplesMenu.insert(coreExamples, separatorIndex);
           examplesMenu.insertSeparator(separatorIndex);
@@ -1402,10 +1238,8 @@ public class Base {
       }
       separatorIndex = examplesMenu.getItemCount();
       JMenu librariesExamples = new JMenu("Cross-platform");
-      //librariesExamples.setEnabled(false);
       found = addSketches(librariesExamples, librariesFolder, false);
       if (found) {
-        //JMenu librariesExamples = new JMenu("Common");
         librariesExamples.setEnabled(true);
         examplesMenu.insert(librariesExamples, separatorIndex);
         examplesMenu.insertSeparator(separatorIndex);
@@ -1413,10 +1247,8 @@ public class Base {
       }
       separatorIndex = examplesMenu.getItemCount();
       JMenu contributedExamples = new JMenu("Contributed");
-      //contributedExamples.setEnabled(false);
       found = addSketches(contributedExamples, getSketchbookLibrariesFolder(), false);
       if (found) {
-        //JMenuItem contributedExamples = new JMenuItem("Contributed");
         contributedExamples.setEnabled(true);
         examplesMenu.insert(contributedExamples, separatorIndex);
         examplesMenu.insertSeparator(separatorIndex);
@@ -1427,14 +1259,9 @@ public class Base {
         librariesMenu.setEnabled(false);
         librariesMenu.setFont(librariesMenu.getFont().deriveFont(Font.BOLD));
         librariesMenu.setFont(librariesMenu.getFont().deriveFont(Font.ITALIC));
-        // BH: wish this worked :)
-        //Color wiringRed = new Color(255, 85, 0);
-        //librariesMenu.setForeground(wiringRed);
-        //
         examplesMenu.insert(librariesMenu, librariesSeparatorIndex);
         examplesMenu.insertSeparator(librariesSeparatorIndex);
       }
-      //System.out.println("core libraries path : "+getCoreLibrariesPath());
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -1442,8 +1269,6 @@ public class Base {
 
   
   public void rebuildExamplesMenu(JMenu menu) {
-    //System.out.println("rebuilding examples menu");
-
     try {
       menu.removeAll();
       boolean found = addSketches(menu, examplesFolder, false);
@@ -1452,7 +1277,6 @@ public class Base {
       if (found) menu.addSeparator();
       found = addSketches(menu, librariesFolder, false);
       if (found) menu.addSeparator();
-      //System.out.println("core libraries path : "+getCoreLibrariesPath());
       if (coreAvailable())
         addSketches(menu, getCoreLibrariesFolder(), false);
     } catch (IOException e) {
@@ -1469,7 +1293,6 @@ public class Base {
   
   
   public void rebuildBoardsMenu(JMenu menu) {
-    //System.out.println("rebuilding boards menu");
     targetsTable = new HashMap<String, Target>();
     loadHardware(getHardwareFolder());
     loadHardware(getSketchbookHardwareFolder());
@@ -1490,20 +1313,10 @@ public class Base {
         AbstractAction action = 
           new AbstractAction(target.getBoards().get(board).get("name")) {
             public void actionPerformed(ActionEvent actionevent) {
-              //System.out.println("Switching to " + target + ":" + board);
               Preferences.set("target", (String) getValue("target"));
               Preferences.set("board", (String) getValue("board"));
               
               onBoardOrPortChange();
-              /*
-              for (Editor editor : editors) {
-                editor.onBoardOrPortChange();
-              }      
-              */
-              
-              //activeEditor.onBoardOrPortChange();
-              //rebuild libraries and examples from libraries menus if a board is changed
-              //rebuildExamplesMenu(examplesMenu);
               rebuildExamplesMenu();
               rebuildImportMenu();
             }
@@ -1516,14 +1329,13 @@ public class Base {
           item.setSelected(true);
         }
         group.add(item);
-        targetSubMenu.add(item);////menu.add(item);
+        targetSubMenu.add(item);
       }
       menu.add(targetSubMenu);
     }
   }
   
   public void rebuildBurnBootloaderMenu(JMenu menu) {
-    //System.out.println("rebuilding burn bootloader menu");
     menu.removeAll();      
     Map<String, String> boardPreferences =  Base.getBoardPreferences();
     
@@ -1533,10 +1345,6 @@ public class Base {
         targetItem.setEnabled(false);
         targetItem.setFont(targetItem.getFont().deriveFont(Font.BOLD));
         targetItem.setFont(targetItem.getFont().deriveFont(Font.ITALIC));
-        // BH: wish this worked :)
-        //Color wiringRed = new Color(255, 85, 0);
-        //targetItem.setForeground(wiringRed);
-        //
         menu.add(targetItem);
         for (String programmer : target.getProgrammers().keySet()) {
           AbstractAction action = 
@@ -1552,7 +1360,6 @@ public class Base {
           JMenuItem item = new JMenuItem(action);
           menu.add(item);
         }
-        //menu.addSeparator();
       }
     }  
   }  
@@ -1576,8 +1383,6 @@ public class Base {
 
     // Alphabetize list, since it's not always alpha order
     Arrays.sort(list, String.CASE_INSENSITIVE_ORDER);
-    //processing.core.PApplet.println("adding sketches " + folder.getAbsolutePath());
-    //PApplet.println(list);
 
     ActionListener listener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -1600,8 +1405,6 @@ public class Base {
           }
         }
       };
-    // offers no speed improvement
-    //menu.addActionListener(listener);
 
     boolean ifound = false;
 
@@ -1615,8 +1418,6 @@ public class Base {
       File entry = new File(subfolder, list[i] + ".pde");
       // if a .pde file of the same prefix as the folder exists..
       if (entry.exists()) {
-        //String sanityCheck = sanitizedName(list[i]);
-        //if (!sanityCheck.equals(list[i])) {
         if (!Sketch.isSanitaryName(list[i])) {
           if (!builtOnce) {
             String complaining =
@@ -1667,7 +1468,6 @@ public class Base {
     if (list == null) return false;
 
     // alphabetize list, since it's not always alpha order
-    // replaced hella slow bubble sort with this feller for 0093
     Arrays.sort(list, String.CASE_INSENSITIVE_ORDER);
 
     ActionListener listener = new ActionListener() {
@@ -1693,16 +1493,6 @@ public class Base {
 
 
       String libraryName = potentialName;
-//        // get the path for all .jar files in this code folder
-//        String libraryClassPath =
-//          Compiler.contentsToClassPath(libraryFolder);
-//        // grab all jars and classes from this folder,
-//        // and append them to the library classpath
-//        librariesClassPath +=
-//          File.pathSeparatorChar + libraryClassPath;
-//        // need to associate each import with a library folder
-//        String packages[] =
-//          Compiler.packageListFromClassPath(libraryClassPath);
       libraries.add(subfolder);
       String packages[] =
         Compiler.headerListFromIncludePath(subfolder.getAbsolutePath());
@@ -1717,15 +1507,6 @@ public class Base {
       ifound = true;
 
 // XXX: DAM: should recurse here so that library folders can be nested
-//      } else {  // not a library, but is still a folder, so recurse
-//        JMenu submenu = new JMenu(libraryName);
-//        // needs to be separate var, otherwise would set ifound to false
-//        boolean found = addLibraries(submenu, subfolder);
-//        if (found) {
-//          menu.add(submenu);
-//          ifound = true;
-//        }
-//      }
     }
     return ifound;
   }
@@ -1827,32 +1608,6 @@ public class Base {
   // ...................................................................
 
 
-  /**
-   * Get list of platform constants.
-   */
-//  static public int[] getPlatforms() {
-//    return platforms;
-//  }
-
-
-//  static public int getPlatform() {
-//    String osname = System.getProperty("os.name");
-//
-//    if (osname.indexOf("Mac") != -1) {
-//      return PConstants.MACOSX;
-//
-//    } else if (osname.indexOf("Windows") != -1) {
-//      return PConstants.WINDOWS;
-//
-//    } else if (osname.equals("Linux")) {  // true for the ibm vm
-//      return PConstants.LINUX;
-//
-//    } else {
-//      return PConstants.OTHER;
-//    }
-//  }
-
-
   static public Platform getPlatform() {
     return platform;
   }
@@ -1892,16 +1647,10 @@ public class Base {
   }
 
 
-  // These were changed to no longer rely on PApplet and PConstants because
-  // of conflicts that could happen with older versions of core.jar, where
-  // the MACOSX constant would instead read as the LINUX constant.
-
-
   /**
    * returns true if Processing is running on a Mac OS X machine.
    */
   static public boolean isMacOS() {
-    //return PApplet.platform == PConstants.MACOSX;
     return System.getProperty("os.name").indexOf("Mac") != -1;
   }
 
@@ -1910,7 +1659,6 @@ public class Base {
    * returns true if running on windows.
    */
   static public boolean isWindows() {
-    //return PApplet.platform == PConstants.WINDOWS;
     return System.getProperty("os.name").indexOf("Windows") != -1;
   }
 
@@ -1919,7 +1667,6 @@ public class Base {
    * true if running on linux.
    */
   static public boolean isLinux() {
-    //return PApplet.platform == PConstants.LINUX;
     return System.getProperty("os.name").indexOf("Linux") != -1;
   }
 
@@ -1974,8 +1721,6 @@ public class Base {
         buildFolder = new File(buildPath);
 
       } else {
-        //File folder = new File(getTempFolder(), "build");
-        //if (!folder.exists()) folder.mkdirs();
         buildFolder = createTempFolder("build");
         buildFolder.deleteOnExit();
       }
@@ -1994,8 +1739,6 @@ public class Base {
   static public File createTempFolder(String name) {
     try {
       File folder = File.createTempFile(name, null);
-      //String tempPath = ignored.getParent();
-      //return new File(tempPath);
       folder.delete();
       folder.mkdirs();
       return folder;
@@ -2098,7 +1841,6 @@ public class Base {
 
   
   static public Target getTarget() {
-    //return Preferences.get("build.mcu"); 
     return Base.targetsTable.get(Preferences.get("target"));
   }
 
@@ -2245,11 +1987,10 @@ public class Base {
    */
   static public File selectFolder(String prompt, File folder, Frame frame) {
     if (Base.isMacOS()) {
-      if (frame == null) frame = new Frame(); //.pack();
+      if (frame == null) frame = new Frame();
       FileDialog fd = new FileDialog(frame, prompt, FileDialog.LOAD);
       if (folder != null) {
         fd.setDirectory(folder.getParent());
-        //fd.setFile(folder.getName());
       }
       System.setProperty("apple.awt.fileDialogForDirectories", "true");
       fd.setVisible(true);
@@ -2286,26 +2027,6 @@ public class Base {
     Image image = Toolkit.getDefaultToolkit().createImage(PApplet.ICON_IMAGE);
     frame.setIconImage(image);
   }
-
-
-  // someone needs to be slapped
-  //static KeyStroke closeWindowKeyStroke;
-
-  /**
-   * Return true if the key event was a Ctrl-W or an ESC,
-   * both indicators to close the window.
-   * Use as part of a keyPressed() event handler for frames.
-   */
-  /*
-  static public boolean isCloseWindowEvent(KeyEvent e) {
-    if (closeWindowKeyStroke == null) {
-      int modifiers = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-      closeWindowKeyStroke = KeyStroke.getKeyStroke('W', modifiers);
-    }
-    return ((e.getKeyCode() == KeyEvent.VK_ESCAPE) ||
-            KeyStroke.getKeyStrokeForEvent(e).equals(closeWindowKeyStroke));
-  }
-  */
 
 
   /**
@@ -2451,18 +2172,6 @@ public class Base {
                                       JOptionPane.YES_NO_CANCEL_OPTION,
                                       JOptionPane.QUESTION_MESSAGE);
       return result;
-//    if (result == JOptionPane.YES_OPTION) {
-//
-//    } else if (result == JOptionPane.NO_OPTION) {
-//      return true;  // ok to continue
-//
-//    } else if (result == JOptionPane.CANCEL_OPTION) {
-//      return false;
-//
-//    } else {
-//      throw new IllegalStateException();
-//    }
-
     } else {
       // Pane formatting adapted from the Quaqua guide
       // http://www.randelshofer.ch/quaqua/guide/joptionpane.html
@@ -2505,19 +2214,6 @@ public class Base {
       }
     }
   }
-
-
-//if (result == JOptionPane.YES_OPTION) {
-  //
-//      } else if (result == JOptionPane.NO_OPTION) {
-//        return true;  // ok to continue
-  //
-//      } else if (result == JOptionPane.CANCEL_OPTION) {
-//        return false;
-  //
-//      } else {
-//        throw new IllegalStateException();
-//      }
 
   static public int showYesNoQuestion(Frame editor, String title,
                                             String primary, String secondary) {
@@ -2564,50 +2260,11 @@ public class Base {
   }
 
 
-  /**
-   * Retrieve a path to something in the Processing folder. Eventually this
-   * may refer to the Contents subfolder of Processing.app, if we bundle things
-   * up as a single .app file with no additional folders.
-   */
-//  static public String getContentsPath(String filename) {
-//    String basePath = System.getProperty("user.dir");
-//    /*
-//      // do this later, when moving to .app package
-//    if (PApplet.platform == PConstants.MACOSX) {
-//      basePath = System.getProperty("processing.contents");
-//    }
-//    */
-//    return basePath + File.separator + filename;
-//  }
-
-
-  /**
-   * Get a path for something in the Processing lib folder.
-   */
-  /*
-  static public String getLibContentsPath(String filename) {
-    String libPath = getContentsPath("lib/" + filename);
-    File libDir = new File(libPath);
-    if (libDir.exists()) {
-      return libPath;
-    }
-//    was looking into making this run from Eclipse, but still too much mess
-//    libPath = getContents("build/shared/lib/" + what);
-//    libDir = new File(libPath);
-//    if (libDir.exists()) {
-//      return libPath;
-//    }
-    return null;
-  }
-  */
-
   static public File getContentFile(String name) {
     String path = System.getProperty("user.dir");
 
     // Get a path to somewhere inside the .app folder
     if (Base.isMacOS()) {
-//      <key>javaroot</key>
-//      <string>$JAVAROOT</string>
       String javaroot = System.getProperty("javaroot");
       if (javaroot != null) {
         path = javaroot;
@@ -2785,11 +2442,9 @@ public class Base {
     for (int i = 0; i < files.length; i++) {
       // Ignore dot files (.DS_Store), dot folders (.svn) while copying
       if (files[i].charAt(0) == '.') continue;
-      //if (files[i].equals(".") || files[i].equals("..")) continue;
       File source = new File(sourceDir, files[i]);
       File target = new File(targetDir, files[i]);
       if (source.isDirectory()) {
-        //target.mkdirs();
         copyDir(source, target);
         target.setLastModified(source.lastModified());
       } else {
@@ -2834,7 +2489,6 @@ public class Base {
         }
       } else {
         removeDir(dead);
-        //dead.delete();
       }
     }
   }
