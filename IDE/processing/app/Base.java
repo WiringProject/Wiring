@@ -141,9 +141,6 @@ public class Base {
     // Don't put anything above this line that might make GUI,
     // because the platform has to be inited properly first.
 
-    // Make sure a full JDK is installed
-    //initRequirements();
-
     // run static initialization that grabs all the prefs
     Preferences.init(null);
 
@@ -197,20 +194,6 @@ public class Base {
                      "platform-specific code for your machine.", e);
     }
   }
-
-
-  static protected void initRequirements() {
-    try {
-      Class.forName("com.sun.jdi.VirtualMachine");
-    } catch (ClassNotFoundException cnfe) {
-      Base.showPlatforms();
-      Base.showError("Please install JRE 1.5 or later",
-                     "Wiring requires a JRE\n" +
-                     "to run. Please install JRE 1.5 or later.\n" +
-                     "More information can be found in the reference.", cnfe);
-    }
-  }
-
 
   public Base(String[] args) {
     // Get paths for the libraries and examples in the Processing folder
