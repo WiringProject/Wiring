@@ -1847,11 +1847,11 @@ public class Base {
   
   static public Map<String, String> getBoardPreferences() {
     Target target = getTarget();
-    if (target == null) return new LinkedHashMap();
-    Map map = target.getBoards();
-    if (map == null) return new LinkedHashMap();
-    map = (Map) map.get(Preferences.get("board"));
-    if (map == null) return new LinkedHashMap();
+    if (target == null) return new LinkedHashMap<String, String>();
+    Map<String, Map<String,String>> boardsMap = target.getBoards();
+    if (boardsMap == null) return new LinkedHashMap<String, String>();
+    Map<String, String> map = boardsMap.get(Preferences.get("board"));
+    if (map == null) return new LinkedHashMap<String, String>();
     return map;
   }
 
