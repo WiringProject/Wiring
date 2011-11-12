@@ -68,7 +68,7 @@ public class Theme {
     setColor("run.window.bgcolor", SystemColor.control);
 
     // clone the hash table
-    defaults = (HashMap<String, String>) table.clone();
+    defaults = new HashMap<String, String>(table);
   }
 
 
@@ -90,12 +90,12 @@ public class Theme {
 
 
   static public String get(String attribute) {
-    return (String) table.get(attribute);
+    return table.get(attribute);
   }
 
 
   static public String getDefault(String attribute) {
-    return (String) defaults.get(attribute);
+    return defaults.get(attribute);
   }
 
 
