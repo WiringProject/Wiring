@@ -1839,8 +1839,8 @@ public class Sketch {
    * Read from a file with a bunch of attribute/value pairs
    * that are separated by = and ignore comments with #.
    */
-  protected Hashtable readSettings(File inputFile) {
-    Hashtable outgoing = new Hashtable();
+  protected Hashtable<String, String> readSettings(File inputFile) {
+    Hashtable<String, String> outgoing = new Hashtable<String, String>();
     if (!inputFile.exists()) return outgoing;  // return empty hash
 
     String lines[] = PApplet.loadStrings(inputFile);
