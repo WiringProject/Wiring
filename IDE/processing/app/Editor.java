@@ -1063,28 +1063,6 @@ public class Editor extends JFrame implements RunnerListener {
     JMenuItem item;
 
     /*
-    // testing internal web server to serve up docs from a zip file
-    item = new JMenuItem("Web Server Test");
-    item.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          //WebServer ws = new WebServer();
-          SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-              try {
-                int port = WebServer.launch("/Users/fry/coconut/processing/build/shared/reference.zip");
-                Base.openURL("http://127.0.0.1:" + port + "/reference/setup_.html");
-
-              } catch (IOException e1) {
-                e1.printStackTrace();
-              }
-            }
-          });
-        }
-      });
-    menu.add(item);
-    */
-
-    /*
     item = new JMenuItem("Browser Test");
     item.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
