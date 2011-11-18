@@ -33,27 +33,27 @@ import processing.app.Preferences;
 public class Target {
   private String name;
   private File folder;
-  private Map boards;
-  private Map programmers;
+  private Map<String, Map<String, String>> boards;
+  private Map<String, Map<String, String>> programmers;
   
   public Target(String name, File folder) {
     this.name = name;
     this.folder = folder;
-    this.boards = new LinkedHashMap();
-    this.programmers = new LinkedHashMap();
+    this.boards = new LinkedHashMap<String, Map<String, String>>();
+    this.programmers = new LinkedHashMap<String, Map<String, String>>();
     
     File boardsFile = new File(folder, "boards.txt");
     try {
       if (boardsFile.exists()) {
-        Map boardPreferences = new LinkedHashMap();
+        Map<String, String> boardPreferences =
+          new LinkedHashMap<String, String>();
         Preferences.load(new FileInputStream(boardsFile), boardPreferences);
-        for (Object k : boardPreferences.keySet()) {
-          String key = (String) k;
+        for (String key : boardPreferences.keySet()) {
           String board = key.substring(0, key.indexOf('.'));
-          if (!boards.containsKey(board)) boards.put(board, new HashMap());
-          ((Map) boards.get(board)).put(
-            key.substring(key.indexOf('.') + 1),
-            boardPreferences.get(key));
+          if (!boards.containsKey(board))
+            boards.put(board, new HashMap<String, String>());
+          boards.get(board).put(key.substring(key.indexOf('.') + 1),
+                                boardPreferences.get(key));
         }
       }
     } catch (Exception e) {
@@ -63,15 +63,15 @@ public class Target {
     File programmersFile = new File(folder, "programmers.txt");
     try {
       if (programmersFile.exists()) {
-        Map programmerPreferences = new LinkedHashMap();
+        Map<String, String> programmerPreferences =
+          new LinkedHashMap<String, String>();
         Preferences.load(new FileInputStream(programmersFile), programmerPreferences);
-        for (Object k : programmerPreferences.keySet()) {
-          String key = (String) k;
+        for (String key : programmerPreferences.keySet()) {
           String programmer = key.substring(0, key.indexOf('.'));
-          if (!programmers.containsKey(programmer)) programmers.put(programmer, new HashMap());
-          ((Map) programmers.get(programmer)).put(
-            key.substring(key.indexOf('.') + 1),
-            programmerPreferences.get(key));
+          if (!programmers.containsKey(programmer))
+            programmers.put(programmer, new HashMap<String, String>());
+          programmers.get(programmer).put(key.substring(key.indexOf('.') + 1),
+                                          programmerPreferences.get(key));
         }
       }
     } catch (Exception e) {

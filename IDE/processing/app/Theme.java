@@ -68,7 +68,7 @@ public class Theme {
     setColor("run.window.bgcolor", SystemColor.control);
 
     // clone the hash table
-    defaults = (HashMap<String, String>) table.clone();
+    defaults = new HashMap<String, String>(table);
   }
 
 
@@ -90,12 +90,12 @@ public class Theme {
 
 
   static public String get(String attribute) {
-    return (String) table.get(attribute);
+    return table.get(attribute);
   }
 
 
   static public String getDefault(String attribute) {
-    return (String) defaults.get(attribute);
+    return defaults.get(attribute);
   }
 
 
@@ -148,7 +148,6 @@ public class Theme {
     boolean replace = false;
     String value = get(attr);
     if (value == null) {
-      //System.out.println("reset 1");
       value = getDefault(attr);
       replace = true;
     }
@@ -156,9 +155,7 @@ public class Theme {
     String[] pieces = PApplet.split(value, ',');
     if (pieces.length != 3) {
       value = getDefault(attr);
-      //System.out.println("reset 2 for " + attr);
       pieces = PApplet.split(value, ',');
-      //PApplet.println(pieces);
       replace = true;
     }
 
@@ -175,8 +172,6 @@ public class Theme {
 
     // replace bad font with the default
     if (replace) {
-      //System.out.println(attr + " > " + value);
-      //setString(attr, font.getName() + ",plain," + font.getSize());
       set(attr, value);
     }
 

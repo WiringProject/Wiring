@@ -133,9 +133,10 @@ public class Preferences {
 
   // data model
 
-  static Hashtable defaults;
-  static Hashtable table = new Hashtable();
-  static File preferencesFile;
+  private static Hashtable<String, String> defaults;
+  private static Hashtable<String, String> table =
+    new Hashtable<String, String>();
+  private static File preferencesFile;
 
 
   static public void init(String commandLinePrefs) {
@@ -152,9 +153,9 @@ public class Preferences {
     // check for platform-specific properties in the defaults
     String platformExt = "." + PConstants.platformNames[PApplet.platform];
     int platformExtLength = platformExt.length();
-    Enumeration e = table.keys();
+    Enumeration<String> e = table.keys();
     while (e.hasMoreElements()) {
-      String key = (String) e.nextElement();
+      String key = e.nextElement();
       if (key.endsWith(platformExt)) {
         // this is a key specific to a particular platform
         String actualKey = key.substring(0, key.length() - platformExtLength);
@@ -163,8 +164,7 @@ public class Preferences {
       }
     }
 
-    // clone the hash table
-    defaults = (Hashtable) table.clone();
+    defaults = new Hashtable<String, String>(table);
 
     // other things that have to be set explicitly for the defaults
     setColor("run.window.bgcolor", SystemColor.control);
@@ -674,7 +674,8 @@ public class Preferences {
     load(input, table);
   }
 
-  static public void load(InputStream input, Map table) throws IOException {
+  static public void load(InputStream input,
+                          Map<String,String> table) throws IOException {
     String[] lines = PApplet.loadStrings(input);  // Reads as UTF-8
     for (String line : lines) {
       if ((line.length() == 0) ||
@@ -704,15 +705,13 @@ public class Preferences {
     // Fix for 0163 to properly use Unicode when writing preferences.txt
     PrintWriter writer = PApplet.createWriter(preferencesFile);
 
-    Enumeration e = table.keys(); //properties.propertyNames();
-
     // Sort keys alphabetically and store
     // BH, 20110417
-    java.util.List<String> prefKeys = Collections.list(e);
+    java.util.List<String> prefKeys = Collections.list(table.keys());
     Collections.sort(prefKeys);
 
     for (String prefKey : prefKeys) {
-      writer.println(prefKey + "=" + ((String) table.get(prefKey)));
+      writer.println(prefKey + "=" + table.get(prefKey));
     }
 
     writer.flush();
@@ -734,7 +733,7 @@ public class Preferences {
   //}
 
   static public String get(String attribute /*, String defaultValue */) {
-    return (String) table.get(attribute);
+    return table.get(attribute);
     /*
     //String value = (properties != null) ?
     //properties.getProperty(attribute) : applet.getParameter(attribute);
@@ -747,7 +746,7 @@ public class Preferences {
 
 
   static public String getDefault(String attribute) {
-    return (String) defaults.get(attribute);
+    return defaults.get(attribute);
   }
 
 

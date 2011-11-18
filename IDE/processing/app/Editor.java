@@ -956,147 +956,12 @@ public class Editor extends JFrame implements RunnerListener {
   }
 
 
-/*
-  protected JMenu buildHardwareMenu() {
-    HardwareMenuListener listener = new HardwareMenuListener();
-    String defaultMicrocontroller = Preferences.get("build.mcu");
-    if(null == hardwareMenu) {
-      hardwareMenu = new JMenu("Target microcontroller");
-    } else {
-      hardwareMenu.removeAll();
-    }
-    JCheckBoxMenuItem mi =
-      new JCheckBoxMenuItem("atmega128", defaultMicrocontroller.equals("atmega128"));
-    mi.addActionListener(listener);
-    hardwareMenu.add(mi);
-    mi = new JCheckBoxMenuItem("atmega1281", defaultMicrocontroller.equals("atmega1281"));
-    mi.addActionListener(listener);
-    hardwareMenu.add(mi);
-    mi = new JCheckBoxMenuItem("atmega2561", defaultMicrocontroller.equals("atmega2561"));
-    mi.addActionListener(listener);
-    hardwareMenu.add(mi);
-    return hardwareMenu;
-  }
-
-
-  class HardwareMenuListener implements ActionListener {
-    public void actionPerformed(ActionEvent e) {
-      if(hardwareMenu == null) {
-        System.out.println("hardwareMenu is null");
-        return;
-      }
-      int count = hardwareMenu.getItemCount();
-      for(int i = 0; i < count; i++) {
-        ((JCheckBoxMenuItem)hardwareMenu.getItem(i)).setState(false);
-      }
-      JCheckBoxMenuItem item = (JCheckBoxMenuItem)e.getSource();
-      item.setState(true);
-      String name = item.getText();
-      if(name.equals("atmega128")) {
-		    Preferences.set("board", "Wiring");
-        Preferences.set("build.mcu", "atmega128");
-        Preferences.set("upload.mcu", "m128");
-      } else if(name.equals("atmega1281")) {
-		    Preferences.set("board", "Wiring");
-        Preferences.set("build.mcu", "atmega1281");
-        Preferences.set("upload.mcu", "m1281");
-      } else if(name.equals("atmega2561")) {
-        Preferences.set("board", "Wiring");
-        Preferences.set("build.mcu", "atmega2561");
-        Preferences.set("upload.mcu", "m2561");
-      }
-      //statusNotice("Rebuilding libraries for target "+ Preferences.get("build.mcu"));
-      //rebuildLibraries();
-      
-    }
-  }
-
-
-  protected JMenu buildFirmwareMenu() {
-    FirmwareMenuListener listener = new FirmwareMenuListener();
-    int defaultVersion = Preferences.getInteger("firmware.version");
-    if(null == firmwareMenu) {
-      firmwareMenu = new JMenu("Firmware version");
-    } else {
-      firmwareMenu.removeAll();
-    }
-    JCheckBoxMenuItem mi =
-      new JCheckBoxMenuItem("1.x", 1 == defaultVersion);
-    mi.addActionListener(listener);
-    firmwareMenu.add(mi);
-    mi = new JCheckBoxMenuItem("2.x", 2 == defaultVersion);
-    mi.addActionListener(listener);
-    firmwareMenu.add(mi);
-    return firmwareMenu;
-  }
-
-
-  class FirmwareMenuListener implements ActionListener {
-    public void actionPerformed(ActionEvent e) {
-      if(firmwareMenu == null) {
-        System.out.println("firmwareMenu is null");
-        return;
-      }
-      int count = firmwareMenu.getItemCount();
-      for(int i = 0; i < count; i++) {
-        ((JCheckBoxMenuItem)firmwareMenu.getItem(i)).setState(false);
-      }
-      JCheckBoxMenuItem item = (JCheckBoxMenuItem)e.getSource();
-      item.setState(true);
-      String name = item.getText();
-      if(name.equals("1.x")) {
-        Preferences.setInteger("firmware.version", 1);
-      } else if(name.equals("2.x")) {
-        Preferences.setInteger("firmware.version", 2);
-      }
-    }
-  }
-*/
-
-
   protected JMenu buildHelpMenu() {
     // To deal with a Mac OS X 10.5 bug, add an extra space after the name  
     // so that the OS doesn't try to insert its slow help menu.
     // 
-    //JMenu menu = new JMenu("Help ");
     helpMenu = new JMenu("Help ");
     JMenuItem item;
-
-    /*
-    // testing internal web server to serve up docs from a zip file
-    item = new JMenuItem("Web Server Test");
-    item.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          //WebServer ws = new WebServer();
-          SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-              try {
-                int port = WebServer.launch("/Users/fry/coconut/processing/build/shared/reference.zip");
-                Base.openURL("http://127.0.0.1:" + port + "/reference/setup_.html");
-
-              } catch (IOException e1) {
-                e1.printStackTrace();
-              }
-            }
-          });
-        }
-      });
-    menu.add(item);
-    */
-
-    /*
-    item = new JMenuItem("Browser Test");
-    item.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          //Base.openURL("http://processing.org/learning/gettingstarted/");
-          //JFrame browserFrame = new JFrame("Browser");
-          BrowserStartup bs = new BrowserStartup("jar:file:/Users/fry/coconut/processing/build/shared/reference.zip!/reference/setup_.html");
-          bs.initUI();
-          bs.launch();
-        }
-      });
-    menu.add(item);
-    */
 
     item = new JMenuItem("Getting started");
     item.addActionListener(new ActionListener() {
@@ -1296,8 +1161,6 @@ public class Editor extends JFrame implements RunnerListener {
     item.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           if (find != null) {
-            //find.find(true);
-            //FindReplace find = new FindReplace(Editor.this); //.show();
             find.find(true);
           }
         }
@@ -1327,10 +1190,7 @@ public class Editor extends JFrame implements RunnerListener {
       }
       try {
         undo.undo();
-        //sketch.setModified(true);
       } catch (CannotUndoException ex) {
-        //System.out.println("Unable to undo: " + ex);
-        //ex.printStackTrace();
       }
       updateUndoState();
       redoAction.updateRedoState();
@@ -1345,17 +1205,11 @@ public class Editor extends JFrame implements RunnerListener {
         undoItem.setEnabled(true);
         undoItem.setText(undo.getUndoPresentationName());
         putValue(Action.NAME, undo.getUndoPresentationName());
-//        if (sketch != null) {
-//          sketch.setModified(true);  // 0107
-//        }
       } else {
         this.setEnabled(false);
         undoItem.setEnabled(false);
         undoItem.setText("Undo");
         putValue(Action.NAME, "Undo");
-//        if (sketch != null) {
-//          sketch.setModified(false);  // 0107
-//        }
       }
     }
   }
@@ -1370,10 +1224,7 @@ public class Editor extends JFrame implements RunnerListener {
     public void actionPerformed(ActionEvent e) {
       try {
         undo.redo();
-        //sketch.setModified(true);
       } catch (CannotRedoException ex) {
-        //System.out.println("Unable to redo: " + ex);
-        //ex.printStackTrace();
       }
       try {
         final Integer caret = caretRedoStack.pop();
@@ -1493,24 +1344,6 @@ public class Editor extends JFrame implements RunnerListener {
     textarea.setSelectedText(what);
     stopCompoundEdit();
   }
-
-
-  /**
-   * Called to update the text but not switch to a different set of code
-   * (which would affect the undo manager).
-   */
-//  public void setText2(String what, int start, int stop) {
-//    beginCompoundEdit();
-//    textarea.setText(what);
-//    endCompoundEdit();
-//
-//    // make sure that a tool isn't asking for a bad location
-//    start = Math.max(0, Math.min(start, textarea.getDocumentLength()));
-//    stop = Math.max(0, Math.min(start, textarea.getDocumentLength()));
-//    textarea.select(start, stop);
-//
-//    textarea.requestFocus();  // get the caret blinking
-//  }
 
 
   public String getSelectedText() {
@@ -1660,9 +1493,6 @@ public class Editor extends JFrame implements RunnerListener {
         bl.printStackTrace();
       }
 
-      // set up this guy's own undo manager
-//      code.undo = new UndoManager();
-
       // connect the undo listener to the editor
       document.addUndoableEditListener(new UndoableEditListener() {
           public void undoableEditHappened(UndoableEditEvent e) {
@@ -1685,7 +1515,6 @@ public class Editor extends JFrame implements RunnerListener {
                          code.getSelectionStart(), code.getSelectionStop(),
                          code.getScrollPosition());
 
-//    textarea.requestFocus();  // get the caret blinking
     textarea.requestFocusInWindow();  // required for caret blinking
 
     this.undo = code.getUndo();
@@ -1766,7 +1595,6 @@ public class Editor extends JFrame implements RunnerListener {
       } else {
         // Check the first two characters to see if it's already a comment.
         String begin = textarea.getText(pos, 2);
-        //System.out.println("begin is '" + begin + "'");
         commented = begin.equals("//");
       }
     }
@@ -1821,9 +1649,6 @@ public class Editor extends JFrame implements RunnerListener {
         textarea.setSelectedText(tabString);
 
       } else {  // outdent
-//        System.out.println("location is "+location);
-//        System.out.println("tabSize is "+tabSize);
-//        System.out.println("location+tabsize is "+location+tabSize);
         int length = textarea.getDocumentLength();
         if (location+tabSize <= length)
           textarea.select(location, location + tabSize);
@@ -1851,7 +1676,6 @@ public class Editor extends JFrame implements RunnerListener {
 
     } else {
       String referenceFile = PdeKeywords.getReference(text);
-      //System.out.println("reference file is " + referenceFile);
       if (referenceFile == null) {
         statusNotice("No reference available for \"" + text + "\"");
       } else {
@@ -1874,7 +1698,6 @@ public class Editor extends JFrame implements RunnerListener {
     running = true;
     toolbar.activate(EditorToolbar.RUN);
     statusEmpty();
-    //statusNotice("Compiling...");
     status.progress("Compiling...");
     // do this to advance/clear the terminal window / dos prompt / etc
     for (int i = 0; i < 10; i++) System.out.println();
@@ -1884,23 +1707,6 @@ public class Editor extends JFrame implements RunnerListener {
       console.clear();
     }
 
-    //presenting = present;
-
-    /*try {
-      String appletClassName = sketch.compile(verbose);
-      if (appletClassName != null) {
-          statusNotice("Done compiling. No syntax errors found");
-          handleStop();
-      }
-    } catch (Exception e) {
-      //System.err.println("exception reached editor");
-      //e.printStackTrace();
-      statusNotice("Error compiling...");
-      statusError(e);
-      handleStop();
-    }
-	  toolbar.deactivate(EditorToolbar.RUN);
-     */
     new Thread(verbose ? presentHandler : runHandler).start();
   }
 
@@ -1908,7 +1714,6 @@ public class Editor extends JFrame implements RunnerListener {
   class DefaultRunHandler implements Runnable {
     public void run() {
       try {
-        //sketch.compile(false);
         String appletClassName = sketch.compile(false);
         statusNotice("Done compiling.");
         if (appletClassName != null) {
@@ -1958,10 +1763,8 @@ public class Editor extends JFrame implements RunnerListener {
    * hitting export twice, quickly, and horking things up.
    */
   synchronized public void handleBuild(final boolean verbose) {
-    //if (!handleExportCheckModified()) return;
     toolbar.activate(EditorToolbar.RUN);
     console.clear();
-    //statusNotice("Uploading to I/O Board...");
     status.progress("Building sketch...");
     new Thread(verbose ? buildAppHandler : buildHandler).start();
   }
@@ -1984,8 +1787,6 @@ public class Editor extends JFrame implements RunnerListener {
           // error message will already be visible
         }
       } catch (RunnerException e) {
-        //statusError("Error during upload.");
-        //e.printStackTrace();
         status.unprogress();
         statusError(e);
       } catch (Exception e) {
@@ -1993,7 +1794,6 @@ public class Editor extends JFrame implements RunnerListener {
       }
       status.unprogress();
       uploading = false;
-      //toolbar.clear();
       toolbar.deactivate(EditorToolbar.RUN);
     }
   }
@@ -2016,8 +1816,6 @@ public class Editor extends JFrame implements RunnerListener {
           // error message will already be visible
         }
       } catch (RunnerException e) {
-        //statusError("Error during upload.");
-        //e.printStackTrace();
         status.unprogress();
         statusError(e);
       } catch (Exception e) {
@@ -2025,7 +1823,6 @@ public class Editor extends JFrame implements RunnerListener {
       }
       status.unprogress();
       uploading = false;
-      //toolbar.clear();
       toolbar.deactivate(EditorToolbar.EXPORT);
     }
   }
@@ -2065,12 +1862,9 @@ public class Editor extends JFrame implements RunnerListener {
    */
   public void handleStop() {  // called by menu or buttons
 
-    //toolbar.activate(EditorToolbar.STOP);
-
     internalCloseRunner();
 
     toolbar.deactivate(EditorToolbar.RUN);
-    //toolbar.deactivate(EditorToolbar.STOP);
     toolbar.deactivate(EditorToolbar.SERIAL);
 
     // focus the PDE again after quitting presentation mode [toxi 030903]
@@ -2096,10 +1890,6 @@ public class Editor extends JFrame implements RunnerListener {
       hasSchematics = true;
     }
     if(hasSchematics) {
-      //System.out.println(s);
-      //System.out.println(sketch.getName());
-      //System.out.println(folder.getAbsolutePath());
-      //System.out.println(sketch.getMainFilePath());
       toolbar.activate(EditorToolbar.SCHEMATICS);
       if (schematics == null) schematics = new Schematics(s);
       schematics.showFrame(this);
@@ -2258,7 +2048,6 @@ public class Editor extends JFrame implements RunnerListener {
       // user selected a .java from the same sketch,
       // but open the .pde instead
       path = altFile.getAbsolutePath();
-      //System.out.println("found alt file in same folder");
 
     } else if (!path.endsWith(".pde")) {
       Base.showWarning("Bad file selected",
@@ -2295,7 +2084,6 @@ public class Editor extends JFrame implements RunnerListener {
           return false;
         }
         if (!properFolder.mkdirs()) {
-          //throw new IOException("Couldn't create sketch folder");
           Base.showWarning("Error",
                            "Could not create the sketch folder.", null);
           return false;
@@ -2340,12 +2128,6 @@ public class Editor extends JFrame implements RunnerListener {
 
     // opening was successful
     return true;
-
-//    } catch (Exception e) {
-//      e.printStackTrace();
-//      statusError(e);
-//      return false;
-//    }
   }
 
 
@@ -2359,7 +2141,6 @@ public class Editor extends JFrame implements RunnerListener {
    * <A HREF="http://dev.processing.org/bugs/show_bug.cgi?id=276">Bug 276</A>.
    */
   public boolean handleSave(boolean immediately) {
-    //stopRunner();
     handleStop();  // 0136
 
     if (untitled) {
@@ -2389,43 +2170,23 @@ public class Editor extends JFrame implements RunnerListener {
       } else {
         statusEmpty();
       }
-      // rebuild sketch menu in case a save-as was forced
-      // Disabling this for 0125, instead rebuild the menu inside
-      // the Save As method of the Sketch object, since that's the
-      // only one who knows whether something was renamed.
-      //sketchbook.rebuildMenus();
-      //sketchbook.rebuildMenusAsync();
-
     } catch (Exception e) {
       // show the error as a message in the window
       statusError(e);
-
-      // zero out the current action,
-      // so that checkModified2 will just do nothing
-      //checkModifiedMode = 0;
-      // this is used when another operation calls a save
     }
-    //toolbar.clear();
     toolbar.deactivate(EditorToolbar.SAVE);
   }
 
 
   public boolean handleSaveAs() {
-    //stopRunner();  // formerly from 0135
     handleStop();
 
     toolbar.activate(EditorToolbar.SAVE);
 
-    //SwingUtilities.invokeLater(new Runnable() {
-    //public void run() {
     statusNotice("Saving...");
     try {
       if (sketch.saveAs()) {
         statusNotice("Done Saving.");
-        // Disabling this for 0125, instead rebuild the menu inside
-        // the Save As method of the Sketch object, since that's the
-        // only one who knows whether something was renamed.
-        //sketchbook.rebuildMenusAsync();
       } else {
         statusNotice("Save Canceled.");
         return false;
@@ -2452,12 +2213,9 @@ public class Editor extends JFrame implements RunnerListener {
    * hitting export twice, quickly, and horking things up.
    */
   synchronized public void handleExport(final boolean verbose) {
-    //if (!handleExportCheckModified()) return;
-    
     splitPane.setDividerLocation(splitPane.getLastDividerLocation());
     toolbar.activate(EditorToolbar.EXPORT);
     console.clear();
-    //statusNotice("Uploading to I/O Board...");
     status.progress("Uploading to Wiring Hardware...");
     new Thread(verbose ? exportAppHandler : exportHandler).start();
   }
@@ -2484,8 +2242,6 @@ public class Editor extends JFrame implements RunnerListener {
           // error message will already be visible
         }
       } catch (RunnerException e) {
-        //statusError("Error during upload.");
-        //e.printStackTrace();
         status.unprogress();
         statusError(e);
       } catch (Exception e) {
@@ -2493,7 +2249,6 @@ public class Editor extends JFrame implements RunnerListener {
       }
       status.unprogress();
       uploading = false;
-      //toolbar.clear();
       toolbar.deactivate(EditorToolbar.EXPORT);
     }
   }
@@ -2520,8 +2275,6 @@ public class Editor extends JFrame implements RunnerListener {
           // error message will already be visible
         }
       } catch (RunnerException e) {
-        //statusError("Error during upload.");
-        //e.printStackTrace();
         status.unprogress();
         statusError(e);
       } catch (Exception e) {
@@ -2529,45 +2282,10 @@ public class Editor extends JFrame implements RunnerListener {
       }
       status.unprogress();
       uploading = false;
-      //toolbar.clear();
       toolbar.deactivate(EditorToolbar.EXPORT);
     }
   }
 
-/*
-  synchronized public void handleExport(final boolean verbose) {
-    handleStop();
-    if(debugging) return;
-    //if (!handleExportCheckModified()) return;
-    toolbar.activate(EditorToolbar.EXPORT);
-
-    statusNotice("Uploading to I/O Board...");
-
-    //SwingUtilities.invokeLater(new Runnable() {
-    Thread t = new Thread(new Runnable() {
-        public void run() {
-          try {
-            boolean success = sketch.exportApplet(verbose);
-            if (success) {
-//              File appletFolder = new File(sketch.getFolder(), "applet");
-//              Base.openFolder(appletFolder);
-              statusNotice("Done uploading. Reset to start the new program");
-              if (Preferences.getBoolean("monitor.start")) {
-                handleSerial();
-                System.out.println("Serial monitor started after upload (Wiring -> Preferences)");
-              }
-            } else {
-              // error message will already be visible
-            }
-          } catch (Exception e) {
-            statusError(e);
-          }
-          //toolbar.clear();
-          toolbar.deactivate(EditorToolbar.EXPORT);
-        }});
-    t.start();
-  }
-*/
 
   /**
    * Handler for Sketch &rarr; Export Application
@@ -2576,7 +2294,6 @@ public class Editor extends JFrame implements RunnerListener {
     if (!handleExportCheckModified()) return;
     toolbar.activate(EditorToolbar.EXPORT);
 
-    //SwingUtilities.invokeLater(new Runnable() {
     SwingUtilities.invokeLater(new Runnable() {
         public void run() {
           statusNotice("Exporting application...");
@@ -2592,7 +2309,6 @@ public class Editor extends JFrame implements RunnerListener {
             statusNotice("Error during export.");
             e.printStackTrace();
           }
-          //toolbar.clear();
           toolbar.deactivate(EditorToolbar.EXPORT);
         }});
   }
@@ -2622,11 +2338,7 @@ public class Editor extends JFrame implements RunnerListener {
       handleSave(true);
 
     } else {
-      // why it's not CANCEL_OPTION is beyond me (at least on the mac)
-      // but f-- it.. let's get this shite done..
-      //} else if (result == JOptionPane.CANCEL_OPTION) {
       statusNotice("Export canceled, changes must first be saved.");
-      //toolbar.clear();
       return false;
     }
     return true;
@@ -2649,7 +2361,6 @@ public class Editor extends JFrame implements RunnerListener {
         } catch (RunnerException e) {
           statusError("Error while burning bootloader.");
           e.printStackTrace();
-          //statusError(e);
         } catch (Exception e) {
           statusError("Error while burning bootloader.");
           e.printStackTrace();
@@ -2662,7 +2373,6 @@ public class Editor extends JFrame implements RunnerListener {
    * Handler for File &rarr; Page Setup.
    */
   public void handlePageSetup() {
-    //printerJob = null;
     if (printerJob == null) {
       printerJob = PrinterJob.getPrinterJob();
     }
@@ -2670,7 +2380,6 @@ public class Editor extends JFrame implements RunnerListener {
       pageFormat = printerJob.defaultPage();
     }
     pageFormat = printerJob.pageDialog(pageFormat);
-    //System.out.println("page format is " + pageFormat);
   }
 
 
@@ -2679,12 +2388,10 @@ public class Editor extends JFrame implements RunnerListener {
    */
   public void handlePrint() {
     statusNotice("Printing...");
-    //printerJob = null;
     if (printerJob == null) {
       printerJob = PrinterJob.getPrinterJob();
     }
     if (pageFormat != null) {
-      //System.out.println("setting page format " + pageFormat);
       printerJob.setPrintable(textarea.getPainter(), pageFormat);
     } else {
       printerJob.setPrintable(textarea.getPainter());
@@ -2704,7 +2411,6 @@ public class Editor extends JFrame implements RunnerListener {
     } else {
       statusNotice("Printing canceled.");
     }
-    //printerJob = null;  // clear this out?
   }
 
 
@@ -2721,7 +2427,6 @@ public class Editor extends JFrame implements RunnerListener {
     ArrayList<String> matches = new ArrayList<String>();
     Matcher matcher = pattern.matcher(sketch.current.program);
     while (matcher.find()) {
-      //result = matcher.getMatch();
       speedString = matcher.group(1).toString();
     }  
 
@@ -2787,70 +2492,15 @@ public class Editor extends JFrame implements RunnerListener {
           // Serial or Firmata speed detected, assume that speed
           serialMonitor.openSerialPort(portSpeed);
            
-      //serialMonitor.openSerialPort();        
       serialMonitor.setVisible(true);
       toolbar.deactivate(EditorToolbar.SERIAL);
     } catch (SerialException e) {
-    	//statusError(e);
       status.error("Error opening serial port, see possible causes below...");
       System.err.println(e.getMessage());
       handleStop();
     }
   }
   
-
-  /**
-   * Handler for Serial Monitor.
-   */
-  /*
-  public void handleSerial() {
-    int portSpeed;
-    int firmataSpeed;
-    String portName;
-    if (!debugging) {
-      console.clear();
-      toolbar.activate(EditorToolbar.SERIAL);
-      //buttons.activate(EditorButtons.SERIAL);
-      portSpeed = getSerialSpeed();
-      firmataSpeed = getFirmataSpeed();
-      // if no speed detected for debugging
-      // try Firmata detection or 
-      // assume speed stored in Preferences
-      if(portSpeed == 0) {  // no Serial.begin guess
-        if(firmataSpeed == 0)  // no Firmata.begin guess
-          portSpeed = Preferences.getInteger("serial.rate");  // get speed from Preferences
-        else 
-          portSpeed = firmataSpeed;  // Firmata.begin detected, assume that speed
-      } else {  // port speed detected, save it to Preferences
-        Preferences.setInteger("serial.rate", portSpeed);
-      }
-
-      portName = Preferences.get("serial.port");
-      try {
-        if(0 < portSpeed){
-          serialPort = new Serial(portName, portSpeed);
-          serialPort.setMonitor(true);
-        }else{
-          serialPort = new Serial(portName);
-          serialPort.setMonitor(true);
-        }
-      }
-      catch (SerialException e) {
-        status.error("Error opening serial port '" + portName + "'.");
-        System.err.println(e.getMessage());
-        handleStop();
-        return;
-        //e.printStackTrace();
-      }
-      statusNotice("Serial monitor running at " + serialPort.rate + "bps");
-      //System.out.println("Serial monitor running at " + serialPort.rate + "bps");
-      debugging = true;
-      status.serial();
-    } else {
-      handleStop();
-    }
-  }
-  */
 
   // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
@@ -2860,7 +2510,6 @@ public class Editor extends JFrame implements RunnerListener {
    */
   public void statusError(String what) {
     status.error(what);
-    //new Exception("deactivating RUN").printStackTrace();
     toolbar.deactivate(EditorToolbar.RUN);
   }
 
@@ -2870,10 +2519,6 @@ public class Editor extends JFrame implements RunnerListener {
    */
   public void statusError(Exception e) {
     e.printStackTrace();
-//    if (e == null) {
-//      System.err.println("Editor.statusError() was passed a null exception.");
-//      return;
-//    }
 
     if (e instanceof RunnerException) {
       RunnerException re = (RunnerException) e;
@@ -2916,7 +2561,6 @@ public class Editor extends JFrame implements RunnerListener {
       }
       statusError(mess);
     }
-//    e.printStackTrace();
   }
 
 
@@ -2950,7 +2594,6 @@ public class Editor extends JFrame implements RunnerListener {
    * Returns the edit popup menu.
    */
   class TextAreaPopup extends JPopupMenu {
-    //String currentDir = System.getProperty("user.dir");
     String referenceFile = null;
     String clickedURL;
 

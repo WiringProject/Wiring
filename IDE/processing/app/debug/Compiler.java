@@ -28,7 +28,6 @@
 package processing.app.debug;
 import processing.app.*;
 import processing.core.*;
-//import wiring.app.*;
 
 import java.io.*;
 import java.util.*;
@@ -66,7 +65,6 @@ public class Compiler implements MessageConsumer {
 
     String avrBasePath = Base.getAvrBasePath();
     Map<String, String> boardPreferences = Base.getBoardPreferences();
-    //String target = Preferences.get("build.mcu");
     String hardware = boardPreferences.get("build.hardware");
     if (hardware == null) {
     	RunnerException re = new RunnerException("No board selected; please choose a board from the Tools > Board menu.");
@@ -76,15 +74,10 @@ public class Compiler implements MessageConsumer {
     String hardwarePath;
     if (hardware.indexOf(':') == -1) {
       Target t = Base.getTarget();
-      //System.out.println(t.getFolder());
-      //File coreFolder = new File(new File(t.getFolder(), "cores"), core);
       File hardwareFolder = new File(t.getFolder(), hardware);
-      //File coreFolder = Base.getHardwareFolder();
-      hardwarePath = hardwareFolder.getAbsolutePath();// + File.separator + "targets" + File.separator + target;
-      //System.out.println(corePath);
+      hardwarePath = hardwareFolder.getAbsolutePath();
     } else {
       Target t = Base.targetsTable.get(hardware.substring(0, hardware.indexOf(':')));
-      //File coresFolder = new File(t.getFolder(), "cores");
       File hardwaresFolder = t.getFolder();
       File hardwareFolder = new File(hardwaresFolder, hardware.substring(hardware.indexOf(':') + 1));
       hardwarePath = hardwareFolder.getAbsolutePath();
@@ -104,11 +97,6 @@ public class Compiler implements MessageConsumer {
     coresPath = coresFolder.getAbsolutePath();
     coresCommonPath = coresCommonFolder.getAbsolutePath();
     
-    //System.out.println("coresPath = "+coresPath);
-    //System.out.println("coresCommonPath = "+coresCommonPath);
-    //if(true)
-    //return true;
-    
     List<File> objectFiles = new ArrayList<File>();
     
     List includePaths = new ArrayList();
@@ -122,7 +110,6 @@ public class Compiler implements MessageConsumer {
     
     // use library directories as include paths for all libraries
     for (File file : sketch.getImportedLibraries()) {
-      //System.out.println("IMPORTED: "+file.getPath());
       includePaths.add(file.getPath());
     }
 
@@ -135,45 +122,6 @@ public class Compiler implements MessageConsumer {
                                     findFilesInPath(buildPath, "cpp", false),
                                     boardPreferences));
     
-    /*
-    List<File> sSources = findFilesInPath(buildPath, "S", false);
-    List<File> cSources = findFilesInPath(buildPath, "c", false);
-    List<File> cppSources = findFilesInPath(buildPath, "cpp", false);
-    List<File> sketchObjectFiles = new ArrayList<File>();
-    String sketchSSources = "";
-    String sketchCSources = "";
-    String sketchCPPSources = "";
-    String sketchObjects = "";
-    String sketchIncludes = "";
-    for (File file : sSources) {
-      sketchSSources += file.getName()+" ";
-      String objectPath = file.getName().substring(0, file.getName().lastIndexOf(".S")) + ".o";
-      sketchObjectFiles.add(new File(objectPath));
-    }
-    for (File file : cSources) {
-      sketchCSources += file.getName()+" ";
-      String objectPath = file.getName().substring(0, file.getName().lastIndexOf(".c")) + ".o";
-      sketchObjectFiles.add(new File(objectPath));
-    }
-    for (File file : cppSources) {
-      sketchCPPSources += file.getName()+" ";
-      String objectPath = file.getName().substring(0, file.getName().lastIndexOf(".cpp")) + ".o";
-      sketchObjectFiles.add(new File(objectPath));
-    }
-    for (File file : sketchObjectFiles) {
-      sketchObjects+=file.getName()+" ";
-    }
-    for (File file : includePaths) {
-      sketchIncludes+="-I"+file.getName()+" ";
-    }
-    
-    System.out.println("SKETCHSSOURCES=" + sketchSSources);
-    System.out.println("SKETCHCSOURCES=" + sketchCSources);
-    System.out.println("SKETCHCPPSOURCES=" + sketchCPPSources);
-    System.out.println("SKETCHOBJECTS=" + sketchObjects);
-    System.out.println("SKETCHINCLUDES=" + sketchIncludes);
-    */
-    
     sketch.setCompilingProgress(30);
     
     // 2. compile the libraries, outputting .o files to: <buildPath>/<library>/
@@ -185,12 +133,6 @@ public class Compiler implements MessageConsumer {
       includePaths.add(utilityFolder.getAbsolutePath());
       
       // Barragan: libraries might depend on other libraries, so add all paths for compilation
-      /*List <File> allLibrariesPaths = new ArrayList <File>();
-      allLibrariesPaths.addAll(sketch.getAllLibraries());
-      for (int i=0; i<allLibrariesPaths.size(); i++) {
-        includePaths.add(allLibrariesPaths.get(i).getAbsolutePath());
-      }*/
-      
       objectFiles.addAll(
       compileFiles(avrBasePath, outputFolder.getAbsolutePath(), includePaths,
         findFilesInFolder(libraryFolder, "S", false),
@@ -449,14 +391,8 @@ public class Compiler implements MessageConsumer {
     
     // look for error line, which contains file name, line number,
     // and at least the first line of the error message
-    //String errorFormat = "([\\w\\d_]+.\\w+):(\\d+):\\s*error:\\s*(.*)\\s*";
     String errorFormat = "([\\w\\d_]+.\\w+):(\\d+):\\s*\\s*(.*)\\s*";
     String[] pieces = PApplet.match(s, errorFormat);
-    
-    //    if (pieces != null && exception == null) {
-    //      exception = sketch.placeException(pieces[3], pieces[1], PApplet.parseInt(pieces[2]) - 1);
-    //      if (exception != null) exception.hideStackTrace();
-    //    }
     
     if (pieces != null) {
       RunnerException e = sketch.placeException(pieces[3], pieces[1], PApplet.parseInt(pieces[2]) - 1);
@@ -477,148 +413,6 @@ public class Compiler implements MessageConsumer {
     System.err.print(s);
   }
   
-/*  
-  public void message(String s) {
-    // This receives messages as full lines, so a newline needs
-    // to be added as they're printed to the console.
-    System.err.print(s);
-    
-    // ignore cautions
-    if (s.indexOf("warning") != -1) return;
-    
-    // ignore this line; the real error is on the next one
-    if (s.indexOf("In file included from") != -1) return;
-    
-    // jikes always uses a forward slash character as its separator,
-    // so replace any platform-specific separator characters before
-    // attemping to compare
-    //
-    //String buildPathSubst = buildPath.replace(File.separatorChar, '/') + "/";
-    String buildPathSubst =
-    buildPath.replace(File.separatorChar,File.separatorChar) +
-    File.separatorChar;
-    
-    String partialTempPath = null;
-    int partialStartIndex = -1; //s.indexOf(partialTempPath);
-    int fileIndex = -1;  // use this to build a better exception
-    
-    // check the main sketch file first.
-    partialTempPath = buildPathSubst + primaryClassName;
-      
-    partialStartIndex = s.indexOf(partialTempPath);
-      
-    if (partialStartIndex != -1) {
-      fileIndex = 0;
-    } else {
-      // wasn't there, check the other (non-pde) files in the sketch.
-      // iterate through the project files to see who's causing the trouble
-      for (int i = 0; i < sketch.getCodeCount(); i++) {
-        if (sketch.getCode(i).isExtension("pde")) continue;
-        
-        partialTempPath = buildPathSubst + sketch.getCode(i).getFileName();
-        //System.out.println(partialTempPath);
-        partialStartIndex = s.indexOf(partialTempPath);
-        if (partialStartIndex != -1) {
-          fileIndex = i;
-          //System.out.println("fileIndex is " + fileIndex);
-          break;
-        }
-      }
-      //+ className + ".java";
-    }
-    
-    // if the partial temp path appears in the error message...
-    //
-    //int partialStartIndex = s.indexOf(partialTempPath);
-    if (partialStartIndex != -1) {
-      
-      // skip past the path and parse the int after the first colon
-      //
-      String s1 = s.substring(partialStartIndex +
-                  partialTempPath.length() + 1);
-      
-      //System.out.println(s1);
-      int colon = s1.indexOf(':');
-      
-      if (s1.indexOf("In function") != -1 || colon == -1) {
-        System.err.print(s1);
-        //firstErrorFound = true;
-        return;
-      }
-      
-      int lineNumber;
-      try {
-        lineNumber = Integer.parseInt(s1.substring(0, colon));
-      } catch (NumberFormatException e) {
-        System.err.print(s1);
-        return;
-      }
-      
-      //System.out.println("pde / line number: " + lineNumber);
-      
-      if (fileIndex == 0) {  // main class, figure out which tab
-        for (int i = 1; i < sketch.getCodeCount(); i++) {
-          if (sketch.getCode(i).isExtension("pde")) {
-            //System.out.println("preprocOffset "+ sketch.getCode(i).getPreprocOffset());
-            if (sketch.getCode(i).getPreprocOffset() < lineNumber) {
-              fileIndex = i;
-              //System.out.println("i'm thinkin file " + i);
-            }
-          }
-        }
-        // XXX: DAM: if the lineNumber is less than sketch.getCode(0).getPreprocOffset()
-        // we shouldn't subtract anything from it, as the error is above the
-        // location where the function prototypes and #include "WProgram.h"
-        // were inserted.
-        lineNumber -= sketch.getCode(fileIndex).getPreprocOffset();
-      }
-      
-      //String s2 = s1.substring(colon + 2);
-      int err = s1.indexOf(":");
-      if (err != -1) {
-        
-        // if the first error has already been found, then this must be
-        // (at least) the second error found
-        if (firstErrorFound) {
-          secondErrorFound = true;
-          return;
-        }
-        
-        // if executing at this point, this is *at least* the first error
-        firstErrorFound = true;
-        
-        err += ":".length();
-        String description = s1.substring(err);
-        description = description.trim();
-        System.err.print(description);
-        
-        //System.out.println("description = " + description);
-        //System.out.println("creating exception " + exception);
-        exception = new RunnerException(description, fileIndex, lineNumber-1, -1, false);
-        
-        // NOTE!! major change here, this exception will be queued
-        // here to be thrown by the compile() function
-        //editor.error(exception);
-        
-      } else {
-        System.err.println("i suck: " + s);
-      }
-      
-    } else {
-      // this isn't the start of an error line, so don't attempt to parse
-      // a line number out of it.
-      
-      // if the second error hasn't been discovered yet, these lines
-      // are probably associated with the first error message,
-      // which is already in the status bar, and are likely to be
-      // of interest to the user, so spit them to the console.
-      //
-      if (!secondErrorFound) {
-        System.err.println(s);
-      }
-    }
-  }
-*/
 
   static private List getCommandCompilerS(String avrBasePath, List includePaths,
     String sourceName, String objectName, Map<String, String> boardPreferences) {
@@ -655,9 +449,6 @@ public class Compiler implements MessageConsumer {
       "-w", // surpress all warnings
       "-ffunction-sections", // place each function in its own section
       "-fdata-sections",
-      //"-ffreestanding",
-      //"-fno-inline-small-functions",
-      //"-std=gnu99",
       "-mmcu=" + boardPreferences.get("build.mcu"),
       "-DF_CPU=" + boardPreferences.get("build.f_cpu"),
       "-DWIRING=" + Base.REVISION,
@@ -665,7 +456,6 @@ public class Compiler implements MessageConsumer {
                 
     for (int i = 0; i < includePaths.size(); i++) {
       baseCommandCompiler.add("-I" + (String) includePaths.get(i));
-    //System.out.println("include path: "+(String) includePaths.get(i));
     }
 
     baseCommandCompiler.add(sourceName);
@@ -688,8 +478,6 @@ public class Compiler implements MessageConsumer {
       "-fno-exceptions",
       "-ffunction-sections", // place each function in its own section
       "-fdata-sections",
-      //"-ffreestanding",
-      //"-fno-inline-small-functions",
       "-mmcu=" + boardPreferences.get("build.mcu"),
       "-DF_CPU=" + boardPreferences.get("build.f_cpu"),
       "-DWIRING=" + Base.REVISION,
@@ -778,11 +566,6 @@ public class Compiler implements MessageConsumer {
     try {
       String path = folder.getCanonicalPath();
       
-      //    disabled as of 0136
-      // add the folder itself in case any unzipped files
-      //      abuffer.append(sep);
-      //      abuffer.append(path);
-      //
       // When getting the name of this folder, make sure it has a slash
       // after it, so that the names of sub-items can be added.
       if (!path.endsWith(File.separator)) {
@@ -805,8 +588,6 @@ public class Compiler implements MessageConsumer {
     } catch (IOException e) {
       e.printStackTrace();  // this would be odd
     }
-    //System.out.println("included path is " + abuffer.toString());
-    //packageListFromClassPath(abuffer.toString());  // WHY?
     return abuffer.toString();
   }
   
@@ -827,21 +608,16 @@ public class Compiler implements MessageConsumer {
     PApplet.split(path, File.pathSeparatorChar);
     
     for (int i = 0; i < pieces.length; i++) {
-      //System.out.println("checking piece '" + pieces[i] + "'");
       if (pieces[i].length() == 0) continue;
       
       if (pieces[i].toLowerCase().endsWith(".jar") ||
         pieces[i].toLowerCase().endsWith(".zip")) {
-        //System.out.println("checking " + pieces[i]);
         packageListFromZip(pieces[i], table);
         
       } else {  // it's another type of file or directory
         File dir = new File(pieces[i]);
         if (dir.exists() && dir.isDirectory()) {
           packageListFromFolder(dir, null, table);
-          //importCount = magicImportsRecursive(dir, null,
-          //                                  table);
-          //imports, importCount);
         }
       }
     }
@@ -852,8 +628,6 @@ public class Compiler implements MessageConsumer {
     while (e.hasMoreElements()) {
       output[index++] = ((String) e.nextElement()).replace('/', '.');
     }
-    //System.arraycopy(imports, 0, output, 0, importCount);
-    //PApplet.printarr(output);
     return output;
   }
   
@@ -881,7 +655,6 @@ public class Compiler implements MessageConsumer {
       }
     } catch (IOException e) {
       System.err.println("Ignoring " + filename + " (" + e.getMessage() + ")");
-      //e.printStackTrace();
     }
   }
   
@@ -894,9 +667,6 @@ public class Compiler implements MessageConsumer {
    */
   static private void packageListFromFolder(File dir, String sofar,
                         Hashtable table) {
-    //String imports[],
-    //int importCount) {
-    //System.err.println("checking dir '" + dir + "'");
     boolean foundClass = false;
     String files[] = dir.list();
     
@@ -908,13 +678,8 @@ public class Compiler implements MessageConsumer {
         String nowfar =
         (sofar == null) ? files[i] : (sofar + "." + files[i]);
         packageListFromFolder(sub, nowfar, table);
-        //System.out.println(nowfar);
-        //imports[importCount++] = nowfar;
-        //importCount = magicImportsRecursive(sub, nowfar,
-        //                                  imports, importCount);
       } else if (!foundClass) {  // if no classes found in this folder yet
         if (files[i].endsWith(".class")) {
-          //System.out.println("unique class: " + files[i] + " for " + sofar);
           table.put(sofar, new Object());
           foundClass = true;
         }
