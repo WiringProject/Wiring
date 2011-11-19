@@ -1,7 +1,7 @@
 this file includes licensing information for parts of processing and wiring.
 
-the gnu general public license covers the main body of the processing and wiring code 
-(in general, all the stuff inside the 'app' subfolder).
+The GNU general public license covers the main body of the Processing
+and Wiring code (most of the stuff inside the 'IDE' subfolder).
 
 
 .....................................................................
