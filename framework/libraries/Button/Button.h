@@ -63,7 +63,7 @@ class Button
     uint8_t pin;
     uint8_t mode;
     uint8_t state;
-    unsigned int pressedStartTime;
+    unsigned long pressedStartTime;
     unsigned int holdEventThreshold;
     buttonEventHandler cb_onPress;
     buttonEventHandler cb_onRelease;
