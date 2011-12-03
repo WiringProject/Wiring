@@ -105,12 +105,12 @@ bool Button::isPressed(void)
     if (bitRead(state, CURRENT) == true)
     {
       numberOfPresses++;
+      pressedStartTime = millis();             //start timing
+      triggeredHoldEvent = false;
       if (cb_onPress)
       {
         cb_onPress(*this);  //fire the onPress event
       }
-      pressedStartTime = millis();             //start timing
-      triggeredHoldEvent = false;
     }
     else //the state changed to RELEASED
     {
