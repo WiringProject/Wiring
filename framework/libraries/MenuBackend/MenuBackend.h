@@ -564,7 +564,7 @@ class MenuBackend
       {
         if (cb_menuChange)
         {
-          MenuChangeEvent mce = { *current, *next };
+          MenuChangeEvent mce = { *cur, *current };
           (*cb_menuChange)(mce);
         }
       }
