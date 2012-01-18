@@ -1,4 +1,20 @@
-Wiring: an open-source programming framework for microcontrollers.
+About Wiring
+============
+
+Wiring is an open-source programming framework for microcontrollers.
+
+Wiring allows writing cross-platform software to control devices
+attached to a wide range of microcontroller boards to create all kinds
+of creative coding, interactive objects, spaces or physical experiences.
+The framework is thoughtfully created with designers and artists in 
+mind to encourage a community where beginners through experts from 
+around the world share ideas, knowledge and their collective experience.
+There are thousands of students, artists, designers, researchers, and
+hobbyists who use Wiring for learning, prototyping, and finished
+professional work production. 
+
+Wiring's Components
+===================
 
 Wiring has three major components:
 
@@ -26,7 +42,7 @@ Framework. If you just want to write and upload programs, your best
 bet is to download an existing binary release. These are available at
 the Wiring web site for Windows, Mac, and Linux:
 
-    http://wiring.org.co/download/
+   http://wiring.org.co/download/
 
 If you are interested in developing Wiring, you'll need to build the
 IDE using this repository.  For more information, see the file
@@ -39,15 +55,15 @@ Development discussion takes place on
 wiring-dev@yahoogroups.ca. Please ask any development-related
 questions there. To subscribe, send email to:
 
-    wiring-dev-subscribe@yahoogroups.ca.
+  wiring-dev-subscribe@yahoogroups.ca.
 
 Archives are available online at:
 
-    http://ca.groups.yahoo.com/group/wiring-dev/
+  http://ca.groups.yahoo.com/group/wiring-dev/
 
 The developers' portal on the Wiring Wiki is here:
 
-    http://wiki.wiring.co/wiki/Develop_Wiring
+  http://wiki.wiring.co/wiki/Develop_Wiring
 
 Repository Structure
 ====================
