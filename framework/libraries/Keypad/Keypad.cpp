@@ -5,6 +5,7 @@
 || @url            http://alexanderbrevig.com/
 || @contribution   Mark Stanley
 || @contribution   Brett Hagman <bhagman@wiring.org.co>
+|| @contribution   Nick Gammon
 ||
 || @description
 || | This is a Hardware Abstraction Library for matrix Keypads.
@@ -182,18 +183,18 @@ void Keypad::transitionTo(KeypadState newState)
   }
 }
 
-void Keypad::initializePins()
-{
-  for (byte r = 0; r < size.rows; r++)
+void Keypad::initializePins(){
+  for (byte r=0; r<size.rows; r++)
   {
-    for (byte c = 0; c < size.columns; c++)
-    {
-      pinMode(columnPins[c], OUTPUT);
-      digitalWrite(columnPins[c], HIGH);
-    }
     //configure row pin modes and states
-    pinMode(rowPins[r], INPUT);
-    digitalWrite(rowPins[r], HIGH);
+    pinMode(rowPins[r],INPUT);
+    digitalWrite(rowPins[r],HIGH);
   }
+  for (byte c=0; c<size.columns; c++)
+  {
+    //configure column pin modes and states
+    pinMode(columnPins[c],OUTPUT);
+    digitalWrite(columnPins[c],HIGH);
+  }  
 }
 
