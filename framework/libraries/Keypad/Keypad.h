@@ -41,8 +41,8 @@ typedef enum
 /// define a structure that holds the size of the keypad
 typedef struct
 {
-  byte rows : 4;
-  byte columns : 4;
+  byte rows;
+  byte columns;
 } KeypadSize;
 
 /// for readability in user code when polling the state
