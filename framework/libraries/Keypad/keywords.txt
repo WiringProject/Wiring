@@ -17,7 +17,7 @@ begin                          KEYWORD2
 getKey                         KEYWORD2
 getState                       KEYWORD2
 setHoldTime                    KEYWORD2
-addEventListener               KEYWORD2
+setEventListener               KEYWORD2
 
 # this is a macro that converts 2d arrays to pointers
 makeKeymap                     KEYWORD2
