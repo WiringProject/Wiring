@@ -62,8 +62,12 @@ class Keypad
 
     void setDebounceTime(unsigned int debounce);
     void setHoldTime(unsigned int hold);
-
-    void addEventListener(void (*listener)(char));
+    
+    //@deprecated
+    void addEventListener(void (*listener)(char)) {
+      setEventListener(listener);
+    }
+    void setEventListener(void (*listener)(char));
 
   private:
     void transitionTo(KeypadState newState);
