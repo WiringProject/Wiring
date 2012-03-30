@@ -158,13 +158,13 @@ void Keypad::setHoldTime(unsigned int hold)
 
 /*
 || @description
-|| | Add an event listener to this keypad
+|| | Set an event listener to this keypad
 || | The event listener function has to be of void type, and expect a char as the parameter
 || #
 ||
 || @parameter listener The void function that handles events, must accept a char as its parameter
 */
-void Keypad::addEventListener(void (*listener)(char))
+void Keypad::setEventListener(void (*listener)(char))
 {
   keypadEventListener = listener;
 }
