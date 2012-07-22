@@ -18,7 +18,7 @@
             location="${dist.dir}/wiring-${release.version}.tgz"/>
 
   <!-- platform.bootclasspath: Location of bootstrap class files.
-       Linux builds defer to the user-installed JDK, so use its rt.jar. -->
+       Linux builds use the system JDK/JRE, so use its rt.jar. -->
   <property environment="env"/>
   <property name="platform.bootclasspath"
             value="${env.JAVA_HOME}/jre/lib/rt.jar"/>
@@ -26,10 +26,6 @@
   <!-- Dependencies -->
   <property name="dep.toolchain.avr.remote"
             value="http://wiring.googlecode.com/files/tools-avr-linux-i586.tar.gz"/>
-  <property name="dep.jre.remote"
-            value="http://wiring.googlecode.com/files/jre-tools-6u26-linux-i586.tgz"/>
-  <property name="dep.jre.local"
-            location="${deps.archive}/jre.tgz"/>
 
   <!-- =======
        Targets
@@ -46,16 +42,10 @@
     <copy todir="${dist.wiring.lib}" file="${build.jar}"/>
 
     <!-- Hacks to get things to (mostly) work -->
-    <copy todir="${dist.wiring.dir}/java/lib/i386">
-      <filelist dir="${dist.wiring.dir}/lib/serial/" files="librxtxSerial.so"/>
-    </copy>
     <copy todir="${dist.wiring.dir}" file="${platform.basedir}/dist/wiring"/>
     <chmod perm="ugo+x">
       <fileset dir="${dist.wiring.dir}/tools"
                includes="**/bin/*,**/libexec/gcc/avr/4.3.5/c*"/>
-    </chmod>
-    <chmod perm="ugo+x">
-      <fileset dir="${dist.wiring.dir}/java" includes="**/bin/*"/>
     </chmod>
     <chmod perm="ugo+x" file="${dist.wiring.dir}/wiring"/>
 
@@ -72,18 +62,7 @@
   <!-- Dependency resolution -->
 
   <target name="-resolve.deps"
-          depends="platform.-resolve.dep.jre,platform.-resolve.dep.avr">
-  </target>
-
-  <target name="-resolve.dep.jre"
-          depends="platform.-check.dep.jre"
-          unless="exists.dep.jre">
-    <get src="${dep.jre.remote}" dest="${dep.jre.local}"/>
-    <untar src="${dep.jre.local}" dest="${deps.extract}" compression="gzip"/>
-  </target>
-
-  <target name="-check.dep.jre" depends="-init">
-    <available property="exists.dep.jre" file="${dep.jre.local}"/>
+          depends="platform.-resolve.dep.avr">
   </target>
 
   <!-- Override AVR toolchain using a real tar, so symlinks work. -->

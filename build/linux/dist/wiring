@@ -101,6 +101,11 @@ log CLASSPATH
 export PATH="$JDKDIR/bin":"$PATH"
 log PATH
 
+# Hack up LD_LIBRARY_PATH so JNI finds librxtxSerial.so
+BUNDLED_LIBS="$APPDIR/lib/"
+export LD_LIBRARY_PATH="$BUNDLED_LIBS/serial/":"$LD_LIBRARY_PATH"
+log LD_LIBRARY_PATH
+
 # Start Processing in the same directory as this script
 cd "$APPDIR"
 if [ "$1" ]; then
