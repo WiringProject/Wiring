@@ -35,10 +35,12 @@
 
   <target name="-dist" depends="-init,platform.-init,resolve.deps,build">
     <!-- Copy everything into dist.wiring.dir -->
-    <copy todir="${dist.wiring.dir}"><fileset dir="${deps.extract}"/></copy>
-    <copy todir="${dist.wiring.dir}"><fileset dir="${framework.dir}"/></copy>
-    <copy todir="${dist.wiring.dir}"><fileset dir="${build.rsrc.shared}"/></copy>
-    <copy todir="${dist.wiring.lib}"><path refid="lib.class.path"/></copy>
+    <copy todir="${dist.wiring.dir}">
+      <fileset dir="${deps.extract}"/>
+      <fileset dir="${framework.dir}"/>
+      <fileset dir="${build.rsrc.shared}"/>
+      <path refid="lib.class.path"/>
+    </copy>
     <copy todir="${dist.wiring.lib}" file="${build.jar}"/>
 
     <!-- Hacks to get things to (mostly) work -->
