@@ -1,14 +1,14 @@
 HOW TO BUILD WIRING ON YOUR FAVORITE PLATFORM
 
 These instructions apply to the Wiring distribution available on
-GitHub. If you're trying to build an older version of Wiring (obtained
-from e.g. Subversion), you'll need to use the instructions from that
-older version instead.
+GitHub:
+
+    https://github.com/WiringProject/Wiring
 
 
 ////////////////////////////////////////////////////////////////////
 
-//// Steps for First Time Setup 
+//// Steps for First Time Setup
 
 
 1. INSTALL DEVELOPMENT TOOLS
@@ -19,27 +19,58 @@ At a minimum, you will need the following things to build Wiring:
   1.5+ should work. (We make use of some com.sun.* APIs that may
   render other JDKs inoperable).
 
-+ Apache Ant. Last we checked, OS X includes this by default with its
-  JDK install. Linux users will likely find Ant in their
-  distribution's package manager. Windows users can download and
-  install Ant from its Apache page:
+  - Windows: after installing the JDK, you'll need to:
+
+    1. Set the environment variable JAVA_HOME to point to the JDK
+    directory (by default, this goes into C:\Program
+    Files\Java\jdk-VERSION\).
+
+    2. Add the JDK's bin\ directory to your PATH (check this by
+    running javac at the command prompt).
+
+  - OS X: use Apple's. (We haven't tested with Oracle's; feedback is
+    welcome).
+
+  - Linux: you're on your own. Your distribution's package manager
+    likely provides many choices.
+
++ Apache Ant.
+
+  - Windows: download and install Ant from its Apache page:
 
       http://ant.apache.org/
+
+    Pay attention to the Windows install instructions (setting
+    JAVA_HOME, ANT_HOME, and updating your PATH) here:
+
+      http://ant.apache.org/manual/install.html
+
+    However, the recommendations that page makes about *how* to set
+    environment variables are bogus; to make the settings permanent,
+    you'll need to go through the usual environment variables dialog
+    dance in the System control panel.
+
+  - OS X: last we checked, Ant is included by default with the JDK.
+
+  - Linux: you'll likely find Ant in your distribution's package
+    manager (e.g. on Debian or Ubuntu: sudo apt-get install ant).
 
 Depending on your platform, you will also need some other stuff:
 
 1a. Windows:
 
-    - Launch4j: You need this to build wiring.exe. After you download and
-      install it, make sure that launch4jc.exe is on your PATH.
+    - Launch4j: You need this to build wiring.exe. After you download
+      and install it, make sure that launch4jc.exe (which is in the
+      top-level Launch4j folder under Program Files) is on your PATH.
 
       http://launch4j.sourceforge.net/
 
 1b. Mac OS X
 
-    - Apple's developer tools (XCode).
+    - Apple's developer tools (XCode). You may be able to get by with
+      just the free command line tools.
 
-1c. On Linux:
+1c. Linux:
 
     - tar: We test with GNU tar. This is almost certainly already
       installed on your system.
@@ -50,11 +81,11 @@ That means you'll also need Git. If you're reading this, you've
 probably already got that ;). If you don't, the following GitHub guide
 should help you install Git:
 
-      http://help.github.com/set-up-git-redirect
+    http://help.github.com/set-up-git-redirect
 
 Once that's installed, get the code with:
 
-     $ git clone git://github.com/WiringProject/Wiring.git
+    $ git clone git://github.com/WiringProject/Wiring.git
 
 3. BUILD IT
 
@@ -62,12 +93,18 @@ From the top-level Wiring directory, run
 
     $ ant
 
-To build the Wiring IDE.
+To build the Wiring IDE for your system. (This is the same thing as
+running $ ant make).
 
-The first time you run this, Ant will automatically download and
-extract bunch of other things you need, so it may take a while. After
+NOTE: the first time you run ant, some external dependencies will be
+automatically downloaded and extracted, so it may take a while. After
 the first time, though, builds will go much faster.
 
+Once it's built, use
+
+    $ ant run
+
+to run the Wiring IDE.
 
 ////////////////////////////////////////////////////////////////////
 
@@ -92,9 +129,9 @@ the first time, though, builds will go much faster.
 
     $ ant clean.all
 
-    Be aware, though, that using clean.all means your next build will
-    require an internet connection, as Wiring's dependencies will have
-    to be re-downloaded.
+    IMPORTANT: Using clean.all means your next build will require an
+    internet connection, as the external dependencies will have to be
+    re-downloaded. You have been warned.
 
 
 ////////////////////////////////////////////////////////////////////

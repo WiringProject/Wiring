@@ -9,6 +9,14 @@
   <property name="dist.wiring" value="wiring-${release.version}"/>
   <property name="dist.wiring.dir" location="${dist.dir}/${dist.wiring}"/>
   <property name="dist.wiring.lib" location="${dist.wiring.dir}/lib"/>
+  <!-- dist.wiring.exe: The launch4j-generated wiring.exe -->
+  <property name="dist.wiring.exe" location="${dist.wiring.dir}/wiring.exe"/>
+  <!-- dist.wiring.zip: the distributable zipfile -->
+  <property name="dist.wiring.zip"
+	    location="${dist.dir}/${dist.wiring}.zip"/>
+  <!-- dist.wiring.expert.zip: the distributable zipfile with no JRE -->
+  <property name="dist.wiring.expert.zip"
+	    location="${dist.dir}/${dist.wiring}-expert.zip"/>
 
   <!-- build.rsrc.launch4j: launch4j resources. -->
   <property name="dist.rsrc.launch4j" location="${build.rsrc.plat}/launcher"/>
@@ -41,7 +49,36 @@
 
   <!-- dist -->
 
-  <target name="-dist" depends="platform.-dist.prep">
+  <target name="-dist" depends="make">
+    <!-- This is the normal distributable, which includes a JRE: -->
+    <zip destfile="${dist.wiring.zip}">
+      <zipfileset dir="${dist.wiring.dir}" prefix="${dist.wiring}"/>
+    </zip>
+    <!-- This is the expert distributable, which does not: -->
+    <zip destfile="${dist.wiring.expert.zip}">
+      <zipfileset dir="${dist.wiring.dir}" prefix="${dist.wiring}"
+		  excludes="java/**"/>
+    </zip>
+  </target>
+
+  <!-- make -->
+
+  <target name="-make" depends="init,resolve.deps,build">
+    <!-- Dirty hacks; TODO: clean this up. -->
+
+    <!-- Get wiring.exe under ${dist.wiring.dir}. The launch4j config
+         wants to put this in ${dist.rsrc.launch4j}/wiring.exe, and I
+         haven't figure out how to dissuade it from doing so, so just
+         move it to the right place for now. [mbolivar] -->
+    <exec executable="launch4jc.exe">
+      <arg value="${dist.rsrc.launch4j}/config.xml"/>
+    </exec>
+    <move file="${dist.rsrc.launch4j}/wiring.exe" todir="${dist.wiring.dir}"/>
+
+    <!-- Make sure rxtxSerial.dll gets picked up by JNI -->
+    <copy file="${build.rsrc.ide-deps}/serial/rxtxSerial.dll"
+          todir="${dist.wiring.dir}"/>
+
     <!-- Copy everything into dist.wiring.dir. -->
     <copy todir="${dist.wiring.dir}"><fileset dir="${build.rsrc.shared}"/></copy>
     <copy todir="${dist.wiring.dir}"><fileset dir="${deps.extract}"/></copy>
@@ -58,22 +95,10 @@
     <echo message="--------------------------------------------------"/>
   </target>
 
-  <target name="-dist.prep"
-          depends="-init,platform.-init,resolve.deps,build">
-    <!-- Dirty hacks; TODO: clean this up. -->
+  <!-- run -->
 
-    <!-- Get wiring.exe under ${dist.wiring.dir}. The launch4j config
-         wants to put this in ${dist.rsrc.launch4j}/wiring.exe, and I
-         haven't figure out how to dissuade it from doing so, so just
-         move it to the right place for now. [mbolivar] -->
-    <exec executable="launch4jc.exe">
-      <arg value="${dist.rsrc.launch4j}/config.xml"/>
-    </exec>
-    <move file="${dist.rsrc.launch4j}/wiring.exe" todir="${dist.wiring.dir}"/>
-
-    <!-- Make sure rxtxSerial.dll gets picked up by JNI -->
-    <copy file="${build.rsrc.ide-deps}/serial/rxtxSerial.dll"
-          todir="${dist.wiring.dir}"/>
+  <target name="-run" depends="make">
+    <exec executable="${dist.wiring.exe}" spawn="true"/>
   </target>
 
   <!-- Dependency resolution -->
@@ -89,7 +114,7 @@
     <unzip src="${dep.jre.local}" dest="${deps.extract}"/>
   </target>
 
-  <target name="-check.dep.jre" depends="-init">
+  <target name="-check.dep.jre" depends="init">
     <available property="exists.dep.jre" file="${dep.jre.local}"/>
   </target>
 
@@ -100,7 +125,7 @@
     <unzip src="${dep.cygwindlls.local}" dest="${deps.extract}"/>
   </target>
 
-  <target name="-check.dep.cygwindlls" depends="-init">
+  <target name="-check.dep.cygwindlls" depends="init">
     <available property="exists.dep.cygwindlls"
                file="${dep.cygwindlls.local}"/>
   </target>

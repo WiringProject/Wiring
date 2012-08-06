@@ -39,10 +39,15 @@
 
   <!-- dist -->
 
-  <target name="-dist" depends="platform.-dist.prep.app">
+  <target name="-dist" depends="make">
+    <!-- TODO port the relevant pieces out of the old build scripts
+         over to Ant here -->
+    <fail message="Unimplemented"/>
   </target>
 
-  <target name="-dist.prep.app" depends="-init,resolve.deps,build">
+  <!-- make -->
+
+  <target name="-make" depends="init,resolve.deps,build">
     <exec executable="cp">
       <arg value="-pRX"/>
       <arg value="${dist.rsrc.app}"/>
@@ -74,10 +79,22 @@
     <echo message="Done. ${app.name} is in ${dist.app}."/>
   </target>
 
+  <!-- run -->
+
+  <target name="-run" depends="make">
+    <exec executable="open">
+      <arg value="${dist.app}"/>
+    </exec>
+  </target>
+
   <!-- Dependency resolution -->
 
   <target name="-resolve.deps">
     <!-- No extra dependencies on OS X at this time. -->
   </target>
+
+  <!-- init -->
+
+  <target name="-init"/> <!-- Nothing extra to do -->
 
 </project>
