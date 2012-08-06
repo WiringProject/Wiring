@@ -11,6 +11,12 @@
   <property name="dist.wiring.lib" location="${dist.wiring.dir}/lib"/>
   <!-- dist.wiring.exe: The launch4j-generated wiring.exe -->
   <property name="dist.wiring.exe" location="${dist.wiring.dir}/wiring.exe"/>
+  <!-- dist.wiring.zip: the distributable zipfile -->
+  <property name="dist.wiring.zip"
+	    location="${dist.dir}/${dist.wiring}.zip"/>
+  <!-- dist.wiring.expert.zip: the distributable zipfile with no JRE -->
+  <property name="dist.wiring.expert.zip"
+	    location="${dist.dir}/${dist.wiring}-expert.zip"/>
 
   <!-- build.rsrc.launch4j: launch4j resources. -->
   <property name="dist.rsrc.launch4j" location="${build.rsrc.plat}/launcher"/>
@@ -44,9 +50,15 @@
   <!-- dist -->
 
   <target name="-dist" depends="make">
-    <!-- TODO port the relevant pieces out of the old build scripts
-         over to Ant here -->
-    <fail message="Unimplemented"/>
+    <!-- This is the normal distributable, which includes a JRE: -->
+    <zip destfile="${dist.wiring.zip}">
+      <zipfileset dir="${dist.wiring.dir}" prefix="${dist.wiring}"/>
+    </zip>
+    <!-- This is the expert distributable, which does not: -->
+    <zip destfile="${dist.wiring.expert.zip}">
+      <zipfileset dir="${dist.wiring.dir}" prefix="${dist.wiring}"
+		  excludes="java/**"/>
+    </zip>
   </target>
 
   <!-- make -->
