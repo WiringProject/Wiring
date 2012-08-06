@@ -33,7 +33,7 @@
 
   <!-- dist -->
 
-  <target name="-dist" depends="-init,platform.-init,resolve.deps,build">
+  <target name="-dist" depends="init,resolve.deps,build">
     <!-- Copy everything into dist.wiring.dir -->
     <copy todir="${dist.wiring.dir}">
       <fileset dir="${deps.extract}"/>
@@ -69,7 +69,7 @@
 
   <!-- Override AVR toolchain using a real tar, so symlinks work. -->
   <target name="-resolve.dep.avr"
-          depends="-init,-check.dep.avr"
+          depends="init,-check.dep.avr"
           unless="exists.dep.avr">
     <get src="${dep.toolchain.avr.remote}" dest="${dep.toolchain.avr.local}"/>
     <exec executable="tar" dir="${deps.extract}">

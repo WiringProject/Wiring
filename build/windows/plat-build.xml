@@ -59,7 +59,7 @@
   </target>
 
   <target name="-dist.prep"
-          depends="-init,platform.-init,resolve.deps,build">
+          depends="init,resolve.deps,build">
     <!-- Dirty hacks; TODO: clean this up. -->
 
     <!-- Get wiring.exe under ${dist.wiring.dir}. The launch4j config
@@ -89,7 +89,7 @@
     <unzip src="${dep.jre.local}" dest="${deps.extract}"/>
   </target>
 
-  <target name="-check.dep.jre" depends="-init">
+  <target name="-check.dep.jre" depends="init">
     <available property="exists.dep.jre" file="${dep.jre.local}"/>
   </target>
 
@@ -100,7 +100,7 @@
     <unzip src="${dep.cygwindlls.local}" dest="${deps.extract}"/>
   </target>
 
-  <target name="-check.dep.cygwindlls" depends="-init">
+  <target name="-check.dep.cygwindlls" depends="init">
     <available property="exists.dep.cygwindlls"
                file="${dep.cygwindlls.local}"/>
   </target>

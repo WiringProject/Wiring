@@ -42,7 +42,7 @@
   <target name="-dist" depends="platform.-dist.prep.app">
   </target>
 
-  <target name="-dist.prep.app" depends="-init,resolve.deps,build">
+  <target name="-dist.prep.app" depends="init,resolve.deps,build">
     <exec executable="cp">
       <arg value="-pRX"/>
       <arg value="${dist.rsrc.app}"/>
@@ -79,5 +79,9 @@
   <target name="-resolve.deps">
     <!-- No extra dependencies on OS X at this time. -->
   </target>
+
+  <!-- init -->
+
+  <target name="-init"/> <!-- Nothing extra to do -->
 
 </project>

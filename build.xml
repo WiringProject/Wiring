@@ -139,7 +139,7 @@
 
   <!-- build -->
 
-  <target name="build" depends="-init,resolve.deps"
+  <target name="build" depends="init,resolve.deps"
           description="Build Wiring IDE's Java source code">
     <javac srcdir="${ide.src}"
            destdir="${build.classes}"
@@ -156,7 +156,7 @@
 
   <!-- JavaDoc -->
 
-  <target name="javadoc" depends="-init"
+  <target name="javadoc" depends="init"
           description="Generate JavaDoc HTML output">
     <javadoc sourcepath="${ide.src}" destdir="${javadoc.dir}"
              packagenames="processing.app.*" classpathref="lib.class.path"
@@ -183,7 +183,7 @@
            dest="${deps.extract}" compression="gzip"/>
   </target>
 
-  <target name="-check.dep.avr" depends="-init">
+  <target name="-check.dep.avr" depends="init">
     <available property="exists.dep.avr" file="${dep.toolchain.avr.local}"/>
   </target>
 
@@ -194,7 +194,7 @@
     <unzip src="${dep.reference.local}" dest="${deps.extract}"/>
   </target>
 
-  <target name="-check.dep.reference" depends="-init">
+  <target name="-check.dep.reference" depends="init">
     <available property="exists.dep.reference" file="${dep.reference.local}"/>
   </target>
 
@@ -213,7 +213,8 @@
 
   <!-- Initialization -->
 
-  <target name="-init">
+  <target name="init" depends="platform.-init"
+          description="Initialize output directories">
     <mkdir dir="${out.dir}"/>
 
     <mkdir dir="${dist.dir}"/>
