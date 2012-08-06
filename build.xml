@@ -4,6 +4,12 @@
      - get rid of unnecessary copying and work (e.g., apple.jar is copied
        to out/dist/ under Linux).  This can likely be handled by only fetching
        the JARs needed for the current platform.
+
+     - align these files more with Ant build file conventions:
+
+           http://wiki.apache.org/ant/TheElementsOfAntStyle
+
+       In particular, the names of our main targets could probably use some work.
 -->
 
 <project name="wiring" default="dist" basedir=".">
@@ -116,17 +122,25 @@
 
   <!-- ==============
        Common Targets
-       ============== -->
+       ==============
+
+       Note that several of these are currently just aliases for
+       platform-specific targets (defined in the platform
+       plat-build.xml). Keep it this way; it will let us insert any
+       portable functionality easily in the future.
+
+  -->
+
 
   <!-- dist -->
 
   <target name="dist" depends="platform.-dist"
-          description="Build the Wiring distribution"/>
+          description="Build the Wiring IDE distributable"/>
 
   <!-- build -->
 
   <target name="build" depends="-init,resolve.deps"
-          description="Build Wiring IDE sources">
+          description="Build Wiring IDE's Java source code">
     <javac srcdir="${ide.src}"
            destdir="${build.classes}"
            includeAntRuntime="false"
