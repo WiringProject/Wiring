@@ -12,7 +12,7 @@
        In particular, the names of our main targets could probably use some work.
 -->
 
-<project name="wiring" default="dist" basedir=".">
+<project name="wiring" default="make" basedir=".">
   <description>Wiring IDE build file.</description>
 
   <!-- ====================
@@ -136,6 +136,16 @@
 
   <target name="dist" depends="platform.-dist"
           description="Build the Wiring IDE distributable"/>
+
+  <!-- make -->
+
+  <target name="make" depends="platform.-make"
+          description="Build Wiring IDE for local use"/>
+
+  <!-- run -->
+
+  <target name="run" depends="make,platform.-run"
+          description="Build and run Wiring IDE"/>
 
   <!-- build -->
 

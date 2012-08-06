@@ -9,6 +9,8 @@
   <property name="dist.wiring" value="wiring-${release.version}"/>
   <property name="dist.wiring.dir" location="${dist.dir}/${dist.wiring}"/>
   <property name="dist.wiring.lib" location="${dist.wiring.dir}/lib"/>
+  <!-- dist.wiring.exe: The launch4j-generated wiring.exe -->
+  <property name="dist.wiring.exe" location="${dist.wiring.dir}/wiring.exe"/>
 
   <!-- build.rsrc.launch4j: launch4j resources. -->
   <property name="dist.rsrc.launch4j" location="${build.rsrc.plat}/launcher"/>
@@ -41,7 +43,30 @@
 
   <!-- dist -->
 
-  <target name="-dist" depends="platform.-dist.prep">
+  <target name="-dist" depends="make">
+    <!-- TODO port the relevant pieces out of the old build scripts
+         over to Ant here -->
+    <fail message="Unimplemented"/>
+  </target>
+
+  <!-- make -->
+
+  <target name="-make" depends="init,resolve.deps,build">
+    <!-- Dirty hacks; TODO: clean this up. -->
+
+    <!-- Get wiring.exe under ${dist.wiring.dir}. The launch4j config
+         wants to put this in ${dist.rsrc.launch4j}/wiring.exe, and I
+         haven't figure out how to dissuade it from doing so, so just
+         move it to the right place for now. [mbolivar] -->
+    <exec executable="launch4jc.exe">
+      <arg value="${dist.rsrc.launch4j}/config.xml"/>
+    </exec>
+    <move file="${dist.rsrc.launch4j}/wiring.exe" todir="${dist.wiring.dir}"/>
+
+    <!-- Make sure rxtxSerial.dll gets picked up by JNI -->
+    <copy file="${build.rsrc.ide-deps}/serial/rxtxSerial.dll"
+          todir="${dist.wiring.dir}"/>
+
     <!-- Copy everything into dist.wiring.dir. -->
     <copy todir="${dist.wiring.dir}"><fileset dir="${build.rsrc.shared}"/></copy>
     <copy todir="${dist.wiring.dir}"><fileset dir="${deps.extract}"/></copy>
@@ -58,22 +83,10 @@
     <echo message="--------------------------------------------------"/>
   </target>
 
-  <target name="-dist.prep"
-          depends="init,resolve.deps,build">
-    <!-- Dirty hacks; TODO: clean this up. -->
+  <!-- run -->
 
-    <!-- Get wiring.exe under ${dist.wiring.dir}. The launch4j config
-         wants to put this in ${dist.rsrc.launch4j}/wiring.exe, and I
-         haven't figure out how to dissuade it from doing so, so just
-         move it to the right place for now. [mbolivar] -->
-    <exec executable="launch4jc.exe">
-      <arg value="${dist.rsrc.launch4j}/config.xml"/>
-    </exec>
-    <move file="${dist.rsrc.launch4j}/wiring.exe" todir="${dist.wiring.dir}"/>
-
-    <!-- Make sure rxtxSerial.dll gets picked up by JNI -->
-    <copy file="${build.rsrc.ide-deps}/serial/rxtxSerial.dll"
-          todir="${dist.wiring.dir}"/>
+  <target name="-run" depends="make">
+    <exec executable="${dist.wiring.exe}" spawn="true"/>
   </target>
 
   <!-- Dependency resolution -->
