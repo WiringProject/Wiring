@@ -46,13 +46,13 @@ At a minimum, you will need the following things to build Wiring:
       http://ant.apache.org/manual/install.html
 
     However, the recommendations that page makes about *how* to set
-    environment variables are bogus; to make the settings permanet,
+    environment variables are bogus; to make the settings permanent,
     you'll need to go through the usual environment variables dialog
     dance in the System control panel.
 
   - OS X: last we checked, Ant is included by default with the JDK.
 
-  - Linux: you'll will likely find Ant in your distribution's package
+  - Linux: you'll likely find Ant in your distribution's package
     manager (e.g. on Debian or Ubuntu: sudo apt-get install ant).
 
 Depending on your platform, you will also need some other stuff:
