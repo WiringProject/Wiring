@@ -4,9 +4,15 @@
      - get rid of unnecessary copying and work (e.g., apple.jar is copied
        to out/dist/ under Linux).  This can likely be handled by only fetching
        the JARs needed for the current platform.
+
+     - align these files more with Ant build file conventions:
+
+           http://wiki.apache.org/ant/TheElementsOfAntStyle
+
+       In particular, the names of our main targets could probably use some work.
 -->
 
-<project name="wiring" default="dist" basedir=".">
+<project name="wiring" default="make" basedir=".">
   <description>Wiring IDE build file.</description>
 
   <!-- ====================
@@ -116,17 +122,35 @@
 
   <!-- ==============
        Common Targets
-       ============== -->
+       ==============
+
+       Note that several of these are currently just aliases for
+       platform-specific targets (defined in the platform
+       plat-build.xml). Keep it this way; it will let us insert any
+       portable functionality easily in the future.
+
+  -->
+
 
   <!-- dist -->
 
   <target name="dist" depends="platform.-dist"
-          description="Build the Wiring distribution"/>
+          description="Build the Wiring IDE distributable"/>
+
+  <!-- make -->
+
+  <target name="make" depends="platform.-make"
+          description="Build Wiring IDE for local use"/>
+
+  <!-- run -->
+
+  <target name="run" depends="make,platform.-run"
+          description="Build and run Wiring IDE"/>
 
   <!-- build -->
 
-  <target name="build" depends="-init,resolve.deps"
-          description="Build Wiring IDE sources">
+  <target name="build" depends="init,resolve.deps"
+          description="Build Wiring IDE's Java source code">
     <javac srcdir="${ide.src}"
            destdir="${build.classes}"
            includeAntRuntime="false"
@@ -142,7 +166,7 @@
 
   <!-- JavaDoc -->
 
-  <target name="javadoc" depends="-init"
+  <target name="javadoc" depends="init"
           description="Generate JavaDoc HTML output">
     <javadoc sourcepath="${ide.src}" destdir="${javadoc.dir}"
              packagenames="processing.app.*" classpathref="lib.class.path"
@@ -169,7 +193,7 @@
            dest="${deps.extract}" compression="gzip"/>
   </target>
 
-  <target name="-check.dep.avr" depends="-init">
+  <target name="-check.dep.avr" depends="init">
     <available property="exists.dep.avr" file="${dep.toolchain.avr.local}"/>
   </target>
 
@@ -180,7 +204,7 @@
     <unzip src="${dep.reference.local}" dest="${deps.extract}"/>
   </target>
 
-  <target name="-check.dep.reference" depends="-init">
+  <target name="-check.dep.reference" depends="init">
     <available property="exists.dep.reference" file="${dep.reference.local}"/>
   </target>
 
@@ -199,7 +223,8 @@
 
   <!-- Initialization -->
 
-  <target name="-init">
+  <target name="init" depends="platform.-init"
+          description="Initialize output directories">
     <mkdir dir="${out.dir}"/>
 
     <mkdir dir="${dist.dir}"/>
