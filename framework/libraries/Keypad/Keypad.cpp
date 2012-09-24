@@ -45,10 +45,13 @@ Keypad::Keypad(char *userKeymap, byte *row, byte *col, byte rows, byte cols)
   begin(userKeymap);
 
   lastUpdate = 0;
+  lastPress = 0;
+  multiPressTime = 300;
   debounceTime = 50;
   holdTime = 1000;
   keypadEventListener = 0;
   currentKey = NO_KEY;
+  lastKey = NO_KEY;
   state = IDLE;
 
   initializePins();
@@ -90,6 +93,7 @@ char Keypad::getKey()
         if (((millis() - lastUpdate) >= debounceTime) && digitalRead(rowPins[r]) == HIGH)
         {
           transitionTo(RELEASED);
+          lastKey = currentKey;
           currentKey = NO_KEY;
         }
       }
@@ -98,6 +102,7 @@ char Keypad::getKey()
       {
         digitalWrite(columnPins[c], HIGH);	// De-activate the current column.
         key = keymap[c + (r * size.columns)];
+        lastPress = lastUpdate;
         lastUpdate = millis();
         goto EVALUATE_KEY; 			// Save resources and do not attempt to parse two keys at a time
       }
@@ -106,10 +111,22 @@ char Keypad::getKey()
   }
 
 EVALUATE_KEY:
-  if (key != NO_KEY && key != currentKey)
+  if (key != NO_KEY)
   {
-    currentKey = key;
-    transitionTo(PRESSED);
+    if (key == lastKey && ((millis() - lastPress) <= multiPressTime))
+    {
+        currentKey = key;
+        transitionTo(MULTIPRESS);
+    }
+    else if (key != currentKey)
+    {
+        currentKey = key;
+        transitionTo(PRESSED);
+    }
+    else
+    {
+        return NO_KEY;
+    }
     return currentKey;
   }
   else
@@ -128,6 +145,19 @@ EVALUATE_KEY:
 KeypadState Keypad::getState()
 {
   return state;
+}
+
+/*
+|| @description
+|| | Set the multi press time of this keypad
+|| | If changes / presses of the same button occur within the multipress interval, the multipress event will fire
+|| #
+||
+|| @parameter multipress This sets the multi press time for this keypad, value in ms
+*/
+void Keypad::setMultiPressTime(unsigned int multipress)
+{
+  multiPressTime = multipress;
 }
 
 /*
