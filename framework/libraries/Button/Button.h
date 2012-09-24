@@ -1,4 +1,4 @@
-/* $Id: Button.h 1198 2011-06-14 21:08:27Z bhagman $
+/*
 ||
 || @author         Alexander Brevig <abrevig@wiring.org.co>
 || @url            http://wiring.org.co/
