@@ -4,6 +4,7 @@
 || @url            http://wiring.org.co/
 || @url            http://alexanderbrevig.com/
 || @contribution   Brett Hagman <bhagman@wiring.org.co>
+|| @contribution   https://github.com/cyborgsimon
 ||
 || @description
 || | Hardware Abstraction Library for Buttons.
