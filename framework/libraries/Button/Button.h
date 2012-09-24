@@ -46,9 +46,12 @@ class Button
     bool held(unsigned int time = 0);
     bool heldFor(unsigned int time);
 
+    void setMultiClickThreshold(unsigned int multiClickTime);
+
     void pressHandler(buttonEventHandler handler);
     void releaseHandler(buttonEventHandler handler);
     void clickHandler(buttonEventHandler handler);
+    void multiClickHandler(buttonEventHandler handler, unsigned int multiClickTime = 0);
     void holdHandler(buttonEventHandler handler, unsigned int holdTime = 0);
 
     unsigned int holdTime() const;
@@ -64,10 +67,13 @@ class Button
     uint8_t mode;
     uint8_t state;
     unsigned long pressedStartTime;
+    unsigned long lastPressStartTime;
     unsigned int holdEventThreshold;
+    unsigned int multiClickEventThreshold;
     buttonEventHandler cb_onPress;
     buttonEventHandler cb_onRelease;
     buttonEventHandler cb_onClick;
+    buttonEventHandler cb_onMultiClick;
     buttonEventHandler cb_onHold;
     unsigned int numberOfPresses;
     bool triggeredHoldEvent;
