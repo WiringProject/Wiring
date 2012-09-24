@@ -41,6 +41,7 @@ Button::Button(uint8_t buttonPin, uint8_t buttonMode)
   bitWrite(state, CURRENT, !mode);
 
   lastPressStartTime = 0;
+  debounceTime = 50;
 
   cb_onPress = 0;
   cb_onRelease = 0;
@@ -114,8 +115,10 @@ bool Button::isPressed(void)
       {
         cb_onPress(*this);  //fire the onPress event
       }
+      //note that the state changed
+      bitWrite(state, CHANGED, true);
     }
-    else //the state changed to RELEASED
+    else if (millis() - pressedStartTime >= debounceTime) //the state changed to RELEASED
     {
       if (cb_onRelease)
       {
@@ -134,9 +137,13 @@ bool Button::isPressed(void)
       lastPressStartTime = pressedStartTime;
       //reset states (for timing and for event triggering)
       pressedStartTime = -1;
+      //note that the state changed
+      bitWrite(state, CHANGED, true);
     }
-    //note that the state changed
-    bitWrite(state, CHANGED, true);
+    else {
+        //note that the state did not change
+        bitWrite(state, CHANGED, false);
+    }
   }
   else
   {
@@ -226,6 +233,16 @@ bool Button::heldFor(unsigned int time)
     }
   }
   return false;
+}
+
+/*
+|| @description
+|| | Set the debounce time
+|| #
+*/
+void Button::setDebounceTime(unsigned int debounce)
+{
+  debounceTime = debounce;
 }
 
 /*
