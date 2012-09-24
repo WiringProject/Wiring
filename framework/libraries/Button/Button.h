@@ -43,6 +43,7 @@ class Button
     bool stateChanged();
     bool uniquePress();
 
+    void setDebounceTime(unsigned int debounce);
     void setHoldThreshold(unsigned int holdTime);
     bool held(unsigned int time = 0);
     bool heldFor(unsigned int time);
@@ -69,6 +70,7 @@ class Button
     uint8_t state;
     unsigned long pressedStartTime;
     unsigned long lastPressStartTime;
+    unsigned int debounceTime;
     unsigned int holdEventThreshold;
     unsigned int multiClickEventThreshold;
     buttonEventHandler cb_onPress;
