@@ -5,10 +5,10 @@
  * Use a button connected to digital pin 12.
  * Digital pin 12 is used as input and connected to a button
  * 
- * This example demonstates the event API for buttons and the new multiclick event
+ * This example demonstates the event API for buttons and the new getClickCount method.
  * Multi click will not work if delay is used since it needs the button.iPressed to 
  * get read before the multiClickTreshold has passed.
- * Look at this example if you need multiclick with blinking leds
+ * Look at this example if you need multi click with blinking leds
  * http://arduino.cc/en/Tutorial/BlinkWithoutDelay
  */
  
@@ -35,12 +35,8 @@ void handleButtonReleaseEvents(Button &btn)
 
 void handleButtonClickEvents(Button &btn)
 {
-  Serial.println("click");
-}
-
-void handleButtonMultiClickEvents(Button &btn)
-{
-  Serial.println("multiclick");
+  Serial.print("click count ");
+  Serial.println(button.getClickCount());
 }
 
 void handleButtonHoldEvents(Button &btn)
