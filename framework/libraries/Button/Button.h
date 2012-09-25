@@ -45,22 +45,23 @@ class Button
 
     void setDebounceTime(unsigned int debounce);
     void setHoldThreshold(unsigned int holdTime);
+    void setMultiClickThreshold(unsigned int multiClickTime);
     bool held(unsigned int time = 0);
     bool heldFor(unsigned int time);
-
-    void setMultiClickThreshold(unsigned int multiClickTime);
 
     void pressHandler(buttonEventHandler handler);
     void releaseHandler(buttonEventHandler handler);
     void clickHandler(buttonEventHandler handler);
-    void multiClickHandler(buttonEventHandler handler, unsigned int multiClickTime = 0);
     void holdHandler(buttonEventHandler handler, unsigned int holdTime = 0);
 
     unsigned int holdTime() const;
+    // returns the total count of presses
     inline unsigned int presses() const
     {
       return numberOfPresses;
     }
+    // returns the count of "multi" clicks
+    unsigned int getClickCount();
 
     bool operator==(Button &rhs);
 
@@ -76,9 +77,9 @@ class Button
     buttonEventHandler cb_onPress;
     buttonEventHandler cb_onRelease;
     buttonEventHandler cb_onClick;
-    buttonEventHandler cb_onMultiClick;
     buttonEventHandler cb_onHold;
-    unsigned int numberOfPresses;
+    unsigned int numberOfPresses; // holds the total count of presses
+    unsigned int clickCount; // holds the count of clicks
     bool triggeredHoldEvent;
 };
 
