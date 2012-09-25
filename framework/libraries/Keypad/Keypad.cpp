@@ -53,6 +53,7 @@ Keypad::Keypad(char *userKeymap, byte *row, byte *col, byte rows, byte cols)
   currentKey = NO_KEY;
   lastKey = NO_KEY;
   state = IDLE;
+  pressCount = 0;
 
   initializePins();
 }
@@ -115,11 +116,13 @@ EVALUATE_KEY:
   {
     if (key == lastKey && ((millis() - lastPress) <= multiPressTime))
     {
+        pressCount++; // increase press count to return the correct key (if multiple keys are available)
         currentKey = key;
-        transitionTo(MULTIPRESS);
+        transitionTo(PRESSED);
     }
     else if (key != currentKey)
     {
+        pressCount = 1; // key was pressed the first time
         currentKey = key;
         transitionTo(PRESSED);
     }
@@ -145,6 +148,18 @@ EVALUATE_KEY:
 KeypadState Keypad::getState()
 {
   return state;
+}
+
+/*
+|| @description
+|| | Get the multi press count of the current key
+|| #
+||
+|| @return The current multi press count of the current pressed key
+*/
+unsigned int Keypad::getPressCount()
+{
+  return pressCount;
 }
 
 /*

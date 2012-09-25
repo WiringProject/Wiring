@@ -16,6 +16,8 @@ KeypadEvent                    KEYWORD1
 begin                          KEYWORD2
 getKey                         KEYWORD2
 getState                       KEYWORD2
+getPressCount                  KEYWORD2
+setMultiPressTime              KEYWORD2
 setHoldTime                    KEYWORD2
 setEventListener               KEYWORD2
 

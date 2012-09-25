@@ -34,7 +34,6 @@ typedef enum
 {
   IDLE = 0,
   PRESSED,
-  MULTIPRESS,
   RELEASED,
   HOLD
 } KeypadState;
@@ -60,6 +59,7 @@ class Keypad
 
     char getKey();
     KeypadState getState();
+    unsigned int getPressCount();
 
     void setMultiPressTime(unsigned int multipress);
     void setDebounceTime(unsigned int debounce);
@@ -82,6 +82,7 @@ class Keypad
     KeypadState state;
     char currentKey;
     char lastKey;
+    unsigned int pressCount;
     unsigned long lastUpdate;
     unsigned long lastPress;
     unsigned int multiPressTime;
