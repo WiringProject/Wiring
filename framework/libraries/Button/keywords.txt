@@ -16,10 +16,12 @@ isPressed                      KEYWORD2
 wasPressed                     KEYWORD2
 stateChanged                   KEYWORD2
 uniquePress                    KEYWORD2
+getClickCount                  KEYWORD2
 pullup                         KEYWORD2
 pulldown                       KEYWORD2
 held                           KEYWORD2
 heldFor                        KEYWORD2
+setMultiClickThreshold         KEYWORD2
 setHoldThreshold               KEYWORD2
 pressHandler                   KEYWORD2
 releaseHandler                 KEYWORD2

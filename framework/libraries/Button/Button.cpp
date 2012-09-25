@@ -42,11 +42,11 @@ Button::Button(uint8_t buttonPin, uint8_t buttonMode)
 
   lastPressStartTime = 0;
   debounceTime = 50;
+  multiClickEventThreshold = 350;
 
   cb_onPress = 0;
   cb_onRelease = 0;
   cb_onClick = 0;
-  cb_onMultiClick = 0;
   cb_onHold = 0;
 
   numberOfPresses = 0;
@@ -124,12 +124,15 @@ bool Button::isPressed(void)
       {
         cb_onRelease(*this);  //fire the onRelease event
       }
-      if (cb_onMultiClick && (millis() - lastPressStartTime < multiClickEventThreshold)) {
-        //fire the onMultiClick event instead of onClick
+      if (millis() - lastPressStartTime < multiClickEventThreshold) {
+        //increase the clickCount
         //if button was pressed again within mulitClickEventTreshold
-        cb_onMultiClick(*this); 
+        clickCount++;
       }
-      else if (cb_onClick)
+      else {
+        clickCount = 1; // reset the clickCount
+      }
+      if (cb_onClick)
       {
         cb_onClick(*this);  //fire the onClick event AFTER the onRelease
       }
@@ -193,6 +196,18 @@ bool Button::stateChanged(void)
 bool Button::uniquePress(void)
 {
   return (isPressed() && stateChanged());
+}
+
+/*
+|| @description
+|| | returns the count of "multi" clicks
+|| | - increases if button is pressed again within multiClickEventThreshold
+|| | - reset to 1 if button is pressed first time or after multiClickEventThresold
+|| #
+*/
+unsigned int Button::getClickCount(void)
+{
+  return clickCount;
 }
 
 /*
@@ -299,22 +314,6 @@ void Button::releaseHandler(buttonEventHandler handler)
 void Button::clickHandler(buttonEventHandler handler)
 {
   cb_onClick = handler;
-}
-
-/*
-|| @description
-|| | Register a handler for multi clicks on this button
-|| #
-||
-|| @parameter handler The function to call when this button is clicked
-*/
-void Button::multiClickHandler(buttonEventHandler handler, unsigned int multiClickTime /*=0*/)
-{
-  if (multiClickTime > 0)
-  {
-      setMultiClickThreshold(multiClickTime);
-  }
-  cb_onMultiClick = handler;
 }
 
 /*
