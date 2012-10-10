@@ -132,7 +132,7 @@ bool Button::isPressed(void)
       else {
         clickCount = 1; // reset the clickCount
       }
-      if (cb_onClick)
+      if (cb_onClick && !triggeredHoldEvent)
       {
         cb_onClick(*this);  //fire the onClick event AFTER the onRelease
       }
