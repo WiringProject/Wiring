@@ -513,6 +513,18 @@ class MenuBackend
     }
     /*
     || @description
+    || | Use an item
+    || #
+    ||
+    || @parameter item is the item to use
+    */
+    void use(MenuItem &item)
+    {
+      setCurrent(&item);
+      use();
+    }
+    /*
+    || @description
     || | Use an item per its shortkey
     || #
     ||
@@ -536,6 +548,15 @@ class MenuBackend
         MenuUseEvent mue = { *current };
         cb_menuUse(mue);
       }
+    }
+    /*
+    || @description
+    || | Select an item, will fire change event
+    || #
+    */
+    void select(MenuItem &item)
+    {
+      setCurrent(&item);
     }
     /*
     || @description

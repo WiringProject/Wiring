@@ -37,6 +37,7 @@ getRight                       KEYWORD2
 getAfter                       KEYWORD2
 getLeft                        KEYWORD2
 use                            KEYWORD2
+select                         KEYWORD2
 moveBack                       KEYWORD2
 moveUp                         KEYWORD2
 moveDown                       KEYWORD2
