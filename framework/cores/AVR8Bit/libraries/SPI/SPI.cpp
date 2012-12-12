@@ -69,7 +69,7 @@ uint8_t WSPI::transfer(uint8_t data)
 }
 
 
-inline void WSPI::setBitOrder(uint8_t bitOrder) {
+void WSPI::setBitOrder(uint8_t bitOrder) {
   if(bitOrder == LSBFIRST) {
     SPCR |= _BV(DORD);
   } else {
