@@ -1,0 +1,24 @@
+Setting up menu...
+Starting navigation (see source for description):
+Menu change MenuRoot File
+Menu change File New
+Menu change New Open
+Menu change Open Examples
+Menu change Examples ArduinoISP
+Menu use ArduinoISP
+menuUseEvent found ArduinoISP
+Menu change ArduinoISP Examples
+Menu change Examples Open
+Menu change Open New
+Menu change New File
+Menu change File Edit
+Menu change Edit Sketch
+Menu change Sketch Verify
+Menu use Verify
+Menu change Verify Sketch
+Menu change Sketch Edit
+Menu change Edit File
+Menu change File New
+Menu use New
+Menu use Verify
+menuUseEvent found Verify (V)

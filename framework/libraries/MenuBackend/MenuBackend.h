@@ -5,6 +5,7 @@
 || @contribution   Adrian Brzezinski
 || @contribution   Bernhard Benum
 || @contribution   Brett Hagman <bhagman@wiring.org.co>
+|| @contribution   Ryan Michael <kerinin@gmail.com>
 ||
 || @description
 || | Provides an easy way of making menus.
@@ -20,6 +21,35 @@
 #define MENUBACKEND_H
 
 class MenuBackend; //forward declaration of the menu backend
+class MenuItem; //forward declaration of the menu item
+
+struct MenuChangeEvent
+{
+  const MenuItem &from;
+  const MenuItem &to;
+};
+
+struct MenuUseEvent
+{
+  MenuItem &item;
+};
+
+struct MenuItemChangeEvent
+{
+  const MenuItem &item;
+};
+
+struct MenuMoveEvent
+{
+  const MenuItem &item;
+};
+
+typedef void (*cb_change)(MenuChangeEvent);
+typedef void (*cb_use)(MenuUseEvent);
+typedef void (*cb_item_change)(MenuItemChangeEvent);
+typedef void (*cb_move)(MenuMoveEvent);
+
+
 /*
   A menu item will be a container for an item that is a part of a menu
   Each such item has a logical position in the hierarchy as well as a text and maybe a mnemonic shortkey
@@ -289,7 +319,100 @@ class MenuItem
       if (!mi.back) mi.back = back;
       return mi;
     }
-
+    /*
+    || @description
+    || | Set a callback to be fired before any 'move' function is called with this item 
+    || | as the current MenuItem.  
+    || #
+    || 
+    || @paramter cb The callback to be fired
+    || @return this MenuItem
+    */
+    MenuItem &onChangeFrom(cb_change cb)
+    {
+      cb_onChangeFrom = cb;
+      return *this;
+    }
+     /*
+    || @description
+    || | Set a callback to be fired after any 'move' function is called with this item 
+    || | as the resulting MenuItem.  
+    || #
+    || 
+    || @paramter cb The callback to be fired
+    || @return this MenuItem
+    */
+    MenuItem &onChangeTo(cb_change cb)
+    {
+      cb_onChangeTo = cb;
+      return *this;
+    }
+ 
+   /*
+    || @description
+    || | Set a callback to be fired when 'moveUp' is called with this item as the current MenuItem
+    || #
+    || 
+    || @paramter cb The callback to be fired
+    || @return this MenuItem
+    */
+    MenuItem &onUp(cb_move cb)
+    {
+      cb_onUp = cb;
+      return *this;
+    }
+    /*
+    || @description
+    || | Set a callback to be fired when 'moveDown' is called with this item as the current MenuItem
+    || #
+    || 
+    || @paramter cb The callback to be fired
+    || @return this MenuItem
+    */
+    MenuItem &onDown(cb_move cb)
+    {
+      cb_onDown = cb;
+      return *this;
+    }
+    /*
+    || @description
+    || | Set a callback to be fired when 'moveLeft' is called with this item as the current MenuItem
+    || #
+    || 
+    || @paramter cb The callback to be fired
+    || @return this MenuItem
+    */
+    MenuItem &onLeft(cb_move cb)
+    {
+      cb_onLeft = cb;
+      return *this;
+    }
+    /*
+    || @description
+    || | Set a callback to be fired when 'moveRight' is called with this item as the current MenuItem
+    || #
+    || 
+    || @paramter cb The callback to be fired
+    || @return this MenuItem
+    */
+    MenuItem &onRight(cb_move cb)
+    {
+      cb_onRight = cb;
+      return *this;
+    }
+    /*
+    || @description
+    || | Set a callback to be fired when 'use' is called with this item as the current MenuItem
+    || #
+    || 
+    || @paramter cb The callback to be fired
+    || @return this MenuItem
+    */
+    MenuItem &onUse(cb_use cb)
+    {
+      cb_onUse = cb;
+      return *this;
+    }
     //manipulate the value
     /*
     || @description
@@ -354,6 +477,15 @@ class MenuItem
     MenuItem *left;
     MenuItem *back;
 
+    cb_change cb_onChangeFrom;
+    cb_change cb_onChangeTo;
+    cb_move cb_onBack;
+    cb_move cb_onUp;
+    cb_move cb_onDown;
+    cb_move cb_onLeft;
+    cb_move cb_onRight;
+    cb_use cb_onUse;
+
     MenuBackend *menuBackend;
 
   private:
@@ -414,26 +546,6 @@ class MenuItem
     }
 };
 
-struct MenuChangeEvent
-{
-  const MenuItem &from;
-  const MenuItem &to;
-};
-
-struct MenuUseEvent
-{
-  MenuItem &item;
-};
-
-struct MenuItemChangeEvent
-{
-  const MenuItem &item;
-};
-
-typedef void (*cb_change)(MenuChangeEvent);
-typedef void (*cb_use)(MenuUseEvent);
-typedef void (*cb_item_change)(MenuItemChangeEvent);
-
 class MenuBackend
 {
   public:
@@ -444,6 +556,7 @@ class MenuBackend
       cb_menuUse = menuUse;
       cb_itemChange = itemChange;
     }
+
     /*
     || @description
     || | Get the root of this menu
@@ -473,6 +586,11 @@ class MenuBackend
     */
     void moveBack()
     {
+      if (current->cb_onBack)
+      {
+        MenuMoveEvent mme = { *current };
+        (*current->cb_onBack)(mme);
+      }
       setCurrent(current->getBack());
     }
     /*
@@ -482,6 +600,11 @@ class MenuBackend
     */
     void moveUp()
     {
+      if (current->cb_onUp)
+      {
+        MenuMoveEvent mme = { *current };
+        (*current->cb_onUp)(mme);
+      }
       setCurrent(current->moveUp());
     }
     /*
@@ -491,6 +614,11 @@ class MenuBackend
     */
     void moveDown()
     {
+      if (current->cb_onDown)
+      {
+        MenuMoveEvent mme = { *current };
+        (*current->cb_onDown)(mme);
+      }
       setCurrent(current->moveDown());
     }
     /*
@@ -500,6 +628,11 @@ class MenuBackend
     */
     void moveLeft()
     {
+      if (current->cb_onLeft)
+      {
+        MenuMoveEvent mme = { *current };
+        (*current->cb_onLeft)(mme);
+      }
       setCurrent(current->moveLeft());
     }
     /*
@@ -509,6 +642,11 @@ class MenuBackend
     */
     void moveRight()
     {
+      if (current->cb_onRight)
+      {
+        MenuMoveEvent mme = { *current };
+        (*current->cb_onRight)(mme);
+      }
       setCurrent(current->moveRight());
     }
     /*
@@ -543,6 +681,11 @@ class MenuBackend
     void use()
     {
       //current->use();
+      if (current->cb_onUse)
+      {
+        MenuUseEvent mue = { *current };
+        (*current->cb_onUse)(mue);
+      }
       if (cb_menuUse)
       {
         MenuUseEvent mue = { *current };
@@ -583,9 +726,17 @@ class MenuBackend
       recursiveSearchForLevel(level, current);
       if (cur != current)
       {
+        MenuChangeEvent mce = { *cur, *current };
+        if (cur->cb_onChangeFrom)
+        {
+          (*cur->cb_onChangeFrom)(mce);
+        }
+        if (current->cb_onChangeTo)
+        {
+          (*current->cb_onChangeTo)(mce);
+        }
         if (cb_menuChange)
         {
-          MenuChangeEvent mce = { *cur, *current };
           (*cb_menuChange)(mce);
         }
       }
@@ -611,9 +762,17 @@ class MenuBackend
     {
       if (next)
       {
+        MenuChangeEvent mce = { *current, *next };
+        if (current->cb_onChangeFrom)
+        {
+          (*current->cb_onChangeFrom)(mce);
+        }
+        if (next->cb_onChangeTo)
+        {
+          (*next->cb_onChangeTo)(mce);
+        }
         if (cb_menuChange)
         {
-          MenuChangeEvent mce = { *current, *next };
           (*cb_menuChange)(mce);
         }
         current = next;
