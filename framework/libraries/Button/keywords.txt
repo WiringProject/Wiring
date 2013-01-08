@@ -16,17 +16,25 @@ isPressed                      KEYWORD2
 wasPressed                     KEYWORD2
 stateChanged                   KEYWORD2
 uniquePress                    KEYWORD2
-getClickCount                  KEYWORD2
 pullup                         KEYWORD2
 pulldown                       KEYWORD2
 held                           KEYWORD2
 heldFor                        KEYWORD2
-setMultiClickThreshold         KEYWORD2
 setHoldThreshold               KEYWORD2
 pressHandler                   KEYWORD2
 releaseHandler                 KEYWORD2
 clickHandler                   KEYWORD2
 holdHandler                    KEYWORD2
+scan                           KEYWORD2
+setMultiClickThreshold         KEYWORD2
+getClickCount                  KEYWORD2
+getHoldRepeatCount             KEYWORD2
+setDebounceDelay               KEYWORD2
+setHoldRepeat                  KEYWORD2
+holdTime                       KEYWORD2
+clicked                        KEYWORD2
+getPin                         KEYWORD2
+heldTime                       KEYWORD2
 
 #######################################
 # Constants (LITERAL1)

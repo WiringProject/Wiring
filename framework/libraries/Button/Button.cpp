@@ -1,9 +1,11 @@
-/* $Id: Button.cpp 1198 2011-06-14 21:08:27Z bhagman $
+/*
 ||
 || @author         Alexander Brevig <abrevig@wiring.org.co>
 || @url            http://wiring.org.co/
 || @url            http://alexanderbrevig.com/
 || @contribution   Brett Hagman <bhagman@wiring.org.co>
+|| @contribution   https://github.com/cyborgsimon
+|| @contribution   Chris van Marle
 ||
 || @description
 || | Hardware Abstraction Library for Buttons.
@@ -23,6 +25,11 @@
 #define PREVIOUS 1
 #define CHANGED 2
 
+#define SAMPLE 3
+#define CLICKSENT 4
+
+#define DEFAULT_HOLDEVENTTHRESHOLDTIME 500
+
 /*
 || @constructor
 || | Set the initial state of this button
@@ -33,16 +40,27 @@
 */
 Button::Button(uint8_t buttonPin, uint8_t buttonMode)
 {
+  ID = 0;
+
   pin = buttonPin;
   pinMode(pin, INPUT);
 
   buttonMode == BUTTON_PULLDOWN ? pulldown() : pullup(buttonMode);
   state = 0;
-  bitWrite(state, CURRENT, !mode);
+  bitWrite(state, CURRENT, false);
+  bitWrite(state, PREVIOUS, false);
+  bitWrite(state, CHANGED, false);
+  bitWrite(state, SAMPLE, mode);
+  bitWrite(state, CLICKSENT, true);
 
-  lastPressStartTime = 0;
-  debounceTime = 50;
-  multiClickEventThreshold = 350;
+  pressedStartTime = 0;
+  debounceDelayTime = 50;
+  debounceStartTime = 0;
+  lastReleaseTime = 0;
+  multiClickThresholdTime = 0;
+
+  holdEventThresholdTime = 0;
+  holdEventRepeatTime = 0;
 
   cb_onPress = 0;
   cb_onRelease = 0;
@@ -80,91 +98,108 @@ void Button::pulldown(void)
 
 /*
 || @description
-|| | Return the bitRead(state,CURRENT) of the switch
+|| | Scan the button and update state and fire events.
 || #
 ||
-|| @return true if button is pressed
+|| @returns true if button is pressed.
 */
-bool Button::isPressed(void)
+bool Button::scan(void)
 {
-  //save the previous value
-  bitWrite(state, PREVIOUS, bitRead(state, CURRENT));
+  unsigned long now = millis();
+  int sample = digitalRead(pin);
 
-  //get the current status of the pin
-  if (digitalRead(pin) == mode)
-  {
-    //currently the button is not pressed
-    bitWrite(state, CURRENT, false);
-  }
-  else
-  {
-    //currently the button is pressed
-    bitWrite(state, CURRENT, true);
-  }
+  if (sample != bitRead(state, SAMPLE))
+    debounceStartTime = now;                                            // Invalidate debounce timer (i.e. we bounced)
 
-  //handle state changes
-  if (bitRead(state, CURRENT) != bitRead(state, PREVIOUS))
+  bitWrite(state, SAMPLE, sample);                                      // Store the sample.
+
+  bitWrite(state, CHANGED, false);
+
+  // If our samples have outlasted our debounce delay (i.e. stabilized),
+  // then we can switch state.
+  if ((now - debounceStartTime) > debounceDelayTime)
   {
-    //the state changed to PRESSED
-    if (bitRead(state, CURRENT) == true)
+    // Save the previous value
+    bitWrite(state, PREVIOUS, bitRead(state, CURRENT));
+
+    // Get the current status of the pin, and normalize into state variable.
+    if (sample == mode)
     {
-      numberOfPresses++;
-      pressedStartTime = millis();             //start timing
+      //currently the button is not pressed
+      bitWrite(state, CURRENT, false);
+    }
+    else
+    {
+      //currently the button is pressed
+      bitWrite(state, CURRENT, true);
+    }
+
+    //handle state changes
+    if (bitRead(state, CURRENT) != bitRead(state, PREVIOUS))
+    {
+      //note that the state changed
+      bitWrite(state, CHANGED, true);
+      // Reset the hold event
       triggeredHoldEvent = false;
-      if (cb_onPress)
+
+      //the state changed to PRESSED
+      if (bitRead(state, CURRENT) == true)
       {
-        cb_onPress(*this);  //fire the onPress event
+        holdEventPreviousTime = 0; // reset hold event
+        holdEventRepeatCount = 0;
+        numberOfPresses++;
+
+        // If we have another click within the multiClick threshold,
+        // increase our click count, otherwise reset.
+        if ((now - lastReleaseTime) < multiClickThresholdTime)
+          clickCount++;
+        else
+          clickCount = 1;
+
+        if (cb_onPress)
+          cb_onPress(*this);                                            // Fire the onPress event
+
+        pressedStartTime = millis();                                    // Start timing
       }
-      //note that the state changed
-      bitWrite(state, CHANGED, true);
+      else //the state changed to RELEASED
+      {
+        if (cb_onRelease)
+          cb_onRelease(*this);                                          // Fire the onRelease event
+
+        lastReleaseTime = now;
+        bitWrite(state, CLICKSENT, false);
+      }
     }
-    else if (millis() - pressedStartTime >= debounceTime) //the state changed to RELEASED
+    else if (bitRead(state, CURRENT))                                   // if we are pressed...
     {
-      if (cb_onRelease)
+      if (holdEventThresholdTime > 0 &&                                 // The owner wants hold events, AND
+          ((holdEventPreviousTime == 0) ||                              // (we haven't sent the event yet OR
+           ((holdEventRepeatTime > 0) &&                                // the owner wants repeats, AND
+            ((now - holdEventPreviousTime) > holdEventRepeatTime))) &&  // or it's time for another), AND
+          ((now - pressedStartTime) > holdEventThresholdTime) &&        // we have waited long enough, AND
+          (cb_onHold != NULL))                                          // someone is actually listening.
       {
-        cb_onRelease(*this);  //fire the onRelease event
+        cb_onHold(*this);
+        holdEventPreviousTime = now;
+        holdEventRepeatCount++;
+        triggeredHoldEvent = true;
       }
-      if (millis() - lastPressStartTime < multiClickEventThreshold) {
-        //increase the clickCount
-        //if button was pressed again within mulitClickEventTreshold
-        clickCount++;
-      }
-      else {
-        clickCount = 1; // reset the clickCount
-      }
-      if (cb_onClick && !triggeredHoldEvent)
-      {
-        cb_onClick(*this);  //fire the onClick event AFTER the onRelease
-      }
-      //remember last press start time to find out if a multi click occured
-      lastPressStartTime = pressedStartTime;
-      //reset states (for timing and for event triggering)
-      pressedStartTime = -1;
-      //note that the state changed
-      bitWrite(state, CHANGED, true);
-    }
-    else {
-        //note that the state did not change
-        bitWrite(state, CHANGED, false);
     }
   }
-  else
+
+  // Manage the onClick handler
+  if (cb_onClick)
   {
-    //note that the state did not change
-    bitWrite(state, CHANGED, false);
-    //should we trigger a onHold event?
-    if (pressedStartTime != -1 && !triggeredHoldEvent)
+    if (bitRead(state, CLICKSENT) == false &&
+        bitRead(state, CURRENT) == false &&
+        ((multiClickThresholdTime == 0) ||                              // We don't want multiClicks OR
+         ((now - lastReleaseTime) > multiClickThresholdTime)))          // we are outside of our multiClick threshold time.
     {
-      if (millis() - pressedStartTime > holdEventThreshold)
-      {
-        if (cb_onHold)
-        {
-          cb_onHold(*this);
-          triggeredHoldEvent = true;
-        }
-      }
+      cb_onClick(*this);                                                // Fire the onClick event.
+      bitWrite(state, CLICKSENT, true);
     }
   }
+
   return bitRead(state, CURRENT);
 }
 
@@ -173,7 +208,7 @@ bool Button::isPressed(void)
 || | Return true if the button has been pressed
 || #
 */
-bool Button::wasPressed(void)
+bool Button::isPressed(void) const
 {
   return bitRead(state, CURRENT);
 }
@@ -183,7 +218,7 @@ bool Button::wasPressed(void)
 || | Return true if state has been changed
 || #
 */
-bool Button::stateChanged(void)
+bool Button::stateChanged(void) const
 {
   return bitRead(state, CHANGED);
 }
@@ -193,35 +228,43 @@ bool Button::stateChanged(void)
 || | Return true if the button is pressed, and was not pressed before
 || #
 */
-bool Button::uniquePress(void)
+bool Button::uniquePress(void) const
 {
   return (isPressed() && stateChanged());
 }
 
 /*
 || @description
-|| | returns the count of "multi" clicks
-|| | - increases if button is pressed again within multiClickEventThreshold
-|| | - reset to 1 if button is pressed first time or after multiClickEventThresold
+|| | Return > 0 if the button is clicked, or 0 if not.
 || #
 */
-unsigned int Button::getClickCount(void)
+unsigned int Button::clicked(void)
 {
-  return clickCount;
+  if (bitRead(state, CLICKSENT) == false &&
+      bitRead(state, CURRENT) == false &&
+      ((multiClickThresholdTime == 0) ||                                // We don't want multiClicks OR
+       ((millis() - lastReleaseTime) > multiClickThresholdTime)))       // we are outside of our multiClick threshold time.
+  {
+    bitWrite(state, CLICKSENT, true);
+    return clickCount;
+  }
+  return 0;
 }
+
 
 /*
 || @description
 || | onHold polling model
 || | Check to see if the button has been pressed for time ms
-|| | This will clear the counter for next iteration and thus return true once
+|| | This is a unique value - this method will return false if it is called
+|| | a second time while the button is still held.
 || #
 */
-bool Button::held(unsigned int time /*=0*/)
+bool Button::held(unsigned long time /*=0*/)
 {
-  unsigned int threshold = time ? time : holdEventThreshold; //use holdEventThreshold if time == 0
+  unsigned long threshold = time ? time : holdEventThresholdTime; //use holdEventThreshold if time == 0
   //should we trigger a onHold event?
-  if (pressedStartTime != -1 && !triggeredHoldEvent)
+  if (isPressed() && !triggeredHoldEvent)
   {
     if (millis() - pressedStartTime > threshold)
     {
@@ -238,7 +281,7 @@ bool Button::held(unsigned int time /*=0*/)
 || | Check to see if the button has been pressed for time ms
 || #
 */
-bool Button::heldFor(unsigned int time)
+bool Button::heldFor(unsigned long time) const
 {
   if (isPressed())
   {
@@ -252,32 +295,42 @@ bool Button::heldFor(unsigned int time)
 
 /*
 || @description
-|| | Set the debounce time
+|| | Set the debounce delay time
 || #
 */
-void Button::setDebounceTime(unsigned int debounce)
+void Button::setDebounceDelay(unsigned int debounceDelay)
 {
-  debounceTime = debounce;
+  debounceDelayTime = debounceDelay;
 }
 
 /*
 || @description
-|| | Set the hold event time threshold
+|| | Set the hold time threshold
 || #
 */
 void Button::setHoldThreshold(unsigned int holdTime)
 {
-  holdEventThreshold = holdTime;
+  holdEventThresholdTime = holdTime;
 }
 
 /*
 || @description
-|| | Set the multi click event time threshold
+|| | Set the hold repeat time
+|| #
+*/
+void Button::setHoldRepeat(unsigned int repeatTime)
+{
+  holdEventRepeatTime = repeatTime;
+}
+
+/*
+|| @description
+|| | Set the multi click time threshold
 || #
 */
 void Button::setMultiClickThreshold(unsigned int multiClickTime)
 {
-  multiClickEventThreshold = multiClickTime;
+  multiClickThresholdTime = multiClickTime;
 }
 
 /*
@@ -322,13 +375,12 @@ void Button::clickHandler(buttonEventHandler handler)
 || #
 ||
 || @parameter handler The function to call when this button is held
+|| @optionalparameter holdTime Sets the hold time for the handler. If 0, then the default hold time is used.
 */
-void Button::holdHandler(buttonEventHandler handler, unsigned int holdTime /*=0*/)
+void Button::holdHandler(buttonEventHandler handler, unsigned long holdTime /*=0*/)
 {
-  if (holdTime > 0)
-  {
-    setHoldThreshold(holdTime);
-  }
+  setHoldThreshold(holdTime ? holdTime : DEFAULT_HOLDEVENTTHRESHOLDTIME);
+
   cb_onHold = handler;
 }
 
@@ -339,13 +391,25 @@ void Button::holdHandler(buttonEventHandler handler, unsigned int holdTime /*=0*
 ||
 || @return The time this button has been held
 */
-unsigned int Button::holdTime() const
+unsigned long Button::holdTime() const
 {
-  if (pressedStartTime != -1)
+  if (isPressed())
   {
     return millis() - pressedStartTime;
   }
   else return 0;
+}
+
+/*
+|| @description
+|| | Get the time this button had been held.
+|| #
+||
+|| @return The time this button had been held
+*/
+unsigned long Button::heldTime() const
+{
+  return millis() - pressedStartTime;
 }
 
 /*
@@ -361,4 +425,3 @@ bool Button::operator==(Button &rhs)
 {
   return (this == &rhs);
 }
-
