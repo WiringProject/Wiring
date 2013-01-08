@@ -1,36 +1,42 @@
 /**
  * Button
- * by BREVIG http://alexanderbrevig.com
- * 
- * Use a button connected to digital pin 12.
- * Digital pin 12 is used as input and connected to a button
- * When the button is pressed, the Wiring board LED turn ON,
- * the LED turns OFF when the button is released.
- * 
- * This example simulates the switch example
+ * by Brett Hagman http://roguerobotics.com/
+ *    and BREVIG http://alexanderbrevig.com/
+ *
+ * Use a button connected to digital pin 5.
+ * Digital pin 5 is used as input and connected to a button.
+ * When the button is pressed, the Wiring board LED will turn ON.
+ * The LED turns OFF when the button is released.
+ *
+ * The button is debounced.
  */
- 
+
 #include <Button.h>
 
+const int buttonPin = 5;
 /*
   Wire like this:
-  GND -----/ button ------ pin 12
+  GND -----/ button ------ pin 5
 */
-Button button = Button(12,BUTTON_PULLUP_INTERNAL);
+
+// Instantiate our button, setting the appropriate mode.
+// (BUTTON_PULLDOWN, BUTTON_PULLUP, or BUTTON_PULLUP_INTERNAL)
+Button button = Button(buttonPin, BUTTON_PULLUP_INTERNAL);
 
 void setup()
 {
-  pinMode(48,OUTPUT);
+  pinMode(WLED, OUTPUT);
 }
 
 void loop()
 {
-  if(button.isPressed())
+  if (button.scan())
   {
-    digitalWrite(48,HIGH);
+    digitalWrite(WLED, HIGH);
   }
   else
   {
-    digitalWrite(48,LOW);
+    digitalWrite(WLED, LOW);
   }
 }
+

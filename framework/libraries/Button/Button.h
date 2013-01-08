@@ -5,6 +5,7 @@
 || @url            http://alexanderbrevig.com/
 || @contribution   Brett Hagman <bhagman@wiring.org.co>
 || @contribution   https://github.com/cyborgsimon
+|| @contribution   Chris van Marle (DebounceButton Library)
 ||
 || @description
 || | Hardware Abstraction Library for Buttons.
@@ -33,35 +34,53 @@ class Button
 {
   public:
 
+    // Constructor
     Button(uint8_t buttonPin, uint8_t buttonMode = BUTTON_PULLUP_INTERNAL);
 
+    // Public Member
+    uint8_t ID;
+
+    // Methods
     void pullup(uint8_t buttonMode);
     void pulldown();
+    bool scan();
+    bool isPressed() const;
+    bool stateChanged() const;
+    bool uniquePress() const;
+    unsigned int clicked();
+    bool held(unsigned long time = 0);
+    bool heldFor(unsigned long time) const;
 
-    bool isPressed();
-    bool wasPressed();
-    bool stateChanged();
-    bool uniquePress();
-
-    void setDebounceTime(unsigned int debounce);
+    // Properties
+    uint8_t getPin(void) const
+    {
+      return pin;
+    }
+    void setDebounceDelay(unsigned int debounceDelay);
     void setHoldThreshold(unsigned int holdTime);
+    void setHoldRepeat(unsigned int repeatTime);
     void setMultiClickThreshold(unsigned int multiClickTime);
-    bool held(unsigned int time = 0);
-    bool heldFor(unsigned int time);
-
     void pressHandler(buttonEventHandler handler);
     void releaseHandler(buttonEventHandler handler);
     void clickHandler(buttonEventHandler handler);
-    void holdHandler(buttonEventHandler handler, unsigned int holdTime = 0);
+    void holdHandler(buttonEventHandler handler, unsigned long holdTime = 0);
 
-    unsigned int holdTime() const;
-    // returns the total count of presses
-    inline unsigned int presses() const
+    unsigned long holdTime() const;
+    unsigned long heldTime() const;
+    inline unsigned long presses() const
     {
       return numberOfPresses;
     }
-    // returns the count of "multi" clicks
-    unsigned int getClickCount();
+
+    inline unsigned int getClickCount() const
+    {
+      return clickCount;
+    }
+
+    inline unsigned int getHoldRepeatCount() const
+    {
+      return holdEventRepeatCount;
+    }
 
     bool operator==(Button &rhs);
 
@@ -70,16 +89,20 @@ class Button
     uint8_t mode;
     uint8_t state;
     unsigned long pressedStartTime;
-    unsigned long lastPressStartTime;
-    unsigned int debounceTime;
-    unsigned int holdEventThreshold;
-    unsigned int multiClickEventThreshold;
+    unsigned long debounceStartTime;
+    unsigned long debounceDelayTime;
+    unsigned long holdEventThresholdTime;
+    unsigned long holdEventRepeatTime;
+    unsigned long holdEventPreviousTime;
+    unsigned long lastReleaseTime;
+    unsigned long multiClickThresholdTime;
     buttonEventHandler cb_onPress;
     buttonEventHandler cb_onRelease;
     buttonEventHandler cb_onClick;
     buttonEventHandler cb_onHold;
-    unsigned int numberOfPresses; // holds the total count of presses
-    unsigned int clickCount; // holds the count of clicks
+    unsigned long numberOfPresses;
+    unsigned int clickCount;
+    unsigned int holdEventRepeatCount;
     bool triggeredHoldEvent;
 };
 
