@@ -1,0 +1,19 @@
+##############################################################
+
+LABduino.name=LABduino w/ ATmega328 @ 16 MHz
+LABduino.upload.protocol=arduino
+LABduino.upload.maximum_size=30720
+LABduino.upload.speed=57600
+LABduino.bootloader.low_fuses=0xf7
+LABduino.bootloader.high_fuses=0xda
+LABduino.bootloader.extended_fuses=0xfd
+LABduino.bootloader.path=bootloader
+LABduino.bootloader.file=WiringBoot_ATmega328_16MHz.hex
+LABduino.bootloader.unlock_bits=0xff
+LABduino.bootloader.lock_bits=0xef
+LABduino.build.mcu=atmega328p
+LABduino.build.f_cpu=16000000L
+LABduino.build.core=AVR8Bit
+LABduino.build.hardware=LABduino
+
+##############################################################
