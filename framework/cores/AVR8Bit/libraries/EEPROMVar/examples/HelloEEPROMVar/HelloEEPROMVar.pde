@@ -30,7 +30,10 @@ void setup()
   Serial.println(eepromPI);
   
   eepromRunCounts++;
+  eepromRunCounts.save(); 
+  
   eepromPI *= 2;
+  eepromPI.save();
 }
 
 void loop() {
