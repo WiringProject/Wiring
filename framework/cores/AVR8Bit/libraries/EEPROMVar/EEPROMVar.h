@@ -1,4 +1,4 @@
-/* $Id: EEPROMVar.h 1163 2011-06-08 03:40:56Z bhagman $
+/* 
 ||
 || @author         Alexander Brevig <abrevig@wiring.org.co>
 || @url            http://wiring.org.co/
@@ -48,49 +48,12 @@ public:
     restore();
     availableAddress += sizeof(T) + 1; //make room for the is initialized flag
   }
-  operator T () 
-  { 
-    return var; 
-  }
-  EEPROMVar &operator=(T val) 
-  {
-    var = val;
-    save();
-  }
-  void operator++(int) 
-  {
-    var += T(1); //cast for safety
-    save();
-  }
-  void operator--(int) 
-  {
-    var -= T(1); //cast for safety
-    save();
-  }
-  void operator++() 
-  {
-    var += T(1); //cast for safety
-    save();
-  }
-  void operator--() 
-  {
-    var -= T(1); //cast for safety
-    save();
-  }
-  template<typename V>
-  void operator /= (V divisor) 
-  {
-    var = var / divisor;
-    save();
-  }
-  template<typename V>
-  void operator *= (V multiplicator) 
-  {
-    var = var * multiplicator;
-    save();
-  }
   
-protected:
+  /*
+  || @constructor
+  || | save the data of var to the correct EEPROM address
+  || #
+  */
   void save()
   {
     union {
@@ -104,6 +67,11 @@ protected:
     }
   }
   
+  /*
+  || @constructor
+  || | set the value of var to the value of the EEPROM address(es)
+  || #
+  */
   void restore()
   {
     byte init = EEPROM.read(address);
@@ -133,6 +101,50 @@ protected:
     }
     var = reader.data;
   }
+  
+  operator T () 
+  { 
+    return var; 
+  }
+  
+  EEPROMVar &operator=(T val) 
+  {
+    var = val;
+  }
+  
+  void operator++(int) 
+  {
+    var += T(1); //cast for safety
+  }
+  
+  void operator--(int) 
+  {
+    var -= T(1); //cast for safety
+  }
+  
+  void operator++() 
+  {
+    var += T(1); //cast for safety
+  }
+  
+  void operator--() 
+  {
+    var -= T(1); //cast for safety
+  }
+  
+  template<typename V>
+  void operator /= (V divisor) 
+  {
+    var = var / divisor;
+  }
+  
+  template<typename V>
+  void operator *= (V multiplicator) 
+  {
+    var = var * multiplicator;
+  }
+  
+protected:
   T var;
   int address;
 };
