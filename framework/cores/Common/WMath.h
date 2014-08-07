@@ -18,9 +18,9 @@
 #ifndef WMATH_H
 #define WMATH_H
 
-int32_t random(int32_t);
-int32_t random(int32_t, int32_t);
-int32_t map(int32_t, int32_t, int32_t, int32_t, int32_t);
+long random(long);
+long random(long, long);
+long map(long, long, long, long, long);
 void randomSeed(uint16_t);
 uint16_t makeWord(uint8_t, uint8_t);
 uint16_t makeWord(uint16_t);

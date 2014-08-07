@@ -31,7 +31,7 @@ void randomSeed(uint16_t seed)
 }
 
 
-int32_t random(int32_t howbig)
+long random(long howbig)
 {
   if (howbig == 0)
     return 0;
@@ -39,17 +39,17 @@ int32_t random(int32_t howbig)
 }
 
 
-int32_t random(int32_t howsmall, int32_t howbig)
+long random(long howsmall, long howbig)
 {
   if (howsmall >= howbig)
     return howsmall;
 
-  int32_t diff = howbig - howsmall;
+  long diff = howbig - howsmall;
   return random(diff) + howsmall;
 }
 
 
-int32_t map(int32_t x, int32_t in_min, int32_t in_max, int32_t out_min, int32_t out_max)
+long map(long x, long in_min, long in_max, long out_min, long out_max)
 {
   return (x - in_min) * (out_max - out_min + 1) / (in_max - in_min + 1) + out_min;
 }
