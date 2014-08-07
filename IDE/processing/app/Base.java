@@ -27,6 +27,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.net.*;
 
 import javax.swing.*;
 
@@ -42,8 +43,8 @@ import processing.core.*;
  * files and images, etc) that comes from that.
  */
 public class Base {
-  public static final int REVISION = 100;
-  static String VERSION_NAME = "0100";
+  public static final int REVISION = 101;
+  static String VERSION_NAME = "0101";
   /** Set true if this a proper release rather than a numbered revision. */
   static public boolean RELEASE = false;
   /** True if heavy debugging error/log messages are enabled */
@@ -2259,8 +2260,62 @@ public class Base {
     }
   }
 
+  static public String urlDecode(String str) {
+    try {
+      return URLDecoder.decode(str, "UTF-8");
+    } catch (UnsupportedEncodingException e) {  // safe per the JDK source
+      return null;
+    }
+  }
 
+  /**
+   * Adjacent the executable on Windows and Linux,
+   * or inside Contents/Resources/Java on Mac OS X.
+   */
+  static protected File wiringRoot;
+  
+  
   static public File getContentFile(String name) {
+    if (wiringRoot == null) {
+      // Get the path to the .jar file that contains Base.class
+      String path = Base.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+      // Path may have URL encoding, so remove it
+      String decodedPath = urlDecode(path);
+      
+      if (decodedPath.contains("/app/bin")) {
+        if (Base.isMacOS()) {
+          wiringRoot =
+          new File(path, "../../build/macosx/work/Processing.app/Contents/Java");
+        } else if (Base.isWindows()) {
+          wiringRoot =  new File(path, "../../build/windows/work");
+        } else if (Base.isLinux()) {
+          wiringRoot =  new File(path, "../../build/linux/work");
+        }
+      } else {
+        // The .jar file will be in the lib folder
+        File jarFolder = new File(decodedPath).getParentFile();
+        if (jarFolder.getName().equals("lib")) {
+          // The main Processing installation directory.
+          // This works for Windows, Linux, and Apple's Java 6 on OS X.
+          wiringRoot = jarFolder.getParentFile();
+        } else if (Base.isMacOS()) {
+          // This works for Java 7 on OS X. The 'lib' folder is not part of the
+          // classpath on OS X, and adding it creates more problems than it's
+          // worth.
+          wiringRoot = jarFolder;
+          
+        }
+        if (wiringRoot == null || !wiringRoot.exists()) {
+          // Try working directory instead (user.dir, different from user.home)
+          System.err.println("Could not find lib folder via " +
+                             jarFolder.getAbsolutePath() +
+                             ", switching to user.dir");
+          wiringRoot = new File(System.getProperty("user.dir"));
+        }
+      }
+    }
+    
+    /*
     String path = System.getProperty("user.dir");
 
     // Get a path to somewhere inside the .app folder
@@ -2271,7 +2326,8 @@ public class Base {
       }
     }
     File working = new File(path);
-    return new File(working, name);
+     */
+    return new File(wiringRoot, name);
   }
 
 
@@ -2305,6 +2361,17 @@ public class Base {
    * Return an InputStream for a file inside the Processing lib folder.
    */
   static public InputStream getLibStream(String filename) throws IOException {
+    /*
+    Properties p = System.getProperties();
+    Enumeration keys = p.keys();
+    String res = new String();
+    while (keys.hasMoreElements()) {
+      String key = (String)keys.nextElement();
+      String value = (String)p.get(key);
+      res += key + ": " + value+ "\n";
+    }
+    showMessage("HERE ", getContentFile("lib").getAbsolutePath() +"XXX"+ System.getProperty("os.name")+"XXX"+res);
+    */
     return new FileInputStream(new File(getContentFile("lib"), filename));
   }
 

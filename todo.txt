@@ -1,4 +1,8 @@
-0100
+0101
+x Add support for osx 10.9
+x Replace rxtx library
+x Add support for Windows 8.1
+x Fix random and map issue with longs
 
 0027
 x Add New hardware Serial and FIFO libraries thanks to Brett Hagman

@@ -34,7 +34,7 @@ import java.io.*;
 import java.util.*;
 import java.util.zip.*;
 import javax.swing.*;
-import gnu.io.*;
+import jssc.*;
 
 
 public class AvrdudeUploader extends Uploader  {

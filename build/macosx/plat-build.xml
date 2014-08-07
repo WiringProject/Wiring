@@ -5,20 +5,36 @@
        Configuration
        ============= -->
 
+  <!-- code signing hack, turns on code signing during dist -->
+  <condition property="codesign">
+    <equals arg1="${env.USER}" arg2="barragan" />
+  </condition>
+
+  <!-- Set the version of Java that must be present to build. -->
+  <property name="jdk.update.macosx" value="65" />
+  <property name="jdk.path.macosx" value="/Library/Java/JavaVirtualMachines/jdk1.7.0_${jdk.update.macosx}.jdk" />
+
+  <available file="${jdk.path.macosx}" property="macosx_jdk_found" />
+
+  <fail if="macosx" unless="macosx_jdk_found"
+  message="JDK 7u${jdk.update.macosx} required.${line.separator}To build on OS X, you must install Oracle's JDK 7u${jdk.update.macosx} from${line.separator}http://www.oracle.com/technetwork/java/javase/downloads${line.separator}Note that only 7u${jdk.update.macosx} (not a later or earlier version) will work. ${line.separator}And it must be the JDK, not the JRE. And do not try to defy me again." />
+
+
   <!-- app.name: Name of the .app we build -->
   <property name="app.name" value="Wiring.app"/>
 
   <!-- dist.app: The .app we build for distribution. -->
   <property name="dist.app" location="${dist.dir}/${app.name}"/>
   <property name="dist.app.resources"
-            location="${dist.app}/Contents/Resources/Java"/>
+            location="${dist.app}/Contents/Java"/>
 
   <!-- dist.rsrc.plat: Platform dist resources. -->
   <property name="dist.rsrc.plat" location="${build.rsrc.plat}/dist"/>
   <!-- TODO make this file an external dependency. -->
+  <!--
   <property name="dist.rsrc.dmg.template"
             location="${build.rsrc.plat}/template.dmg.gz"/>
-
+  -->
   <!-- platform.bootclasspath: Location of bootstrap class files.
        OS X builds defer to the Apple JDK, so use its rt.jar. -->
   <property environment="env"/>
@@ -39,19 +55,109 @@
 
   <!-- dist -->
 
-  <target name="-dist" depends="make">
+
+  <target name="-demo" depends="make">
     <!-- TODO port the relevant pieces out of the old build scripts
          over to Ant here -->
     <fail message="Unimplemented"/>
   </target>
 
   <!-- make -->
+  
+  <target name="version-clear">
+    <delete file="${dist.app.resources}/lib/version.txt" />
+  </target>
+  
+  <target name="version-write" if="version">
+    <echo file="${dist.app.resources}/lib/version.txt" message="${version}"/>
+  </target>
 
-  <target name="-make" depends="init,resolve.deps,build">
+  <target name="-clean">
+    <delete dir="${build.rsrc.plat}/dist" />
+  </target>
+
+  <target name="-make" depends="init,resolve.deps,build,version-clear,version-write">
+    <!-- app bundler for OS X and Java 1.7 -->
+    <echo message="${build.rsrc.plat}"/>
+    
+    <delete dir="${build.rsrc.plat}/dist" />
+  
+    <mkdir dir="${build.rsrc.plat}/dist" />
+    
+    <taskdef name="bundleapp"
+      classname="com.oracle.appbundler.AppBundlerTask"
+      classpath="${build.rsrc.plat}/appbundler.jar" />
+    
+    <!--icon="macosx/processing.icns"-->
+    <bundleapp outputDirectory="${build.rsrc.plat}/dist"
+      name="Wiring"
+      displayName="Wiring"
+      executableName="Wiring"
+      identifier="org.processing.app"
+      signature="Pde2"
+      icon="${build.rsrc.plat}/wiring.icns"
+      copyright="© The Wiring Foundation"
+      getInfo="1.0, Copyright © The Wiring Foundation"
+      shortVersion="1.0"
+      version="101"
+      mainClassName="processing.app.Base">
+
+
+      <!-- The appbundler task needs a couple files (the Info.plist and
+       anything else outside /jre) from the full JDK, even though
+       it's primarily copying over the JRE folder. -->
+      <runtime dir="${jdk.path.macosx}/Contents/Home" />
+      <!-- Eventually we'll want to load the JRE directly from
+       the .tgz on the Oracle site, though it's in a folder called
+       jre1.7.0_40.jre, so we'll need to strip that out. -->
+
+      <classpath file="${build.rsrc.shared}/lib/pde.jar" />
+      <classpath file="${build.rsrc.shared}/lib/processing.jar" />
+      <classpath file="${build.rsrc.shared}/lib/antlr.jar" />
+      <classpath file="${build.rsrc.shared}/lib/ecj.jar" />
+      <classpath file="${build.rsrc.shared}/lib/serial/jssc.jar" />
+      <classpath file="${build.rsrc.shared}/lib/serial/serial.jar" />
+
+      <arch name="x86_64"/>
+      <!-- no support for this with Java 7 from Oracle -->
+      <!--<arch name="i386"/>-->
+
+      <!--icon="macosx/template.app/Contents/Resources/pde.icns"-->
+      <!--icon="${bundle.icon}"-->
+      <bundledocument extensions="pde"
+        icon="${build.rsrc.plat}/pde.icns"
+        name="Wiring Source Code"
+        role="Editor">
+      </bundledocument>
+
+      <!-- Sets dock icon when debugging (not launched via launch svcs) -->
+      <option value="-Xdock:icon=Contents/Resources/wiring.icns" />
+      <!-- Don't think these actually make any difference. -->
+      <!--
+       <option value="-Xdock:name=Processing" />
+      -->
+      <!-- Probably no longer needed? [fry 130917]
+       <option value="-Xms128M" />
+       -->
+      <!-- returning 140606 per PDE X request -->
+      <option value="-Xmx256M" />
+      
+      <option value="-Dapple.awt.application.name=Wiring" />
+      
+      <!-- avoid conflicts with JNA DLLs already in the path -->
+      <option value="-Djna.nosys=true" />
+      
+      <option value="-Dapple.laf.useScreenMenuBar=true" />
+      <option value="-Dcom.apple.macos.use-file-dialog-packages=true" />
+      <option value="-Dcom.apple.macos.useScreenMenuBar=true" />
+      <option value="-Dcom.apple.smallTabs=true" />
+    </bundleapp>
+
+
     <exec executable="cp">
       <arg value="-pRX"/>
       <arg value="${dist.rsrc.app}"/>
-      <arg value="${dist.app}"/>
+      <arg value="${dist.dir}"/>
     </exec>
 
     <copy todir="${dist.app.resources}">
@@ -73,10 +179,36 @@
          files). Rather than mess with java.library.path elsewhere,
          we'll just hack it like this for now. -->
     <!-- TODO set java.library.path appropriately elsewhere. -->
-    <copy file="${dist.app.resources}/lib/serial/librxtxSerial.jnilib"
+    <copy file="${build.rsrc.shared}/lib/serial/macosx/libjSSC-2.8.jnilib"
           todir="${dist.app.resources}"/>
 
     <echo message="Done. ${app.name} is in ${dist.app}."/>
+  </target>
+
+  <target name="macosx-dist-sign" if="codesign">
+    <echo>
+      Code signing will only work if you have a $99/yr Apple developer ID.
+      
+      With a proper ID, if code signing fails, you may need to use:
+      export CODESIGN_ALLOCATE="/Applications/Xcode.app/Contents/Developer/usr/bin/codesign_allocate"
+    </echo>
+    
+    <!-- 3rd party is for the app store, dev id is gatekeeper only -->
+    <!--<arg value="3rd Party Mac Developer Application" />-->
+    
+    <exec executable="/usr/bin/codesign" dir="${dist.dir}">
+      <arg value="--force" />
+      <arg value="--sign" />
+      <arg value="Developer ID Application" />
+      <arg value="Wiring.app/Contents/PlugIns/jdk1.7.0_${jdk.update.macosx}.jdk" />
+    </exec>
+    
+    <exec executable="/usr/bin/codesign" dir="${dist.dir}">
+      <arg value="--force" />
+      <arg value="--sign" />
+      <arg value="Developer ID Application" />
+      <arg value="Wiring.app" />
+    </exec>
   </target>
 
   <!-- run -->
@@ -85,6 +217,83 @@
     <exec executable="open">
       <arg value="${dist.app}"/>
     </exec>
+  </target>
+
+
+  <!-- - - - - - - - - -->
+  <!-- Revision check  -->
+  <!-- - - - - - - - - -->
+  <target name="revision-check">
+    <!-- figure out the revision number -->
+    <loadfile srcfile="todo.txt" property="revision">
+      <filterchain>
+        <headfilter lines="1"/>
+        <tokenfilter>
+          <stringtokenizer suppressdelims="true"/>
+          <!-- grab the thing from the first line that's 4 digits -->
+          <containsregex pattern="(\d\d\d\d)" />
+        </tokenfilter>
+      </filterchain>
+    </loadfile>
+    <!-- <echo message="revision is ${revision}." /> -->
+    
+    <!-- figure out the revision number in base.java -->
+    <loadfile srcfile="IDE/processing/app/Base.java"
+      property="revision.base">
+      <filterchain>
+        <tokenfilter>
+          <linetokenizer />
+          <containsregex pattern="String VERSION_NAME = "/>
+          <replaceregex pattern="[^0-9]*" flags="g" replace=""/>
+        </tokenfilter>
+      </filterchain>
+    </loadfile>
+    <!-- <echo message="base revision is ${revision.base}." /> -->
+    
+    <condition property="revision.correct">
+      <!-- Using contains because I can't figure out how to get rid of the
+       LF in revision.base. Please file a bug if you have a fix. -->
+      <contains string="${revision.base}" substring="${revision}"/>
+    </condition>
+    
+    <!-- the revision.base property won't be set
+     if $revision wasn't found... -->
+    <fail unless="revision.correct"
+    message="Fix revision number in Base.java" />
+  </target>
+
+
+  <target name="-dist" depends="make,revision-check"
+    description="Create a downloadable .zip for the Mac OS X version">
+    
+    <input message="Enter version number:"
+    addproperty="version"
+    defaultvalue="${revision}" />
+    
+    <!-- The ant copy command does not preserve permissions. -->
+    <chmod file="${dist.app}/Contents/MacOS/JavaApplicationStub" perm="ugo+x" />
+    
+    <!-- Now handled by the app bundler -->
+    <!--
+     <replace file="macosx/work/Processing.app/Contents/Info.plist"
+     token="VERSION" value="${version}" />
+     <replace file="macosx/work/Processing.app/Contents/Info.plist"
+     token="REVISION" value="${revision}" />
+     -->
+    
+    <antcall target="macosx-dist-sign" />
+    
+    <exec executable="ditto" dir="${dist.dir}">
+      <arg line="-c -k -rsrc . ../wiring-${version}-macosx.zip" />
+    </exec>
+    
+    <echo>
+      =======================================================
+      Wiring for Mac OS X was built. Grab it from
+      
+      out/dist/wiring-${version}-macosx.zip
+      =======================================================
+    </echo>
   </target>
 
   <!-- Dependency resolution -->

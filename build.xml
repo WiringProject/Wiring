@@ -64,7 +64,7 @@
     <pathelement location="${build.rsrc.ide-deps}/apple.jar"/>
     <pathelement location="${build.rsrc.ide-deps}/jna.jar"/>
     <pathelement location="${build.rsrc.ide-deps}/serial/serial.jar"/>
-    <pathelement location="${build.rsrc.ide-deps}/serial/RXTXcomm.jar"/>
+    <pathelement location="${build.rsrc.ide-deps}/serial/jssc.jar"/>
     <pathelement location="${build.rsrc.ide-deps}/processing.jar"/>
 
     <!-- TODO: do we really still depend on ECJ? -->
@@ -210,9 +210,9 @@
 
   <!-- Cleanup -->
 
-  <target name="clean"
+  <target name="clean" depends="platform.-clean"
           description="Remove built IDE files">
-    <delete dir="${build.dir}" quiet="true"/>
+    <delete dir="${out.dir}" quiet="true"/>
     <delete dir="${dist.dir}" quiet="true"/>
   </target>
 

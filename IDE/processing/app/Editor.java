@@ -43,7 +43,7 @@ import javax.swing.text.*;
 import javax.swing.undo.*;
 
 import java.util.regex.*;
-import gnu.io.*;
+import jssc.*;
 
 /**
  * Main editor panel for the Processing Development Environment.
@@ -868,7 +868,20 @@ public class Editor extends JFrame implements RunnerListener {
 
     try
     {
-      for (Enumeration enumeration = CommPortIdentifier.getPortIdentifiers(); enumeration.hasMoreElements();)
+      Vector<String> ports = new Vector<String>(Arrays.asList(SerialPortList.getPortNames()));
+      Enumeration<?> portList = ports.elements();
+      
+      while (portList.hasMoreElements()) {
+        String portId =
+        (String) portList.nextElement();
+        rbMenuItem = new JCheckBoxMenuItem(portId, portId.equals(Preferences.get("serial.port")));
+        rbMenuItem.addActionListener(serialMenuListener);
+        //serialGroup.add(rbMenuItem);
+        serialMenu.add(rbMenuItem);
+        empty = false;
+      }
+      
+      /*for (Enumeration enumeration = CommPortIdentifier.getPortIdentifiers(); enumeration.hasMoreElements();)
       {
         CommPortIdentifier commportidentifier = (CommPortIdentifier)enumeration.nextElement();
         //System.out.println("Found communication port: " + commportidentifier);
@@ -882,7 +895,7 @@ public class Editor extends JFrame implements RunnerListener {
           serialMenu.add(rbMenuItem);
           empty = false;
         }
-      }
+      }*/
       if (!empty) {
         //System.out.println("enabling the serialMenu");
         serialMenu.setEnabled(true);
@@ -924,21 +937,21 @@ public class Editor extends JFrame implements RunnerListener {
     // environment variable will hose things.
     try {
       //System.out.println("building port list");
-      for( Enumeration portList = CommPortIdentifier.getPortIdentifiers(); portList.hasMoreElements();)
+      Vector<String> ports = new Vector<String>(Arrays.asList(SerialPortList.getPortNames()));
+      Enumeration<?> portList = ports.elements();
+
+      while( portList.hasMoreElements())
       {
-        CommPortIdentifier portId =
-          (CommPortIdentifier) portList.nextElement();
+          String portId = (String) portList.nextElement();
         //System.out.println(portId);
 
-        if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
           //if (portId.getName().equals(port)) {
-          String name = portId.getName();
+          String name = portId;
           JCheckBoxMenuItem mi =
             new JCheckBoxMenuItem(name, name.equals(defaultName));
           mi.addActionListener(listener);
           //mi.addItemListener(listener);
           serialMenu.add(mi);
-        }
       }
     } catch (UnsatisfiedLinkError e) {
       e.printStackTrace();

@@ -20,6 +20,7 @@
 
 package processing.app;
 
+
 public class SerialException extends Exception {
   public SerialException() {
     super();

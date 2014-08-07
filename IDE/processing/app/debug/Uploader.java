@@ -28,7 +28,7 @@ import java.io.*;
 import java.util.*;
 import java.util.zip.*;
 import javax.swing.*;
-import gnu.io.*;
+import jssc.*;
 
 
 public abstract class Uploader implements MessageConsumer{
