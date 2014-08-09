@@ -27,6 +27,9 @@ package processing.app;
 
 import java.lang.reflect.*;
 import java.util.Map;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import processing.app.debug.MessageConsumer;
 
@@ -123,13 +126,14 @@ public class Serial implements SerialPortEventListener {
       stopBitsIdx = SerialPort.STOPBITS_2;
     }
 
-    port = new SerialPort(portName);
+    
     try {
+      port = new SerialPort(portName);
       // the native open() call is not using O_NONBLOCK, so this might block for certain operations (see write())
       port.openPort();
-      port.setParams(baudRate, dataBits, stopBitsIdx, parity);
+      port.setParams(baudRate, dataBits, stopBitsIdx, parity, true, true);
       // we could register more events here
-      port.addEventListener(this, SerialPort.MASK_RXCHAR);
+      port.addEventListener(this);
     } catch (SerialPortException e) {
       // this used to be a RuntimeException before, so stick with it
       throw new RuntimeException("Error opening serial port " + e.getPortName() + ": " + e.getExceptionType());
@@ -172,7 +176,7 @@ public class Serial implements SerialPortEventListener {
   }*/
 
 
-  public int available() {
+  public synchronized int available() {
     return (inBuffer-readOffset);
   }
 
@@ -395,53 +399,20 @@ public class Serial implements SerialPortEventListener {
   
   public void serialEvent(SerialPortEvent event) {
     if (event.getEventType() == SerialPortEvent.RXCHAR) {
-      int toRead;
       try {
-        while (0 < (toRead = port.getInputBufferBytesCount())) {
-          // this method can be called from the context of another thread
-          synchronized (buffer) {
-            // read one byte at a time if the sketch is using serialEvent
-            if (serialEventMethod != null) {
-              toRead = 1;
-            }
-            // enlarge buffer if necessary
-            if (buffer.length < inBuffer+toRead) {
-              byte temp[] = new byte[buffer.length<<1];
-              System.arraycopy(buffer, 0, temp, 0, inBuffer);
-              buffer = temp;
-            }
-            // read an array of bytes and copy it into our buffer
-            byte[] read = port.readBytes(toRead);
-            System.arraycopy(read, 0, buffer, inBuffer, read.length);
-            inBuffer += read.length;
-            
-            if(monitor == true)
-              System.out.print((char) read());
-            if (this.consumer != null)
-              this.consumer.message("" + (char) read());
+        byte[] buf = port.readBytes(event.getEventValue());
+        if (buffer.length > 0) {
+          if(inBuffer == buffer.length) {
+            byte temp[] = new byte[inBuffer<<1];
+            System.arraycopy(buffer, 0, temp, 0, inBuffer);
+            buffer = temp;
           }
-          /*if (serialEventMethod != null) {
-            if ((0 < bufferUntilSize && bufferUntilSize <= inBuffer-readOffset) ||
-              (0 == bufferUntilSize && bufferUntilByte == buffer[inBuffer-1])) {
-              try {
-                // serialEvent() is invoked in the context of the current (serial) thread
-                // which means that serialization and atomic variables need to be used to
-                // guarantee reliable operation (and better not draw() etc..)
-                // serialAvailable() does not provide any real benefits over using
-                // available() and read() inside draw - but this function has no
-                // thread-safety issues since it's being invoked during pre in the context
-                // of the Processing applet
-                serialEventMethod.invoke(parent, this);
-              } catch (Exception e) {
-                System.err.println("Error, disabling serialEvent() for "+port.getPortName());
-                System.err.println(e.getLocalizedMessage());
-                serialEventMethod = null;
-              }
-            }
-          }
-          invokeSerialAvailable = true;
-          */
         }
+        if(monitor == true)
+          System.out.print(new String(buf));
+        if (this.consumer != null)
+          this.consumer.message(new String(buf));
+        
       } catch (SerialPortException e) {
         throw new RuntimeException("Error reading from serial port " + e.getPortName() + ": " + e.getExceptionType());
       }
