@@ -52,7 +52,7 @@ class ConstantString : public Printable
     {
       return reinterpret_cast<const __ConstantStringHelper *>(arr);
     }
-    void printTo(Print &stream) const;
+    size_t printTo(Print &stream) const;
 };
 
 /* For inline/auto creation of ConstantStrings */

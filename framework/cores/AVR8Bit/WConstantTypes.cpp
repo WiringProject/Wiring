@@ -47,7 +47,7 @@ void ConstantString::printTo(Print &stream) const
 }
 */
 
-void ConstantString::printTo(Print &stream) const
+size_t ConstantString::printTo(Print &stream) const
 {
   stream.print((const __ConstantStringHelper *)(arr));
 }

@@ -314,7 +314,7 @@ void HardwareSerial::flush()
 }
 
 
-void HardwareSerial::write(uint8_t c)
+size_t HardwareSerial::write(uint8_t c)
 {
   // We will block here until we have some space free in the FIFO
   while (txfifo.count() >= TX_BUFFER_SIZE);
@@ -326,6 +326,8 @@ void HardwareSerial::write(uint8_t c)
   *_ucsrb |= (1 << UDRIE);
 
   SREG = oldSREG;
+  
+  return 1;
 }
 
 

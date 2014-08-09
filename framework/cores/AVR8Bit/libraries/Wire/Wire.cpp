@@ -73,14 +73,14 @@ void TwoWire::begin(int address)
   begin((uint8_t)address);
 }
 
-uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity)
+uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint8_t sendStop)
 {
   // clamp to buffer length
   if(quantity > BUFFER_LENGTH){
     quantity = BUFFER_LENGTH;
   }
   // perform blocking read into buffer
-  uint8_t read = twi_readFrom(address, rxBuffer, quantity);
+  uint8_t read = twi_readFrom(address, rxBuffer, quantity, sendStop);
   // set rx buffer iterator vars
   rxBufferIndex = 0;
   rxBufferLength = read;
@@ -88,9 +88,19 @@ uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity)
   return read;
 }
 
+uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity)
+{
+  return requestFrom((uint8_t)address, (uint8_t)quantity, (uint8_t)true);
+}
+
 uint8_t TwoWire::requestFrom(int address, int quantity)
 {
-  return requestFrom((uint8_t)address, (uint8_t)quantity);
+  return requestFrom((uint8_t)address, (uint8_t)quantity, (uint8_t)true);
+}
+
+uint8_t TwoWire::requestFrom(int address, int quantity, int sendStop)
+{
+  return requestFrom((uint8_t)address, (uint8_t)quantity, (uint8_t)sendStop);
 }
 
 void TwoWire::beginTransmission(uint8_t address)
@@ -109,10 +119,10 @@ void TwoWire::beginTransmission(int address)
   beginTransmission((uint8_t)address);
 }
 
-uint8_t TwoWire::endTransmission(void)
+uint8_t TwoWire::endTransmission(uint8_t sendStop)
 {
   // transmit buffer (blocking)
-  int8_t ret = twi_writeTo(txAddress, txBuffer, txBufferLength, 1);
+  int8_t ret = twi_writeTo(txAddress, txBuffer, txBufferLength, 1, sendStop);
   // reset tx buffer iterator vars
   txBufferIndex = 0;
   txBufferLength = 0;
@@ -121,16 +131,22 @@ uint8_t TwoWire::endTransmission(void)
   return ret;
 }
 
+uint8_t TwoWire::endTransmission(void)
+{
+  return endTransmission(true);
+}
+
 // must be called in:
 // slave tx event callback
 // or after beginTransmission(address)
-void TwoWire::write(uint8_t data)
+size_t TwoWire::write(uint8_t data)
 {
   if(transmitting){
   // in master transmitter mode
     // don't bother if buffer is full
     if(txBufferLength >= BUFFER_LENGTH){
-      return;
+      setWriteError();
+      return 0;
     }
     // put byte in tx buffer
     txBuffer[txBufferIndex] = data;
@@ -142,12 +158,13 @@ void TwoWire::write(uint8_t data)
     // reply to master
     twi_transmit(&data, 1);
   }
+  return 1;
 }
 
 // must be called in:
 // slave tx event callback
 // or after beginTransmission(address)
-void TwoWire::write(const uint8_t *data, size_t quantity)
+size_t TwoWire::write(const uint8_t *data, size_t quantity)
 {
   if(transmitting){
   // in master transmitter mode
@@ -159,14 +176,7 @@ void TwoWire::write(const uint8_t *data, size_t quantity)
     // reply to master
     twi_transmit(data, quantity);
   }
-}
-
-// must be called in:
-// slave tx event callback
-// or after beginTransmission(address)
-void TwoWire::write(const char *data)
-{
-  write((uint8_t*)data, strlen(data));
+  return quantity;
 }
 
 // must be called in:

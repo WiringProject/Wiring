@@ -136,7 +136,7 @@ class HardwareSerial : public Stream
     int read(void);
     int peek(void);
     void flush(void);
-    void write(uint8_t);
+    size_t write(uint8_t);
 };
 
 #if !defined(SINGLEUSART1)
