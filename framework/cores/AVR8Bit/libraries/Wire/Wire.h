@@ -5,6 +5,7 @@
 || @contribution   Hernando Barragan <b@wiring.org.co>
 || @contribution   Alexander Brevig <abrevig@wiring.org.co>
 || @contribution   Brett Hagman <bhagman@wiring.org.co>
+|| @contribution   Ed Baafi <ed@modk.it>
 ||
 || @description
 || | TWI Library.
@@ -39,8 +40,9 @@ class TwoWire : public Stream
     static uint8_t transmitting;
     static void (*user_onRequest)(void);
     static void (*user_onReceive)(int);
+	static void (*user_onGcallReceive)(int);
     static void onRequestService(void);
-    static void onReceiveService(uint8_t*, int);
+    static void onReceiveService(uint8_t*, int,uint8_t);
   public:
     TwoWire();
     void begin();
@@ -60,6 +62,7 @@ class TwoWire : public Stream
     int peek(void);
     void flush(void);
     void onReceive(void (*)(int));
+	void onReceive( void (*)(int), void (*)(int) );
     void onRequest(void (*)(void));
 };
 

@@ -5,6 +5,7 @@
 || @contribution   Hernando Barragan <b@wiring.org.co>
 || @contribution   Alexander Brevig <abrevig@wiring.org.co>
 || @contribution   Brett Hagman <bhagman@wiring.org.co>
+|| @contribution   Ed Baafi <ed@modk.it>
 ||
 || @description
 || | TWI utility library.
@@ -38,7 +39,7 @@ static volatile uint8_t twi_state;
 static uint8_t twi_slarw;
 
 static void (*twi_onSlaveTransmit)(void);
-static void (*twi_onSlaveReceive)(uint8_t*, int);
+static void (*twi_onSlaveReceive)(uint8_t*, int, uint8_t);
 
 static uint8_t twi_masterBuffer[TWI_BUFFER_LENGTH];
 static volatile uint8_t twi_masterBufferIndex;
@@ -52,6 +53,7 @@ static uint8_t twi_rxBuffer[TWI_BUFFER_LENGTH];
 static volatile uint8_t twi_rxBufferIndex;
 
 static volatile uint8_t twi_error;
+static volatile uint8_t twi_gcall_data;
 
 /* 
  * Function twi_init
@@ -100,15 +102,27 @@ void twi_init(void)
 }
 
 /* 
- * Function twi_slaveInit
- * Desc     sets slave address and enables interrupt
- * Input    none
+ * Function twi_setAddress
+ * Desc     sets slave address
+ * Input    address: 7bit i2c device address
  * Output   none
  */
 void twi_setAddress(uint8_t address)
 {
-  // set twi slave address (skip over TWGCE bit)
-  TWAR = address << 1;
+	// set twi slave address and leave TWGCE bit (LSB)
+	TWAR = (address << TWA0) | ( TWAR & (1 << TWGCE) ) ;
+}
+
+/* 
+ * Function twi_enableGenCall
+ * Desc     enables general call address for slave
+ * Input    none
+ * Output   none
+ */
+void twi_enableGenCall(void)
+{
+  // set TWGCE bit (LSB) and leave rest of address 
+  TWAR |= 1 << TWGCE;
 }
 
 /* 
@@ -270,7 +284,7 @@ uint8_t twi_transmit(const uint8_t* data, uint8_t length)
  * Input    function: callback function to use
  * Output   none
  */
-void twi_attachSlaveRxEvent( void (*function)(uint8_t*, int) )
+void twi_attachSlaveRxEvent( void (*function)(uint8_t*, int, uint8_t) )
 {
   twi_onSlaveReceive = function;
 }
@@ -403,10 +417,13 @@ SIGNAL(TWI_vect)
       twi_state = TWI_SRX;
       // indicate that rx buffer can be overwritten and ack
       twi_rxBufferIndex = 0;
-      twi_reply(1);
+	  //indicate that we have not received any gcall data 
+	  twi_gcall_data = 0;
+	  twi_reply(1);
       break;
+	case TW_SR_GCALL_DATA_ACK: // data received on general call, returned ack
+	  twi_gcall_data = 1; //indicate that we received some gcall data - need to send flag to receiver	  
     case TW_SR_DATA_ACK:       // data received, returned ack
-    case TW_SR_GCALL_DATA_ACK: // data received generally, returned ack
       // if there is still room in the rx buffer
       if(twi_rxBufferIndex < TWI_BUFFER_LENGTH){
         // put byte in buffer and ack
@@ -425,8 +442,8 @@ SIGNAL(TWI_vect)
       // sends ack and stops interface for clock stretching
       twi_stop();
       // callback to user defined callback
-      twi_onSlaveReceive(twi_rxBuffer, twi_rxBufferIndex);
-      // since we submit rx buffer to "wire" library, we can reset it
+      twi_onSlaveReceive(twi_rxBuffer, twi_rxBufferIndex,twi_gcall_data);
+	  // since we submit rx buffer to "wire" library, we can reset it
       twi_rxBufferIndex = 0;
       // ack future responses and leave slave receiver state
       twi_releaseBus();
