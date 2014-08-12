@@ -96,6 +96,9 @@ char Keypad::getKey()
           transitionTo(RELEASED);
           lastKey = currentKey;
           currentKey = NO_KEY;
+          break;
+        } else if (state == HOLD) {
+          break;
         }
       }
       // Button pressed event.  The user pressed a button.
@@ -105,13 +108,16 @@ char Keypad::getKey()
         key = keymap[c + (r * size.columns)];
         lastPress = lastUpdate;
         lastUpdate = millis();
-        goto EVALUATE_KEY; 			// Save resources and do not attempt to parse two keys at a time
+        break;
       }
+    }
+    if (key != NO_KEY)
+    {
+        break;
     }
     digitalWrite(columnPins[c], HIGH);	// De-activate the current column.
   }
-
-EVALUATE_KEY:
+  
   if (key != NO_KEY)
   {
     if (key == lastKey && ((millis() - lastPress) <= multiPressTime))
@@ -242,4 +248,3 @@ void Keypad::initializePins(){
     digitalWrite(columnPins[c],HIGH);
   }  
 }
-
