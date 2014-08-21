@@ -21,7 +21,7 @@
 // Wiring API version for libraries
 // this is passed in at compile-time
 #ifndef WIRING
-#define WIRING 100
+#define WIRING 101
 #endif
 
 // passed in at compile-time

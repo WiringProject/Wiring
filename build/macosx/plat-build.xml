@@ -88,12 +88,12 @@
       classname="com.oracle.appbundler.AppBundlerTask"
       classpath="${build.rsrc.plat}/appbundler.jar" />
     
-    <!--icon="macosx/processing.icns"-->
+    <!--icon="macosx/wiring.icns"-->
     <bundleapp outputDirectory="${build.rsrc.plat}/dist"
       name="Wiring"
       displayName="Wiring"
       executableName="Wiring"
-      identifier="org.processing.app"
+      identifier="co.org.wiring.app"
       signature="Pde2"
       icon="${build.rsrc.plat}/wiring.icns"
       copyright="© The Wiring Foundation"
