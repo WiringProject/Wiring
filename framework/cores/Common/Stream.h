@@ -3,6 +3,7 @@
 || @author         Brett Hagman <bhagman@wiring.org.co>
 || @url            http://wiring.org.co/
 || @contribution   Alexander Brevig <abrevig@wiring.org.co>
+|| @contribution   David A. Mellis
 ||
 || @description
 || | Base class for streams.
