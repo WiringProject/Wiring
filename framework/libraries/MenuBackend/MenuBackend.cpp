@@ -22,7 +22,7 @@ void MenuItem::setValue(int v)
 {
   if (v != value)
   {
-    v = value;
+    value = v;  // This line took cost me three days worth of debuggin! Whew. -aclymer
     menuBackend->fireItemChangedEvent(this);
   }
 }
