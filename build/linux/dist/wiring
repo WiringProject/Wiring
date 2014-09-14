@@ -103,7 +103,10 @@ log PATH
 
 # Hack up LD_LIBRARY_PATH so JNI finds librxtxSerial.so
 BUNDLED_LIBS="$APPDIR/lib"
-SERIAL_LIB_DIR="$BUNDLED_LIBS/serial/linux-"`uname -m`
+SERIAL_LIB_DIR="$BUNDLED_LIBS/serial/linux32"
+if [ $(uname -m | grep '64') ]; then
+    SERIAL_LIB_DIR="$BUNDLED_LIBS/serial/linux64"
+fi
 if [ ! -d $SERIAL_LIB_DIR ]; then
     echo "Missing rxtx support; cannot start Wiring IDE" 2>&1
     exit 1
