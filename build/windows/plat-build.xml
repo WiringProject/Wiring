@@ -101,6 +101,9 @@
     <exec executable="${dist.wiring.exe}" spawn="true"/>
   </target>
 
+  <target name="-clean">
+  </target>
+
   <!-- Dependency resolution -->
 
   <target name="-resolve.deps"
