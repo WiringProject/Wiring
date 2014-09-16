@@ -73,11 +73,15 @@
     <exec executable="${dist.wiring.script}"/>
   </target>
 
+  <target name="-clean">
+  </target>
+
   <!-- Dependency resolution -->
 
   <target name="-resolve.deps"
           depends="platform.-resolve.dep.avr">
   </target>
+
 
   <!-- Override AVR toolchain using a real tar, so symlinks work. -->
   <target name="-resolve.dep.avr"
