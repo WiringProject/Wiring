@@ -118,7 +118,7 @@ size_t Print::print(const Printable &p)
 
 size_t Print::print(const __ConstantStringHelper *cs)
 {
-  const prog_char *p = (const prog_char *)(cs);
+  const char PROGMEM *p = (const char PROGMEM *)(cs);
   size_t n = 0;
   while (1)
   {

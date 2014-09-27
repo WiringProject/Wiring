@@ -38,21 +38,28 @@ typedef uint8_t byte;
 class ConstantString : public Printable
 {
   private:
-    const prog_char *arr;
+    const char PROGMEM *arr;
 
   public:
-    ConstantString(const __ConstantStringHelper *p) :
-      arr(reinterpret_cast<const prog_char *>(p)) {}
-    size_t length() const
-    {
-      return strlen_P(arr);
-    }
-    char operator[](int index) const;
-    operator const __ConstantStringHelper *() const
-    {
-      return reinterpret_cast<const __ConstantStringHelper *>(arr);
-    }
-    size_t printTo(Print &stream) const;
+  ConstantString(const __ConstantStringHelper *p) :
+  
+  arr(reinterpret_cast<const char PROGMEM *>(const_cast<__ConstantStringHelper *>(p)))
+  {
+  }
+  
+  size_t length() const
+  {
+    return strlen_P(arr);
+  }
+  
+  char operator[](int index) const;
+  
+  operator const __ConstantStringHelper *() const
+  {
+    return reinterpret_cast<const __ConstantStringHelper *>(const_cast<char PROGMEM *>(arr));
+  }
+  
+  size_t printTo(Print &stream) const;
 };
 
 /* For inline/auto creation of ConstantStrings */
