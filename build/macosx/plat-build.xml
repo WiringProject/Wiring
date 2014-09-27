@@ -46,9 +46,13 @@
 
   <!-- Dependencies -->
   <property name="dep.toolchain.avr.remote"
-            value="http://wiring.googlecode.com/files/tools-avr-macosx-10.6.tar.gz"/>
+            value="http://wiring.googlecode.com/files/tools-avr-1.0-macosx-10.6.tar.gz"/>
   <property name="dep.avr.default.ok" value="true"/>
 
+  <property name="dep.toolchain.common.remote"
+            value="http://wiring.googlecode.com/files/tools-common-1.0-macosx-10.6.tar.gz"/>
+  <property name="dep.common.default.ok" value="true"/>
+  
   <!-- =======
        Targets
        ======= -->
@@ -172,7 +176,7 @@
           file="${dist.app.resources}/lib/version.txt"/>
     <chmod perm="ugo+x">
       <fileset dir="${dist.app.resources}/tools"
-               includes="**/bin/*,**/libexec/gcc/avr/4.3.5/c*"/>
+               includes="**/bin/*,**/libexec/gcc/avr/4.7.3/c*"/>
     </chmod>
     <!-- It seems that OS X adds Contents/Resources/Java to
          java.library.path (which is the search path for .jnilib
