@@ -316,7 +316,8 @@ public class PdePreprocessor {
     ArrayList<String> matches = new ArrayList<String>();
     Matcher matcher = pattern.matcher(in);
     while (matcher.find())
-      matches.add(matcher.group(0) + ";");
+      if (!matches.contains(matcher.group(0) + ";"))
+        matches.add(matcher.group(0) + ";");
     
     return matches;
   }
