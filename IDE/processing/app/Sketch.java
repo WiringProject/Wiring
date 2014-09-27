@@ -37,6 +37,7 @@ import java.awt.event.*;
 import java.beans.*;
 import java.io.*;
 import java.util.*;
+import java.util.List;
 import java.util.zip.*;
 
 import javax.swing.*;
@@ -1297,7 +1298,7 @@ public class Sketch {
     StringBuffer bigCode = new StringBuffer();
     int bigCount = 0;
     for (SketchCode sc : code) {
-      if (sc.isExtension("pde")) {
+      if (sc.isExtension("pde") || sc.isExtension("ino")) {
         sc.setPreprocOffset(bigCount);
         bigCode.append(sc.getProgram());
         bigCode.append('\n');
@@ -1422,7 +1423,7 @@ public class Sketch {
         }
 //        sc.setPreprocName(filename);
 
-      } else if (sc.isExtension("pde")) {
+      } else if (sc.isExtension("pde") || sc.isExtension("ino")) {
         // The compiler and runner will need this to have a proper offset
         //headerOffset = preprocessor.prototypeCount + preprocessor.headerCount;
         sc.addPreprocOffset(headerOffset);
@@ -1936,7 +1937,7 @@ public class Sketch {
    * For Processing, this is true for .pde files. (Broken out for subclasses.)
    */
   public boolean hideExtension(String what) {
-    return what.equals(getDefaultExtension());
+    return getHiddenExtensions().contains(what);
   }
 
 
@@ -1977,11 +1978,17 @@ public class Sketch {
   }
 
 
+  static private List<String> hiddenExtensions = Arrays.asList("pde", "ino");
+
+  public List<String> getHiddenExtensions() {
+    return hiddenExtensions;
+  }
+  
   /**
    * Returns a String[] array of proper extensions.
    */
   public String[] getExtensions() {
-    return new String[] { "pde", "c", "cpp", "h" };
+    return new String[] { "pde", "ino", "c", "cpp", "h" };
   }
 
 

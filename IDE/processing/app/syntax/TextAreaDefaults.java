@@ -46,7 +46,24 @@ public class TextAreaDefaults {
   public Color bgcolor;
   public boolean antialias;
 
-
+  public int gutterWidth;
+  public int gutterHeight;
+  public boolean gutterCollapsed;
+  public boolean gutterLineNumbers;
+  public int gutterHighlightInterval;
+  public boolean currentLineHighlightEnabled;
+  public Color gutterfgcolor;
+  public Color gutterbgcolor;
+  public Color gutterHighlightColor;
+  public Color gutterMarkerColor;
+  public Color gutterRegisterColor;
+  public Color gutterCurrentLineColor;
+  public String gutterNumberAlignment;
+  public int gutterBorderWidth;
+  public Color gutterFocusBorderColor;
+  public Color gutterNoFocusBorderColor;
+  public Font gutterFont;
+  
   /*
   private static final TextAreaDefaults DEFAULTS = new TextAreaDefaults();
   static {

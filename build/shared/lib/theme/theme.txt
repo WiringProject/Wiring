@@ -1,33 +1,44 @@
 # GUI - STATUS
 status.notice.fgcolor = #ffffff
-status.notice.bgcolor = #ff5500
+status.notice.bgcolor = #333332
 status.error.fgcolor = #ffffff
-status.error.bgcolor = #662000
+status.error.bgcolor = #bd0d00
 status.edit.fgcolor = #000000
-status.edit.bgcolor = #cc6600
+status.edit.bgcolor = #00a1e4
 status.font = SansSerif,plain,12
 status.prompt.fgcolor = #000000
 status.prompt.bgcolor = #ff5500
 
+# GUI - HARDWARE CONTROL
+control.notice.fgcolor = #ffffff
+control.notice.bgcolor = #333332
+control.error.fgcolor = #ffffff
+control.error.bgcolor = #662000
+control.edit.fgcolor = #000000
+control.edit.bgcolor = #cc6600
+control.font = SansSerif,plain,10
+control.prompt.fgcolor = #000000
+control.prompt.bgcolor = #ff0055
+
 # GUI - TABS
 # settings for the tabs at the top
 # (tab images are stored in the lib/theme folder)
-header.bgcolor = #333328
+header.bgcolor = #333332
 header.text.selected.color = #ffffff
-header.text.unselected.color = #999988
+header.text.unselected.color = #999998
 header.text.font = SansSerif,plain,12
 
 # GUI - CONSOLE
 console.font = Monospaced,plain,11
 console.font.macosx = Monaco,plain,10
 console.color = #000000
-console.output.color = #ccccbb
+console.output.color = #cccccb
 console.error.color = #ff3000
 
 # GUI - BUTTONS
-buttons.bgcolor = #66665a
+buttons.bgcolor = #f8f8f7
 buttons.status.font = SansSerif,plain,12
-buttons.status.color = #ffffee
+buttons.status.color = #666666
 
 # GUI - MODE
 mode.button.bgcolor = #9ca6b0
@@ -36,8 +47,8 @@ mode.button.color = #4a545e
 
 # GUI - LINESTATUS
 linestatus.color = #ffffff
-linestatus.message.color = #aaaaaa
-linestatus.bgcolor = #66665a
+linestatus.message.color = #bbbbbb
+linestatus.bgcolor = #666665
 
 # SERIALMONITOR
 serialmonitor.color = #000000
@@ -114,3 +125,23 @@ editor.comment2.style = #7e7e7e,plain
 # LINE STATUS - editor line number status bar at the bottom of the screen
 linestatus.font	   = SansSerif,plain,10
 linestatus.height  = 20
+
+
+# GUTTER - Editor gutter
+gutter.width = 16
+gutter.collapsed = false
+gutter.lineNumbers = true
+gutter.highlightInterval = 5
+gutter.highlightCurrentLine = true
+gutter.bgColor = #f8f8f8
+gutter.fgColor = #cacaca
+gutter.highlightColor = #aaaaaa
+#gutter.markerColor = #eaeaea
+#gutter.registerColor = #ff0000
+gutter.currentLineColor = #ff0055
+gutter.numberAlignment = right
+gutter.borderWidth = 1
+gutter.focusBorderColor = #ff5500
+gutter.noFocusBorderColor = #e2e2e2
+gutter.font = SansSerif,plain,10
+	

@@ -825,7 +825,8 @@ public class Base {
     fd.setFilenameFilter(new FilenameFilter() {
         public boolean accept(File dir, String name) {
           // TODO this doesn't seem to ever be used. AWESOME.
-          return name.toLowerCase().endsWith(".pde");
+          return name.toLowerCase().endsWith(".pde")
+              || name.toLowerCase().endsWith(".ino");
         }
       });
 
@@ -1417,6 +1418,9 @@ public class Base {
       if (!subfolder.isDirectory()) continue;
 
       File entry = new File(subfolder, list[i] + ".pde");
+      if (!entry.exists() && (new File(subfolder, list[i] + ".ino")).exists()) {
+        entry = new File(subfolder, list[i] + ".ino");
+      }
       // if a .pde file of the same prefix as the folder exists..
       if (entry.exists()) {
         if (!Sketch.isSanitaryName(list[i])) {

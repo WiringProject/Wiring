@@ -280,3 +280,4 @@ target=Wiring
 upload.using=bootloader
 build.verbose=false
 recent.sketch.maximum=10
+gutter.collapsed=false

@@ -206,5 +206,22 @@ public class PdeTextAreaDefaults extends TextAreaDefaults {
     eolMarkerColor = Theme.getColor("editor.eolmarkers.color");
 
     paintInvalid = Theme.getBoolean("editor.invalid");
+    
+    gutterWidth = Theme.getInteger("gutter.width");
+    gutterCollapsed = Preferences.getBoolean("gutter.collapsed");
+    gutterLineNumbers = Theme.getBoolean("gutter.lineNumbers");
+    gutterHighlightInterval = Theme.getInteger("gutter.highlightInterval");
+    currentLineHighlightEnabled = Theme.getBoolean("gutter.highlightCurrentLine");
+    gutterfgcolor = Theme.getColor("gutter.fgColor");
+    gutterbgcolor = Theme.getColor("gutter.bgColor");
+    gutterHighlightColor = Theme.getColor("gutter.highlightColor");
+    //gutterMarkerColor = Theme.getColor("gutter.markerColor");
+    //gutterRegisterColor = Theme.getColor("gutter.registerColor");
+    gutterCurrentLineColor = Theme.getColor("gutter.currentLineColor");
+    gutterNumberAlignment = Theme.get("gutter.numberAlignment");
+    gutterBorderWidth = Theme.getInteger("gutter.borderWidth");
+    gutterFocusBorderColor = Theme.getColor("gutter.focusBorderColor");
+    gutterNoFocusBorderColor = Theme.getColor("gutter.noFocusBorderColor");
+    gutterFont = Theme.getFont("gutter.font");
   }
 }

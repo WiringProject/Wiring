@@ -2053,8 +2053,10 @@ public class Editor extends JFrame implements RunnerListener {
     String parentName = parentFile.getName();
     String pdeName = parentName + ".pde";
     File altFile = new File(file.getParent(), pdeName);
+    String inoName = parentName + ".ino";
+    File altInoFile = new File(file.getParent(), pdeName);
 
-    if (pdeName.equals(file.getName())) {
+    if (pdeName.equals(file.getName()) || inoName.equals(file.getName())) {
       // no beef with this guy
 
     } else if (altFile.exists()) {
@@ -2062,7 +2064,9 @@ public class Editor extends JFrame implements RunnerListener {
       // but open the .pde instead
       path = altFile.getAbsolutePath();
 
-    } else if (!path.endsWith(".pde")) {
+    } else if (altInoFile.exists()) {
+      path = altInoFile.getAbsolutePath();
+    } else if (!path.endsWith(".pde") && !path.endsWith(".ino")) {
       Base.showWarning("Bad file selected",
                        "Wiring can only open its own sketches\n" +
                        "and other files ending in .pde", null);

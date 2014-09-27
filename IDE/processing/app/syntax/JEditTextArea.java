@@ -22,6 +22,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.util.Enumeration;
 import java.util.Vector;
+import java.util.LinkedList;
 import java.awt.im.InputMethodRequests;
 
 import processing.app.syntax.im.InputMethodSupport;
@@ -90,10 +91,11 @@ public class JEditTextArea extends JComponent
   public JEditTextArea(TextAreaDefaults defaults)
   {
     // Enable the necessary events
-    enableEvents(AWTEvent.KEY_EVENT_MASK);
+    enableEvents(AWTEvent.KEY_EVENT_MASK | AWTEvent.KEY_EVENT_MASK);
 
     // Initialize some misc. stuff
     painter = new TextAreaPainter(this,defaults);
+    gutter = new Gutter(this, defaults);
     documentHandler = new DocumentHandler();
     eventListenerList = new EventListenerList();
     caretEvent = new MutableCaretEvent();
@@ -103,15 +105,18 @@ public class JEditTextArea extends JComponent
 
     // Initialize the GUI
     setLayout(new ScrollLayout());
+    add(LEFT, gutter);
     add(CENTER, painter);
     add(RIGHT, vertical = new JScrollBar(JScrollBar.VERTICAL));
     add(BOTTOM, horizontal = new JScrollBar(JScrollBar.HORIZONTAL));
 
+    mouseHandler = new MouseHandler();
+    
     // Add some event listeners
     vertical.addAdjustmentListener(new AdjustHandler());
     horizontal.addAdjustmentListener(new AdjustHandler());
     painter.addComponentListener(new ComponentHandler());
-    painter.addMouseListener(new MouseHandler());
+    painter.addMouseListener(mouseHandler);
     painter.addMouseMotionListener(new DragHandler());
     addFocusListener(new FocusHandler());
     // send tab keys through to the text area
@@ -126,6 +131,7 @@ public class JEditTextArea extends JComponent
     caretBlinks = defaults.caretBlinks;
     electricScroll = defaults.electricScroll;
 
+    addFocusListener(new FocusHandler());
     // We don't seem to get the initial focus event?
     focusedComponent = this;
 
@@ -182,6 +188,17 @@ public class JEditTextArea extends JComponent
     return painter;
   }
 
+  
+  /**
+   * Returns the gutter to the left of the text area or null if the gutter
+   * is disabled
+   */
+  public final Gutter getGutter()
+  {
+    return gutter;
+  }
+  
+  
   /**
    * Returns the input handler.
    */
@@ -330,6 +347,7 @@ public class JEditTextArea extends JComponent
       updateScrollBars();
     }
     painter.repaint();
+    gutter.repaint();
   }
 
   /**
@@ -403,6 +421,8 @@ public class JEditTextArea extends JComponent
       {
         updateScrollBars();
         painter.repaint();
+        if(!gutter.isCollapsed())
+          gutter.repaint();
       }
 
     return changed;
@@ -728,6 +748,7 @@ public class JEditTextArea extends JComponent
     select(0, 0);
     updateScrollBars();
     painter.repaint();
+    gutter.repaint();
   }
 
 
@@ -749,6 +770,7 @@ public class JEditTextArea extends JComponent
     updateScrollBars();
     setScrollPosition(scroll);
     painter.repaint();
+    gutter.repaint();
   }
 
 
@@ -1163,6 +1185,18 @@ public class JEditTextArea extends JComponent
         painter.invalidateLineRange(selectionStartLine,selectionEndLine);
         painter.invalidateLineRange(newStartLine,newEndLine);
 
+        // repaint the gutter if the current line changes and current
+        // line highlighting is enabled
+        if ((newStartLine != selectionStartLine
+             || newEndLine != selectionEndLine
+             || newBias != biasLeft)
+             && gutter.isCurrentLineHighlightEnabled())
+        {
+          gutter.invalidateLine(biasLeft ? selectionStartLine
+                                : selectionEndLine);
+          gutter.invalidateLine(newBias ? newStartLine : newEndLine);
+        }
+        
         document.addUndoableEdit(new CaretUndo(selectionStart,selectionEnd));
 
         selectionStart = newStart;
@@ -1786,6 +1820,7 @@ public class JEditTextArea extends JComponent
   }
 
   // protected members
+  protected static String LEFT = "left";
   protected static String CENTER = "center";
   protected static String RIGHT = "right";
   protected static String BOTTOM = "bottom";
@@ -1793,6 +1828,7 @@ public class JEditTextArea extends JComponent
   protected static JEditTextArea focusedComponent;
   protected static Timer caretTimer;
 
+  protected Gutter gutter;
   protected TextAreaPainter painter;
 
   //protected EditPopupMenu popup;
@@ -1821,6 +1857,8 @@ public class JEditTextArea extends JComponent
   protected SyntaxDocument document;
   protected DocumentHandler documentHandler;
 
+  MouseHandler mouseHandler;
+  
   protected Segment lineSegment;
 
   protected int selectionStart;
@@ -1904,6 +1942,7 @@ public class JEditTextArea extends JComponent
     else
       {
         painter.invalidateLineRange(line,firstLine + visibleLines);
+        gutter.invalidateLineRange(line,firstLine + visibleLines);
         updateScrollBars();
       }
   }
@@ -1914,7 +1953,9 @@ public class JEditTextArea extends JComponent
 
     public void addLayoutComponent(String name, Component comp)
     {
-      if(name.equals(CENTER))
+      if(name.equals(LEFT))
+        left = comp;
+      else if(name.equals(CENTER))
         center = comp;
       else if(name.equals(RIGHT))
         right = comp;
@@ -1926,6 +1967,8 @@ public class JEditTextArea extends JComponent
 
     public void removeLayoutComponent(Component comp)
     {
+      if(left == comp)
+        left = null;
       if(center == comp)
         center = null;
       if(right == comp)
@@ -1942,7 +1985,9 @@ public class JEditTextArea extends JComponent
       Insets insets = getInsets();
       dim.width = insets.left + insets.right;
       dim.height = insets.top + insets.bottom;
-
+      
+      Dimension leftPref = left.getPreferredSize();
+      dim.width += leftPref.width;
       Dimension centerPref = center.getPreferredSize();
       dim.width += centerPref.width;
       dim.height += centerPref.height;
@@ -1961,6 +2006,8 @@ public class JEditTextArea extends JComponent
       dim.width = insets.left + insets.right;
       dim.height = insets.top + insets.bottom;
 
+      Dimension leftPref = left.getPreferredSize();
+      dim.width += leftPref.width;
       Dimension centerPref = center.getMinimumSize();
       dim.width += centerPref.width;
       dim.height += centerPref.height;
@@ -1983,17 +2030,23 @@ public class JEditTextArea extends JComponent
       int ibottom = insets.bottom;
       int iright = insets.right;
 
+      int leftWidth = left.getPreferredSize().width;
       int rightWidth = right.getPreferredSize().width;
       int bottomHeight = bottom.getPreferredSize().height;
-      int centerWidth = size.width - rightWidth - ileft - iright;
+      int centerWidth = size.width - rightWidth - ileft - iright - leftWidth;
       int centerHeight = size.height - bottomHeight - itop - ibottom;
 
-      center.setBounds(ileft, // + LEFT_EXTRA,
+      left.setBounds(ileft, // + LEFT_EXTRA,
+                     itop,
+                     leftWidth, // - LEFT_EXTRA,
+                     centerHeight);
+      
+      center.setBounds(ileft + leftWidth, // + LEFT_EXTRA,
                        itop,
                        centerWidth, // - LEFT_EXTRA,
                        centerHeight);
 
-      right.setBounds(ileft + centerWidth,
+      right.setBounds(ileft + leftWidth + centerWidth,
                       itop,
                       rightWidth,
                       centerHeight);
@@ -2017,6 +2070,7 @@ public class JEditTextArea extends JComponent
     }
 
     // private members
+    private Component left;
     private Component center;
     private Component right;
     private Component bottom;

@@ -125,7 +125,8 @@ public class Preferences {
   JTextField fontSizeField;
   JCheckBox autoAssociateBox;
   JComboBox referenceLanguage;
-
+  JCheckBox editorHideLineNumbersBox;
+  
   // the calling editor, so updates can be applied
 
   Editor editor;
@@ -295,6 +296,18 @@ public class Preferences {
     right = Math.max(right, left + d.width);
     top += d.height + GUI_BETWEEN;
     
+    
+    // [ ] Hide line numbers on editor
+    
+    editorHideLineNumbersBox =
+    new JCheckBox("Show line numbers " +
+                  "(requires restart of Wiring)");
+    pain.add(editorHideLineNumbersBox);
+    d = editorHideLineNumbersBox.getPreferredSize();
+    // adding +10 because ubuntu + jre 1.5 truncating items
+    editorHideLineNumbersBox.setBounds(left, top, d.width + 10, d.height);
+    right = Math.max(right, left + d.width);
+    top += d.height + GUI_BETWEEN;
     
     // [ ] Increase maximum available memory to [______] MB
 
@@ -553,6 +566,7 @@ public class Preferences {
   protected void applyFrame() {
     setBoolean("editor.antialias", editorAntialiasBox.isSelected());
 
+    setBoolean("gutter.collapsed", !editorHideLineNumbersBox.isSelected());
     // put each of the settings into the table
 //    setBoolean("export.applet.separate_jar_files",
 //               exportSeparateBox.isSelected());
@@ -627,6 +641,7 @@ public class Preferences {
 
     editorAntialiasBox.setSelected(getBoolean("editor.antialias"));
 
+    editorHideLineNumbersBox.setSelected(!getBoolean("gutter.collapsed"));
     // set all settings entry boxes to their actual status
 //    exportSeparateBox.
 //      setSelected(getBoolean("export.applet.separate_jar_files"));
