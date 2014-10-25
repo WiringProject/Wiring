@@ -98,7 +98,7 @@ public class Gutter extends JComponent implements SwingConstants
     // XXX this is a hack to resize the gutter so the numbers fill in
     int lineCount = textArea.getLineCount();
     int digitsCount = (Integer.toString(lineCount)).length();
-    setGutterWidth(fm.charWidth('w') * ((digitsCount < 2) ? 2 : digitsCount));
+    setGutterWidth(3 + fm.charWidth('w') * ((digitsCount < 2) ? 2 : digitsCount));
     
 		Rectangle clip = gfx.getClipBounds();
 

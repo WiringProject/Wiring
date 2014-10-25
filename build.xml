@@ -20,7 +20,7 @@
        ==================== -->
 
   <!-- Current wiring version (FIXME: this is just a stub) -->
-  <property name="release.version" value="v1.0.0-dev"/>
+  <property name="release.version" value="v1.0.1-dev"/>
 
   <!-- out.dir: the parent directory for all build-generated files. -->
   <property name="out.dir" location="${basedir}/out"/>

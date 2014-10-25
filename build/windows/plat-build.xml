@@ -81,8 +81,12 @@
     </exec>
     <move file="${dist.rsrc.launch4j}/wiring.exe" todir="${dist.wiring.dir}"/>
 
-    <!-- Make sure rxtxSerial.dll gets picked up by JNI -->
-    <copy file="${build.rsrc.ide-deps}/serial/rxtxSerial.dll"
+    <!-- Make sure jSSC-2.8.dll gets picked up by JNI -->
+    
+    <copy file="${build.rsrc.ide-deps}/serial/windows32/jSSC-2.8.dll"
+          todir="${dist.wiring.dir}"/>
+  	
+    <copy file="${deps.extract}/tools/avr/bin/libiconv-2.dll"
           todir="${dist.wiring.dir}"/>
 
     <!-- Copy everything into dist.wiring.dir. -->
@@ -91,6 +95,7 @@
     <copy todir="${dist.wiring.dir}"><fileset dir="${framework.dir}"/></copy>
     <copy todir="${dist.wiring.lib}"><path refid="lib.class.path"/></copy>
     <copy todir="${dist.wiring.lib}" file="${build.jar}"/>
+
 
     <!-- Create version.txt. -->
     <echo message="${release.version}${line.separator}"
@@ -113,7 +118,7 @@
   <!-- Dependency resolution -->
 
   <target name="-resolve.deps"
-          depends="platform.-resolve.dep.jre,platform.-resolve.dep.cygwindlls">
+          depends="platform.-resolve.dep.jre">
   </target>
 
   <target name="-resolve.dep.jre"
@@ -127,6 +132,7 @@
     <available property="exists.dep.jre" file="${dep.jre.local}"/>
   </target>
 
+  <!--
   <target name="-resolve.dep.cygwindlls"
           depends="-check.dep.cygwindlls"
           unless="exists.dep.cygwindlls">
@@ -138,6 +144,7 @@
     <available property="exists.dep.cygwindlls"
                file="${dep.cygwindlls.local}"/>
   </target>
+  -->
 
   <!-- Initializiation -->
 

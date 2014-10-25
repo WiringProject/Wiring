@@ -1501,7 +1501,7 @@ public class Sketch {
     //    System.out.println("placing " + dotJavaFilename + " " + dotJavaLine);
     //    System.out.println("code count is " + getCodeCount());
     
-    // first check to see if it's a .java file
+    // first check to see if it's a .cpp or .c file
     for (int i = 0; i < getCodeCount(); i++) {
       SketchCode code = getCode(i);
       if (code.isExtension("cpp")||code.isExtension("h")||code.isExtension("c")) { 
@@ -1518,7 +1518,7 @@ public class Sketch {
       return null;
     }
     
-    // if it's not a .java file, codeIndex will still be 0
+    // if it's not a .cpp or .c file, codeIndex will still be 0
     // this section searches through the list of .pde files
     codeIndex = 0;
     for (int i = 0; i < getCodeCount(); i++) {

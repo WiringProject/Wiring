@@ -128,6 +128,7 @@ linestatus.height  = 20
 
 
 # GUTTER - Editor gutter
+
 gutter.width = 16
 gutter.collapsed = false
 gutter.lineNumbers = true
@@ -144,4 +145,3 @@ gutter.borderWidth = 1
 gutter.focusBorderColor = #ff5500
 gutter.noFocusBorderColor = #e2e2e2
 gutter.font = SansSerif,plain,10
-	

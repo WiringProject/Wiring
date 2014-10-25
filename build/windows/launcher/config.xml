@@ -2,6 +2,7 @@
   <dontWrapJar>true</dontWrapJar>
   <headerType>gui</headerType>
   <outfile>wiring.exe</outfile>
+  <jar>lib/processing.jar</jar>
   <errTitle></errTitle>
   <chdir>.</chdir>
   <downloadUrl>http://www.oracle.com/technetwork/java/javase/downloads/index.html</downloadUrl>
@@ -18,11 +19,12 @@
     <cp>lib/jna.jar</cp>
     <cp>lib/ecj.jar</cp>
     <cp>lib/antlr.jar</cp>
-    <cp>lib/serial/RXTXcomm.jar</cp>
+    <cp>lib/serial/serial.jar</cp>
+    <cp>lib/serial/jssc.jar</cp>
   </classPath>
   <jre>
     <path>java</path>
-    <minVersion>1.5.0</minVersion>
+    <minVersion>1.6.0</minVersion>
     <maxVersion></maxVersion>
     <jdkPreference>preferJre</jdkPreference>
     <opt>-Xms128m -Xmx128m</opt>
