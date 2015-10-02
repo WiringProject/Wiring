@@ -65,8 +65,9 @@ NMEA::NMEA(int connect)
 */
 int NMEA::decode(char c)
 {
-  // avoid runaway sentences (>99 chars or >29 terms) and terms (>14 chars)
-  if ((n >= 100) || (_terms >= 30) || (_nt >= 15))
+  // avoid runaway sentences (>=100 chars or >=30 terms) and terms (>=15 chars)
+  // in state 3 we use n+1 so we need to check if the value is really <99
+  if ((n+1 >= 100) || (_terms >= 30) || (_nt >= 15))
   {
     _state = 0;
   }
