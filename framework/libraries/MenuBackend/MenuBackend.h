@@ -462,7 +462,7 @@ class MenuItem
     bool isEqual(MenuItem &mi)
     {
       //TODO extend equality test
-      return (menuTestStrings(getName(), mi.getName()) && getValue() == mi.getValue());
+      return (menuTestStrings(getName(), mi.getName()) && getValue() == mi.getValue() && getBack() == mi.getBack());
     }
 
   protected:
