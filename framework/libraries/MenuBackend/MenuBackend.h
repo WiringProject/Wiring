@@ -432,7 +432,7 @@ class MenuItem
     ||
     || @parameter v the new value
     */
-    inline void setValue(int v);   //placed in cpp because of the use of the menu backend
+    void setValue(int v);   //placed in cpp because of the use of the menu backend
     /*
     || @description
     || | Increment the value of this item
