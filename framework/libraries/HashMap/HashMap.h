@@ -1,238 +1,424 @@
-/* $Id: HashMap.h 1198 2011-06-14 21:08:27Z bhagman $
-||
-|| @author         Alexander Brevig <abrevig@wiring.org.co>
-|| @url            http://wiring.org.co/
-|| @url            http://alexanderbrevig.com/
-|| @contribution   Brett Hagman <bhagman@wiring.org.co>
-||
-|| @description
-|| | Implementation of a HashMap data structure.
-|| |
-|| | Wiring Cross-platform Library
-|| #
-||
-|| @license Please see cores/Common/License.txt.
-||
-*/
+#ifndef __HASHMAP_H__
+#define __HASHMAP_H__
 
-#ifndef HASHMAP_H
-#define HASHMAP_H
 
-#include "Countable.h"
+#include <Arduino.h>
 
-//for convenience
-#define CreateHashMap(hashM, ktype, vtype, capacity) HashMap<ktype,vtype,capacity> hashM
-#define CreateComplexHashMap(hashM, ktype, vtype, capacity, comparator) HashMap<ktype,vtype,capacity> hashM(comparator)
 
-template<typename K, typename V, unsigned int capacity>
-class HashMap
-{
-  public:
-    typedef bool (*comparator)(K, K);
+/* Handle association */
+template<typename hash,typename map>
 
-    /*
-    || @constructor
-    || | Initialize this HashMap
-    || #
-    ||
-    || @parameter compare optional function for comparing a key against another (for complex types)
-    */
-    HashMap(comparator compare = 0)
-    {
-      cb_comparator = compare;
-      currentIndex = 0;
-    }
+class HashType {
 
-    /*
-    || @description
-    || | Get the size of this HashMap
-    || #
-    ||
-    || @return The size of this HashMap
-    */
-    unsigned int size() const
-    {
-      return currentIndex;
-    }
+	public:
 
-    /*
-    || @description
-    || | Get a key at a specified index
-    || #
-    ||
-    || @parameter idx the index to get the key at
-    ||
-    || @return The key at index idx
-    */
-    K keyAt(unsigned int idx)
-    {
-      return keys[idx];
-    }
+		HashType(){
+			reset();
+		}
+		
+		~HashType(){ //distruttore
+		
+			//Serial.println("HashType destructing...");
+			//hashCode.~hash();
+			//hashCode.~hash();
+			//Serial.println("HashType destruct");
+		}
+	
+		HashType(hash code, map value): hashCode(code), mappedValue(value){}
+	
+		void reset(){
+			hashCode = 0; mappedValue = 0;
+		}
+	
+		hash getHash(){
+			return hashCode;
+		}
+	
+		void setHash(hash code){
+			hashCode = code;
+		}
+	
+		map getValue(){
+			return mappedValue;
+		}
+	
+		void setValue(map value){
+			mappedValue = value;
+		}
+	
+		HashType& operator()(hash code, map value){
+			setHash( code );
+			setValue( value );
+		}
+	private:
+		hash hashCode;
+		map mappedValue;
+};
 
-    /*
-    || @description
-    || | Get a value at a specified index
-    || #
-    ||
-    || @parameter idx the index to get the value at
-    ||
-    || @return The value at index idx
-    */
-    V valueAt(unsigned int idx)
-    {
-      return values[idx];
-    }
 
-    /*
-    || @description
-    || | Check if a new assignment will overflow this HashMap
-    || #
-    ||
-    || @return true if next assignment will overflow this HashMap
-    */
-    bool willOverflow()
-    {
-      return (currentIndex + 1 > capacity);
-    }
+//classe nodo per la lista
 
-    /*
-    || @description
-    || | An indexer for accessing and assigning a value to a key
-    || | If a key is used that exists, it returns the value for that key
-    || | If there exists no value for that key, the key is added
-    || #
-    ||
-    || @parameter key the key to get the value for
-    ||
-    || @return The const value for key
-    */
-    const V& operator[](const K key) const
-    {
-      return operator[](key);
-    }
+template<typename hash, typename map>
 
-    /*
-    || @description
-    || | An indexer for accessing and assigning a value to a key
-    || | If a key is used that exists, it returns the value for that key
-    || | If there exists no value for that key, the key is added
-    || #
-    ||
-    || @parameter key the key to get the value for
-    ||
-    || @return The value for key
-    */
-    V& operator[](const K key)
-    {
-      if (contains(key))
-      {
-        return values[indexOf(key)];
-      }
-      else if (currentIndex < capacity)
-      {
-        keys[currentIndex] = key;
-        values[currentIndex] = nil;
-        currentIndex++;
-        return values[currentIndex - 1];
-      }
-      return nil;
-    }
+class HashNode {
 
-    /*
-    || @description
-    || | Get the index of a key
-    || #
-    ||
-    || @parameter key the key to get the index for
-    ||
-    || @return The index of the key, or -1 if key does not exist
-    */
-    unsigned int indexOf(K key)
-    {
-      for (int i = 0; i < currentIndex; i++)
-      {
-        if (cb_comparator)
-        {
-          if (cb_comparator(key, keys[i]))
-          {
-            return i;
-          }
-        }
-        else
-        {
-          if (key == keys[i])
-          {
-            return i;
-          }
-        }
-      }
-      return -1;
-    }
+	public:
 
-    /*
-    || @description
-    || | Check if a key is contained within this HashMap
-    || #
-    ||
-    || @parameter key the key to check if is contained within this HashMap
-    ||
-    || @return true if it is contained in this HashMap
-    */
-    bool contains(K key)
-    {
-      for (int i = 0; i < currentIndex; i++)
-      {
-        if (cb_comparator)
-        {
-          if (cb_comparator(key, keys[i]))
-          {
-            return true;
-          }
-        }
-        else
-        {
-          if (key == keys[i])
-          {
-            return true;
-          }
-        }
-      }
-      return false;
-    }
+		HashNode(hash code, map value) {
+		
+			hashType = new HashType<hash, map>(code, value);
+		
+			previus = 0;
+			
+			next = 0;
+		
+		}
+		
+		~HashNode() { //distruttore
+			//Serial.println("HashNode destructing...");
+			
+			delete hashType;
+			
+			//Serial.println("HashNode destruct");
+		}
+		
+		HashType<hash, map> * getHashType() {
+			return hashType;
+		}
+		
+		HashNode<hash, map> * getPrevius() {
+			return previus;
+		}
+		
+		HashNode<hash, map> * getNext() {
+			return next;
+		}
+		
+		void setPrevius(HashNode<hash, map> * previus) {
+		
+			this->previus = previus;
+		
+		}
+		
+		void setNext(HashNode<hash, map> * next) {
+		
+			this->next = next;
+		
+		}
+		
 
-    /*
-    || @description
-    || | Check if a key is contained within this HashMap
-    || #
-    ||
-    || @parameter key the key to remove from this HashMap
-    */
-    void remove(K key)
-    {
-      int index = indexOf(key);
-      if (contains(key))
-      {
-        for (int i = index; i < capacity - 1; i++)
-        {
-          keys[i] = keys[i + 1];
-          values[i] = values[i + 1];
-        }
-        currentIndex--;
-      }
-    }
+	private:
 
-    void setNullValue(V nullv)
-    {
-      nil = nullv;
-    }
+		HashType<hash, map> * hashType;
+		
+		HashNode * previus;
+		
+		HashNode * next;
 
-  protected:
-    K keys[capacity];
-    V values[capacity];
-    V nil;
-    int currentIndex;
-    comparator cb_comparator;
+
+};
+
+
+//classe che gestisce l'hash map
+template<typename hash,typename map>
+class HashMap {
+
+	private:
+		HashNode<hash, map> * start;
+		
+		HashNode<hash, map> * finish;
+		
+		HashNode<hash, map> * position;
+		
+		int size;
+		
+		
+		HashNode<hash, map> * getPosition(hash key) { //get di un elemento
+			
+			for(HashNode<hash, map> * pointer = start; pointer != 0; pointer = pointer->getNext()) {
+			
+				HashType<hash, map> * hashType = pointer->getHashType();
+		
+				if (key == hashType->getHash()) {
+				
+					return pointer;
+				
+				}
+				
+			}
+			
+			return 0;
+		
+		}
+		
+		
+		void remove(HashNode<hash, map> * pointer) { //rimuove l'elemento selezionato
+		
+			if (size == 1) { //1 elemento presente 1 elemento da eliminare
+				
+				//Serial.println("1 solo: remove p");
+				
+				start = finish = 0;
+				
+			} else { //più di un elemento presente
+			
+				if (pointer == start) { //elemto da rimuovere è la testa
+					
+					start = start->getNext();
+				
+					start->setPrevius(0);
+				
+				} else if (pointer == finish) { //elemnto da rimuovere è la coda
+					
+					finish = finish->getPrevius();
+					
+					finish->setNext(0);
+				
+				} else { //elemento da rimuovere in mezzo alla lista
+					
+					pointer->getPrevius()->setNext(pointer->getNext());
+					
+					pointer->getNext()->setPrevius(pointer->getPrevius());
+					
+				}
+				
+			}
+			
+			size--;
+			
+			
+			//Serial.println("dealloc");
+			
+			
+			delete pointer;
+			
+		}
+		
+		
+	public:
+	
+		HashMap(){	
+			
+			start = 0;
+			finish = 0;
+			position = 0;	
+
+			size = 0;
+			
+		}
+		
+		~HashMap(){	//distruttore
+		
+			//Serial.println("HashMap destructing...");
+			//Serial.print("n: ");
+			//Serial.println(length());
+			
+			if (moveToFirst()) {
+				
+				do {
+					
+					remove();
+					
+				} while (moveToNext());
+			
+			}
+			
+			
+			//Serial.println("HashMap destruct");
+			
+		}
+		
+		void put(hash key, map value) { //inserisce un nuovo nodo contenente i dati
+			
+			if (start == 0) {
+				
+				start = finish = new HashNode<hash, map>(key, value);
+				
+			} else {
+				
+				HashNode<hash, map> * temp = new HashNode<hash, map>(key, value);
+				
+				finish->setNext(temp);
+				
+				temp->setPrevius(finish);
+				
+				finish = temp;
+				
+			}
+			
+			size++;
+			
+		}
+		
+		map getValue(hash key) { //get di un elemento
+		
+			HashNode<hash, map> * pointer = getPosition(key);
+			
+			if (pointer != 0) {
+				
+				return pointer->getHashType()->getValue();
+				
+			}
+		
+		}
+		
+		
+		int containsKey(hash key) { //1 se contiene la chiave 0 altrimenti
+			
+			if (getPosition(key) != 0) {
+				
+				return 1;
+				
+			} else {
+			
+				return 0;
+			
+			}
+			
+		}
+		
+		void remove(hash key) {
+			
+			HashNode<hash, map> * pointer = getPosition(key);
+			
+			if (pointer != 0) {
+				
+				remove(pointer);
+				
+			}
+			
+		
+		}
+		
+		int length() {
+			
+			return size;
+			
+		}
+		
+		
+		//metodi per implementare la mia interfaccia iterable 1 ok, 0 non esistono più elementi
+		int moveToFirst() {
+			
+			if (start != 0) {
+				
+				position = start;
+				
+				return 1;
+				
+			} else {
+				
+				return 0;
+				
+			}
+			
+		}
+		
+		int moveToLast() {
+		
+			if (finish != 0) {
+				
+				position = finish;
+				
+				return 1;
+				
+			} else {
+				
+				return 0;
+				
+			}
+			
+		}
+		
+		
+		int moveToNext() {
+			
+			if (position->getNext() != 0) {
+				
+				position = position->getNext();
+				
+				return 1;
+				
+			} else {
+				
+				return 0;
+				
+			}
+		
+		}
+		
+		int moveToPrev() {
+			
+			if (position->getPrevius() != 0) {
+				
+				position = position->getPrevius();
+				
+				return 1;
+				
+			} else {
+				
+				return 0;
+				
+			}
+		
+		}
+		
+		
+		map getValue() { //get di un elemento
+			
+			if (position != 0) {
+				
+				return position->getHashType()->getValue();
+				
+			}
+		
+		}
+		
+		hash getKey() { //get hash di un elemento
+		
+			if (position != 0) {
+				
+				return position->getHashType()->getHash();
+				
+			}
+		
+		}
+		
+		void remove() {
+		
+			if (position != 0) {
+			
+				if (size == 1) { //1 ele 1 da rimuovere					
+					
+					//Serial.println("1 solo: remove");
+					
+					remove(position);
+					
+					position = 0;
+			
+				} else {
+				
+					if (position == start) {
+					
+						remove(position);
+					
+						position = start;
+				
+					} else {
+					
+						remove(position);
+					
+						position = position->getPrevius();
+					
+					}
+				
+				}
+			
+			}
+			
+		}
+		
+		
 };
 
 #endif
-// HASHMAP_H

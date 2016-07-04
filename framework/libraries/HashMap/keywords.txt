@@ -1,23 +1,11 @@
-#######################################
-# Syntax Coloring Map For HashMap
-#######################################
+HashMap	KEYWORD1
 
-#######################################
-# Datatypes (KEYWORD1)
-#######################################
-
-HashMap                        KEYWORD1
-CreateHashMap                  KEYWORD1
-
-#######################################
-# Methods and Functions (KEYWORD2)
-#######################################
-
-size                           KEYWORD2
-keyAt                          KEYWORD2
-valueAt                        KEYWORD2
-willOverflow                   KEYWORD2
-indexOf                        KEYWORD2
-contains                       KEYWORD2
-remove                         KEYWORD2
-setNullValue                   KEYWORD2
+put	KEYWORD2
+getValue	KEYWORD2
+containsKey	KEYWORD2
+remove	KEYWORD2
+moveToFirst	KEYWORD2
+moveToLast	KEYWORD2
+moveToNext	KEYWORD2
+moveToPrev	KEYWORD2
+length	KEYWORD2
