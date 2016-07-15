@@ -4,6 +4,7 @@
 || @url            http://wiring.org.co/
 || @url            http://alexanderbrevig.com/
 || @contribution   Brett Hagman <bhagman@wiring.org.co>
+|| @Updated for Arduino IDE 1.0 -w- backwards compatibility. nathan@sobisource.com
 ||
 || @description
 || | Handle passwords easily.
@@ -17,6 +18,13 @@
 
 #ifndef PASSWORD_H
 #define PASSWORD_H
+
+// Arduino 1.0 w BKWRD versioning.
+#if defined(ARDUINO) && ARDUINO >= 100
+#include "Arduino.h"  // for digitalRead, digitalWrite, etc
+#else
+#include "WProgram.h"
+#endif
 
 #include <Wiring.h>
 
