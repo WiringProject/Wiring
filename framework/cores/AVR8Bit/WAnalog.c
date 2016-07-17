@@ -61,6 +61,10 @@ int16_t analogRead(uint8_t pin)
     adcFirstTime = false;
   }
 
+  // allow for channel or pin numbers
+  if (pin >= FIRST_ANALOG_PIN)
+    pin -= FIRST_ANALOG_PIN;
+
   // The only megaAVR 8 bit controllers that have 16 single-ended a/d channels
   // are the ATmega640/1280/2560
 #if defined(MUX5)

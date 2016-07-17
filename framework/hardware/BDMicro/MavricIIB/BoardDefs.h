@@ -58,14 +58,14 @@ const static uint8_t SCL  = 8;
 const static uint8_t SDA  = 9;
 
 // Analog pins
-const static uint8_t A0 = 0;
-const static uint8_t A1 = 1;
-const static uint8_t A2 = 2;
-const static uint8_t A3 = 3;
-const static uint8_t A4 = 4;
-const static uint8_t A5 = 5;
-const static uint8_t A6 = 6;
-const static uint8_t A7 = 7;
+const static uint8_t A0 = 32;
+const static uint8_t A1 = 33;
+const static uint8_t A2 = 34;
+const static uint8_t A3 = 35;
+const static uint8_t A4 = 36;
+const static uint8_t A5 = 37;
+const static uint8_t A6 = 38;
+const static uint8_t A7 = 39;
 
 // External Interrupts
 const static uint8_t EI0 = 8;
