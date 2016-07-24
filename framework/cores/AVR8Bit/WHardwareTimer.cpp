@@ -781,9 +781,9 @@ uint16_t HardwareTimer::getCounter(void)
   uint16_t value = 0;
   uint8_t oldSREG = SREG;
   cli();
+  value += *_tcntnl;
   if (_tcntnh != NULL)
     value = *_tcntnh << 8;
-  value += *_tcntnl;
   SREG = oldSREG;
 
   return value;
