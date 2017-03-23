@@ -30,21 +30,21 @@
   <!-- Dependencies -->
 
   <property name="dep.toolchain.avr.remote"
-            value="http://wiring.googlecode.com/files/tools-avr-1.0-windows-i586.tar.gz"/>
+            value="https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/wiring/tools-avr-1.0-windows-i586.tar.gz"/>
   <property name="dep.avr.default.ok" value="true"/>
   
   <property name="dep.toolchain.common.remote"
-            value="http://wiring.googlecode.com/files/tools-common-1.0-windows-i586.tar.gz"/>
+            value="https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/wiring/tools-common-1.0-windows-i586.tar.gz"/>
   <property name="dep.common.default.ok" value="true"/>
 
   <property name="dep.jre.remote"
-            value="http://wiring.googlecode.com/files/jre-tools-6u37-windows32.zip"/>
+            value="https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/wiring/jre-tools-6u37-windows32.zip"/>
   <property name="dep.jre.local"
             location="${deps.archive}/jre.tgz"/>
 
   <!--
   <property name="dep.cygwindlls.remote"
-            value="http://wiring.googlecode.com/files/cygwin-dlls-1.0.zip"/>
+            value="https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/wiring/cygwin-dlls-1.0.zip"/>
   <property name="dep.cygwindlls.local"
             location="${deps.archive}/cygwin-dlls.zip"/>
   -->

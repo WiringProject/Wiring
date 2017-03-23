@@ -27,7 +27,7 @@
 
   <!-- Dependencies -->
   <property name="dep.toolchain.avr.remote"
-            value="http://wiring.googlecode.com/files/tools-avr-linux-i586.tar.gz"/>
+            value="https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/wiring/tools-avr-linux-i586.tar.gz"/>
 
   <!-- =======
        Targets

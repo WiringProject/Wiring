@@ -46,11 +46,11 @@
 
   <!-- Dependencies -->
   <property name="dep.toolchain.avr.remote"
-            value="http://wiring.googlecode.com/files/tools-avr-1.0-macosx-10.6.tar.gz"/>
+            value="https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/wiring/tools-avr-1.0-macosx-10.6.tar.gz"/>
   <property name="dep.avr.default.ok" value="true"/>
 
   <property name="dep.toolchain.common.remote"
-            value="http://wiring.googlecode.com/files/tools-common-1.0-macosx-10.6.tar.gz"/>
+            value="https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/wiring/tools-common-1.0-macosx-10.6.tar.gz"/>
   <property name="dep.common.default.ok" value="true"/>
   
   <!-- =======

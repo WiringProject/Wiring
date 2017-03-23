@@ -91,7 +91,7 @@
             location="${deps.archive}/tools-avr.tgz"/>
 
   <property name="dep.reference.remote"
-            value="http://wiring.googlecode.com/files/reference.zip"/>
+            value="https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/wiring/reference.zip"/>
   <property name="dep.reference.local"
             location="${deps.archive}/reference.zip"/>
 
